@@ -27,7 +27,7 @@ export default function GalleryPage() {
           
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 250px), 1fr))', 
             gridAutoRows: '250px', 
             gap: 'var(--space-24)' 
           }}>

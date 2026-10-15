@@ -83,3 +83,10 @@
     padding: var(--space-24);
   }
 }
+
+@media (max-width: 480px) {
+  .join-form-wrapper {
+    padding: 18px 14px;
+    border-radius: var(--radius-md);
+  }
+}

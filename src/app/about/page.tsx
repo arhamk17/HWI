@@ -90,7 +90,7 @@ export default function AboutPage() {
             className="about-reveal-item"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
               gap: 'var(--space-64)',
               alignItems: 'start',
               opacity: 0,
@@ -128,7 +128,7 @@ export default function AboutPage() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
               gap: 'var(--space-32)',
             }}
           >
@@ -194,7 +194,7 @@ export default function AboutPage() {
             className="about-reveal-item"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
               gap: 'var(--space-48)',
               opacity: 0,
               transform: 'translateY(24px)',

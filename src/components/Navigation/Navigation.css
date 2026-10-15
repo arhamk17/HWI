@@ -238,3 +238,59 @@
     display: none;
   }
 }
+
+@media (max-width: 480px) {
+  .navbar__container {
+    padding: 0 16px;
+  }
+  .nav-overlay {
+    overflow-y: auto;
+    padding: 24px 16px;
+  }
+  .nav-overlay__content {
+    gap: 28px;
+  }
+  .nav-overlay__links {
+    gap: 14px;
+  }
+  .nav-overlay__link {
+    font-size: clamp(24px, 7.5vw, 36px);
+  }
+  .nav-overlay__close {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar__container {
+    padding: 0 12px;
+  }
+  .nav-overlay__link {
+    font-size: 24px;
+  }
+}
+
+/* Palmtop / Handheld Landscape Mode */
+@media (max-height: 600px) {
+  .nav-overlay {
+    overflow-y: auto;
+    padding: 16px 20px;
+    justify-content: flex-start;
+  }
+  .nav-overlay__content {
+    gap: 14px;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .nav-overlay__links {
+    gap: 8px;
+  }
+  .nav-overlay__link {
+    font-size: clamp(18px, 5vh, 26px);
+  }
+  .nav-overlay__social {
+    gap: 14px;
+  }
+}

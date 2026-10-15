@@ -1109,6 +1109,289 @@
   }
 }
 
+/* ── Palmtop & Compact Mobile Breakpoint (<= 540px) ── */
+@media (max-width: 540px) {
+  .team-cinematic {
+    padding: calc(64px + 10px) 14px 16px;
+  }
+
+  .dept-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+  }
+
+  .dept-header__left {
+    width: 100%;
+  }
+
+  .dept-header__title {
+    font-size: clamp(1.35rem, 5.8vw, 1.8rem);
+    line-height: 1.1;
+  }
+
+  .dept-header__tagline {
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+
+  .dept-header__switcher {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 3px 4px;
+    gap: 4px;
+  }
+
+  .dept-switcher-pill {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .head-intro-layout {
+    gap: 16px;
+    width: 100%;
+  }
+
+  .head-intro-layout__portrait-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .team-portrait-card--hero {
+    width: 100%;
+    max-width: 240px;
+    max-height: 310px;
+  }
+
+  .head-intro-layout__name {
+    font-size: clamp(1.45rem, 6.2vw, 2.3rem);
+    line-height: 1.05;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .head-intro-layout__bio {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .head-intro-roll-control {
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .roll-control-label-wrap {
+    font-size: 10.5px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .roll-control-divider,
+  .roll-control-or {
+    display: none;
+  }
+
+  .roll-indicator-track {
+    padding: 3px 6px;
+  }
+
+  .roll-mouse-frame {
+    width: 12px;
+    height: 18px;
+  }
+
+  .showcase-layout__body {
+    gap: 14px;
+  }
+
+  .showcase-layout__anchor {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-md);
+  }
+
+  .team-portrait-card--compact {
+    width: 48px;
+    height: 62px;
+  }
+
+  .showcase-active-card {
+    gap: 14px;
+    width: 100%;
+  }
+
+  .showcase-active-card__portrait {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .team-portrait-card--active {
+    width: 100%;
+    max-width: 210px;
+    max-height: 270px;
+  }
+
+  .showcase-active-card__name {
+    font-size: clamp(1.4rem, 6vw, 2.1rem);
+    line-height: 1.05;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .showcase-active-card__bio {
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .showcase-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    padding-top: 10px;
+  }
+
+  .showcase-controls__nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .showcase-controls__roll-hint {
+    display: none;
+  }
+
+  .showcase-controls__member-label {
+    font-size: 11px;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .showcase-controls__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .showcase-controls__toggle-btn,
+  .showcase-controls__back-btn,
+  .showcase-controls__next-dept-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 10px;
+    gap: 4px;
+  }
+
+  .showcase-grid-view {
+    padding: 6px 4px;
+    max-height: none;
+    gap: 16px;
+  }
+
+  .showcase-grid-view__head-card {
+    padding: 12px 14px;
+    gap: 14px;
+  }
+
+  .showcase-grid-view__members-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .final-depts-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ── Ultra-Compact Palmtop Breakpoint (<= 360px) ── */
+@media (max-width: 360px) {
+  .team-cinematic {
+    padding: calc(64px + 6px) 8px 12px;
+  }
+
+  .dept-header__title {
+    font-size: 1.25rem;
+  }
+
+  .team-portrait-card--hero {
+    max-width: 195px;
+    max-height: 250px;
+  }
+
+  .team-portrait-card--active {
+    max-width: 175px;
+    max-height: 230px;
+  }
+
+  .head-intro-layout__name {
+    font-size: 1.35rem;
+  }
+
+  .showcase-active-card__name {
+    font-size: 1.3rem;
+  }
+
+  .showcase-controls__member-label {
+    display: none;
+  }
+
+  .showcase-controls__toggle-btn span,
+  .showcase-controls__back-btn span,
+  .showcase-controls__next-dept-btn span {
+    font-size: 9px;
+  }
+}
+
+/* ── Short Viewport / Palmtop Landscape (height <= 700px) ── */
+@media (max-height: 700px) {
+  .team-cinematic {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+    padding-top: calc(64px + 8px) !important;
+    padding-bottom: 14px !important;
+  }
+
+  .dept-stage {
+    padding: 6px 0 !important;
+    flex: initial !important;
+  }
+
+  .team-portrait-card--hero {
+    width: 165px !important;
+    max-height: 220px !important;
+  }
+
+  .team-portrait-card--active {
+    width: 150px !important;
+    max-height: 200px !important;
+  }
+
+  .head-intro-layout {
+    gap: 14px !important;
+  }
+
+  .showcase-layout__body {
+    gap: 12px !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .team-cinematic *,
   .team-cinematic *::before,
@@ -1327,7 +1610,14 @@
   margin-left: 8px;
 }
 
+.showcase-controls__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .showcase-controls__toggle-btn,
+.showcase-controls__back-btn,
 .showcase-controls__next-dept-btn {
   display: inline-flex;
   align-items: center;
@@ -1345,6 +1635,7 @@
 }
 
 .showcase-controls__toggle-btn:hover,
+.showcase-controls__back-btn:hover,
 .showcase-controls__next-dept-btn:hover {
   background: var(--tc-accent);
   color: #FFFFFF;
