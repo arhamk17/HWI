@@ -349,28 +349,28 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
 
       if (phase === 'head-intro') {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowRight') {
           e.preventDefault();
           handleMeetTheTeam();
-        } else if (e.key === 'ArrowLeft' && deptIndex > 0) {
+        } else if ((e.key === 'ArrowUp' || e.key === 'ArrowLeft') && deptIndex > 0) {
           e.preventDefault();
           jumpToDept(deptIndex - 1);
         }
       } else if (phase === 'showcase' && displayMode === 'carousel') {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
           e.preventDefault();
           goNext();
-        } else if (e.key === 'ArrowLeft') {
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
           e.preventDefault();
           goPrev();
         } else if (e.key === 'Escape') {
           backToHead();
         }
       } else if (phase === 'complete') {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowRight') {
           e.preventDefault();
           goNextDept();
-        } else if (e.key === 'Escape') {
+        } else if (e.key === 'Escape' || e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
           backToHead();
         }
       }
@@ -380,124 +380,127 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [phase, displayMode, handleMeetTheTeam, goNext, goPrev, backToHead, goNextDept, jumpToDept, deptIndex]);
 
-  // ─── Responsive Touch & Drag Swiping ──────────────────────────
+  // ─── Laptop Trackpad / Wheel Roll Up & Down Controller ────────
   useEffect(() => {
     if (displayMode === 'grid') return;
     const stage = stageRef.current;
     if (!stage) return;
 
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
-    let hasMoved = false;
+    let isWheelCooling = false;
+    let wheelCooldownTimer: NodeJS.Timeout | null = null;
+    let touchStartY = 0;
+    let hasTouchMoved = false;
 
-    // Mobile / Touchscreen Swiping
-    const handleTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      hasMoved = false;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const dx = e.touches[0].clientX - startX;
-      const dy = e.touches[0].clientY - startY;
-
-      if (Math.abs(dx) > Math.abs(dy) * 1.2 && Math.abs(dx) > 15) {
-        hasMoved = true;
-        if (e.cancelable) e.preventDefault();
+    // 1. LAPTOP TRACKPAD / MOUSE WHEEL ROLL GESTURE
+    const handleWheel = (e: WheelEvent) => {
+      // Allow normal scroll inside explicit scrollable sub-containers
+      const target = e.target as HTMLElement;
+      if (target?.closest('.head-intro-layout__team-preview-chips, .showcase-grid-view, .final-depts-summary')) {
+        return;
       }
-    };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (!hasMoved) return;
-      const dx = e.changedTouches[0].clientX - startX;
-      const threshold = 40;
+      // Prevent whole page jumping while rolling inside cinematic section
+      e.preventDefault();
 
-      if (dx < -threshold) {
-        // Swiped Left (Forward / Reveal)
-        if (phase === 'head-intro') {
-          handleMeetTheTeam();
-        } else if (phase === 'showcase') {
-          goNext();
-        }
-      } else if (dx > threshold) {
-        // Swiped Right (Backward)
-        if (phase === 'head-intro') {
-          if (deptIndex > 0) jumpToDept(deptIndex - 1);
-        } else if (phase === 'showcase') {
-          if (activeMemberIdx > 1) {
-            goPrev();
-          } else {
-            backToHead();
-          }
-        }
-      }
-      hasMoved = false;
-    };
+      if (isWheelCooling) return;
 
-    // Desktop / Pointer Drag Swiping
-    const handlePointerDown = (e: PointerEvent) => {
-      if ((e.target as HTMLElement)?.closest('button, a, input, textarea')) return;
-      startX = e.clientX;
-      startY = e.clientY;
-      isDragging = true;
-      hasMoved = false;
-    };
+      const delta = e.deltaY;
+      const threshold = 22; // responsive trackpad roll sensitivity
 
-    const handlePointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      if (Math.abs(dx) > Math.abs(dy) * 1.2 && Math.abs(dx) > 15) {
-        hasMoved = true;
-      }
-    };
-
-    const handlePointerUp = (e: PointerEvent) => {
-      if (isDragging && hasMoved) {
-        const dx = e.clientX - startX;
-        const threshold = 45;
-
-        if (dx < -threshold) {
+      if (Math.abs(delta) >= threshold) {
+        if (delta > 0) {
+          // ROLL DOWN (Advance forward)
           if (phase === 'head-intro') {
             handleMeetTheTeam();
           } else if (phase === 'showcase') {
             goNext();
+          } else if (phase === 'complete') {
+            goNextDept();
           }
-        } else if (dx > threshold) {
-          if (phase === 'head-intro') {
-            if (deptIndex > 0) jumpToDept(deptIndex - 1);
-          } else if (phase === 'showcase') {
+        } else {
+          // ROLL UP (Move backward)
+          if (phase === 'showcase') {
             if (activeMemberIdx > 1) {
               goPrev();
             } else {
               backToHead();
             }
+          } else if (phase === 'head-intro') {
+            if (deptIndex > 0) {
+              jumpToDept(deptIndex - 1);
+            }
+          } else if (phase === 'complete') {
+            backToHead();
           }
         }
+
+        // Throttle momentum scroll so 1 roll action = 1 deliberate slide transition
+        isWheelCooling = true;
+        if (wheelCooldownTimer) clearTimeout(wheelCooldownTimer);
+        wheelCooldownTimer = setTimeout(() => {
+          isWheelCooling = false;
+        }, 520);
       }
-      isDragging = false;
-      hasMoved = false;
     };
 
+    // 2. MOBILE / TOUCH VERTICAL ROLL GESTURE
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+      hasTouchMoved = false;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const dy = e.touches[0].clientY - touchStartY;
+      if (Math.abs(dy) > 20) {
+        hasTouchMoved = true;
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!hasTouchMoved) return;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      const threshold = 40;
+
+      if (dy < -threshold) {
+        // Roll / Swipe Upwards (Advance forward)
+        if (phase === 'head-intro') {
+          handleMeetTheTeam();
+        } else if (phase === 'showcase') {
+          goNext();
+        } else if (phase === 'complete') {
+          goNextDept();
+        }
+      } else if (dy > threshold) {
+        // Roll / Swipe Downwards (Move backward)
+        if (phase === 'showcase') {
+          if (activeMemberIdx > 1) {
+            goPrev();
+          } else {
+            backToHead();
+          }
+        } else if (phase === 'head-intro') {
+          if (deptIndex > 0) jumpToDept(deptIndex - 1);
+        } else if (phase === 'complete') {
+          backToHead();
+        }
+      }
+      hasTouchMoved = false;
+    };
+
+    stage.addEventListener('wheel', handleWheel, { passive: false });
     stage.addEventListener('touchstart', handleTouchStart, { passive: true });
     stage.addEventListener('touchmove', handleTouchMove, { passive: false });
     stage.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-    stage.addEventListener('pointerdown', handlePointerDown);
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
-
     return () => {
+      stage.removeEventListener('wheel', handleWheel);
       stage.removeEventListener('touchstart', handleTouchStart);
       stage.removeEventListener('touchmove', handleTouchMove);
       stage.removeEventListener('touchend', handleTouchEnd);
-
-      stage.removeEventListener('pointerdown', handlePointerDown);
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
+      if (wheelCooldownTimer) clearTimeout(wheelCooldownTimer);
     };
-  }, [phase, displayMode, handleMeetTheTeam, goNext, goPrev, backToHead, jumpToDept, deptIndex, activeMemberIdx]);
+  }, [phase, displayMode, handleMeetTheTeam, goNext, goPrev, backToHead, goNextDept, jumpToDept, deptIndex, activeMemberIdx]);
 
   // ─── Helper: Portrait Rendering with Fallback ─────────────────
   const renderPortraitCard = (
@@ -727,45 +730,43 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               <div className="head-intro-layout__cue">
                 <button
                   type="button"
-                  id="head-swipe-cue-btn"
-                  className="head-intro-swipe-control"
+                  id="head-roll-cue-btn"
+                  className="head-intro-roll-control"
                   onClick={handleMeetTheTeam}
                   data-cursor="link"
-                  data-cursor-label="SWIPE"
+                  data-cursor-label="ROLL"
                   aria-label={
                     totalMembers > 0
-                      ? `Swipe left or click to reveal all ${totalMembers + 1} members`
-                      : 'Swipe left or click to continue to next team'
+                      ? `Roll down on laptop trackpad or click to reveal all ${totalMembers + 1} members`
+                      : 'Roll down or click to continue to next team'
                   }
                 >
-                  <div className="swipe-indicator-track" aria-hidden="true">
-                    <span className="swipe-arrow-animated swipe-arrow--1">‹</span>
-                    <span className="swipe-arrow-animated swipe-arrow--2">‹</span>
-                    <span className="swipe-arrow-animated swipe-arrow--3">‹</span>
-                    <span className="swipe-hand-icon">
-                      <ArrowLeft size={13} />
-                    </span>
+                  <div className="roll-indicator-track" aria-hidden="true">
+                    <div className="roll-mouse-frame">
+                      <span className="roll-mouse-dot" />
+                    </div>
+                    <span className="roll-arrow-animated">↓</span>
                   </div>
 
-                  <div className="swipe-control-label-wrap">
-                    <span className="swipe-control-action">SWIPE LEFT</span>
-                    <span className="swipe-control-divider">//</span>
-                    <span className="swipe-control-text">
+                  <div className="roll-control-label-wrap">
+                    <span className="roll-control-action">ROLL DOWN</span>
+                    <span className="roll-control-divider">//</span>
+                    <span className="roll-control-text">
                       {totalMembers > 0 ? (
                         <>
-                          <span className="swipe-control-or">OR CLICK</span>{' '}
-                          <strong className="swipe-control-highlight">
+                          <span className="roll-control-or">OR CLICK</span>{' '}
+                          <strong className="roll-control-highlight">
                             MEET THE TEAM ({totalMembers + 1})
                           </strong>
-                          <ArrowUpRight size={13} className="swipe-control-arrow" />
+                          <ArrowUpRight size={13} className="roll-control-arrow" />
                         </>
                       ) : (
                         <>
-                          <span className="swipe-control-or">OR CLICK</span>{' '}
-                          <strong className="swipe-control-highlight">
+                          <span className="roll-control-or">OR CLICK</span>{' '}
+                          <strong className="roll-control-highlight">
                             {isLastDept ? "THAT'S EVERYONE" : 'NEXT TEAM'}
                           </strong>
-                          <ArrowUpRight size={13} className="swipe-control-arrow" />
+                          <ArrowUpRight size={13} className="roll-control-arrow" />
                         </>
                       )}
                     </span>
@@ -976,6 +977,11 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
 
                 <span className="showcase-controls__member-label">
                   {activeMember.name}
+                </span>
+
+                <span className="showcase-controls__roll-hint" aria-hidden="true">
+                  <span className="roll-hint-icon">↕</span>
+                  ROLL UP / DOWN TO SLIDE
                 </span>
               </div>
 
