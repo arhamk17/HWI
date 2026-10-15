@@ -101,3 +101,14 @@
 .stat-card:hover .stat-card__glow {
   opacity: 1;
 }
+
+@media (max-width: 540px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stat-card {
+    padding: 20px 16px;
+  }
+}

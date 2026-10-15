@@ -498,11 +498,16 @@
 }
 
 @media (max-width: 768px) {
+  .event-modal {
+    padding: 24px;
+  }
+
   .event-modal-poster-wrap {
     width: calc(100% + 48px);
     margin-top: -24px;
     margin-left: -24px;
     margin-right: -24px;
+    margin-bottom: 20px;
     height: 160px;
   }
 
@@ -513,5 +518,93 @@
   .event-row-card {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+}
+
+/* ── Palmtop & Compact Mobile Breakpoint (<= 480px) ── */
+@media (max-width: 480px) {
+  .event-modal-backdrop {
+    padding: 10px;
+  }
+
+  .event-modal {
+    padding: 16px 14px;
+    border-radius: 14px;
+    max-height: 94vh;
+  }
+
+  .event-modal-poster-wrap {
+    width: calc(100% + 28px);
+    margin-top: -16px;
+    margin-left: -14px;
+    margin-right: -14px;
+    margin-bottom: 14px;
+    height: 130px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+  }
+
+  .event-modal-close {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .event-modal-title {
+    font-size: clamp(1.2rem, 5.5vw, 1.6rem);
+  }
+
+  .event-modal-meta-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .event-filter-bar {
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .event-filter-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .event-row-card {
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .event-row-date {
+    font-size: 1.15rem;
+  }
+
+  .event-row-title {
+    font-size: 1.05rem;
+  }
+
+  .event-row-meta {
+    gap: 10px;
+    font-size: 10px;
+  }
+}
+
+/* ── Ultra-Compact Palmtop (<= 360px) ── */
+@media (max-width: 360px) {
+  .event-modal {
+    padding: 14px 10px;
+  }
+
+  .event-modal-poster-wrap {
+    width: calc(100% + 20px);
+    margin-top: -14px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 12px;
+    height: 110px;
+  }
+
+  .event-modal-meta-grid {
+    grid-template-columns: 1fr;
   }
 }

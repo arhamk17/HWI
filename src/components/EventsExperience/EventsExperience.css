@@ -1864,7 +1864,7 @@
 /* Mobile Devices (max-width: 640px) */
 @media (max-width: 640px) {
   .hwi-events-intro {
-    padding-top: 110px;
+    padding-top: 100px;
   }
 
   .hwi-gallery-bar {
@@ -1872,29 +1872,29 @@
   }
 
   .hwi-gallery-track {
-    height: 540px;
+    height: 520px;
   }
 
   .hwi-panel__media-region {
-    height: 180px;
+    height: 170px;
   }
 
   .hwi-panel--idle {
-    flex: 0 0 90px;
-    min-width: 90px;
-    padding: 16px 12px;
+    flex: 0 0 84px;
+    min-width: 84px;
+    padding: 16px 10px;
   }
 
   .hwi-panel--active {
-    flex: 0 0 calc(100vw - 64px);
-    min-width: 280px;
-    max-width: 350px;
-    padding: 20px 16px;
+    flex: 0 0 calc(100vw - 48px);
+    min-width: 260px;
+    max-width: 100%;
+    padding: 18px 14px;
   }
 
   .hwi-feature-banner {
     padding: 24px 18px;
-    min-height: 340px;
+    min-height: auto;
   }
 
   .hwi-feature-banner__meta-strip {
@@ -1903,7 +1903,7 @@
   }
 
   .hwi-story-light-section {
-    padding: 70px 0 90px;
+    padding: 60px 0 80px;
   }
 
   .hwi-story-stats-grid {
@@ -1911,13 +1911,13 @@
   }
 
   .hwi-story-narrative {
-    padding: 24px 20px;
+    padding: 24px 18px;
   }
 
   .callout-card {
     flex-direction: column;
     align-items: flex-start;
-    padding: 28px 22px;
+    padding: 24px 18px;
   }
 
   .callout-btn {
@@ -1929,6 +1929,204 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+  }
+}
+
+/* ── Palmtop & Compact Mobile Breakpoint (<= 480px) ── */
+@media (max-width: 480px) {
+  .hwi-events-intro {
+    padding-top: 84px;
+    padding-bottom: 18px;
+  }
+
+  .hwi-events-intro__title {
+    font-size: clamp(1.55rem, 6.8vw, 2.3rem);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .hwi-events-intro__desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .hwi-gallery-bar {
+    padding: 8px 12px;
+    margin-bottom: 14px;
+  }
+
+  .hwi-gallery-bar__left {
+    font-size: 0.72rem;
+    gap: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .gallery-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hwi-gallery-track {
+    height: clamp(390px, 66vh, 470px);
+    gap: 10px;
+  }
+
+  .hwi-panel--idle {
+    flex: 0 0 74px;
+    min-width: 74px;
+    padding: 12px 6px;
+  }
+
+  .hwi-panel__vertical-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hwi-panel--active {
+    flex: 0 0 calc(100vw - 36px);
+    min-width: 240px;
+    max-width: 100%;
+    padding: 14px 12px;
+  }
+
+  .hwi-panel__media-region {
+    height: clamp(130px, 25vh, 160px);
+  }
+
+  .hwi-panel__info-card {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  .hwi-panel__title {
+    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+  }
+
+  .hwi-panel__theme {
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .hwi-panel__expanded-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .panel-cta-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.74rem;
+  }
+
+  .hwi-feature-banner {
+    padding: 18px 14px;
+    border-radius: 14px;
+  }
+
+  .hwi-feature-banner__title {
+    font-size: clamp(1.25rem, 5.5vw, 1.75rem);
+  }
+
+  .hwi-feature-banner__theme {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .hwi-feature-banner__desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .hwi-feature-banner__meta-strip {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .banner-cta-row {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .banner-cta-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.78rem;
+  }
+
+  .hwi-story-light-section {
+    padding: 44px 0 60px;
+  }
+
+  .hwi-story-narrative {
+    padding: 18px 14px;
+    border-radius: 14px;
+  }
+
+  .narrative-lead {
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .narrative-body p {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .callout-card {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .projects-grid,
+  .speakers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Ultra-Compact Palmtop (<= 360px) ── */
+@media (max-width: 360px) {
+  .hwi-panel--active {
+    flex: 0 0 calc(100vw - 24px);
+    min-width: 220px;
+    max-width: 100%;
+    padding: 12px 10px;
+  }
+
+  .hwi-panel--idle {
+    flex: 0 0 62px;
+    min-width: 62px;
+    padding: 10px 5px;
+  }
+
+  .hwi-panel__vertical-title {
+    font-size: 0.72rem;
+  }
+
+  .hwi-events-intro__title {
+    font-size: 1.4rem;
+  }
+
+  .hwi-feature-banner__title {
+    font-size: 1.2rem;
+  }
+}
+
+/* ── Short Viewport / Palmtop Landscape (height <= 640px) ── */
+@media (max-height: 640px) {
+  .hwi-gallery-track {
+    height: 380px !important;
+  }
+
+  .hwi-panel__media-region {
+    height: 130px !important;
+  }
+
+  .hwi-feature-banner {
+    padding: 16px 14px !important;
+    min-height: auto !important;
   }
 }
 
