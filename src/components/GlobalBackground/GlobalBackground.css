@@ -1,0 +1,257 @@
+/* ==========================================================================
+   PERSISTENT GLOBAL BACKGROUND SYSTEM
+   Architecture:
+   - Layer 1: Solid Base Surface (color interpolated seamlessly on scroll)
+   - Layer 2: Hero Video Layer (fades out smoothly on scroll, pauses when invisible)
+   - Layer 2.5: Permanent HWI Watermark (ALWAYS VISIBLE across entire site, never 0 opacity)
+   - Layer 3: Team-Specific Ambient Visual Atmospheres (5 distinct abstract atmospheres)
+   - Layer 4: Transparent Canvas Particle Engine (Mathematical, lightweight, continuous)
+   - Layer 5: Cinematic Ambient Vignette
+   ========================================================================== */
+
+:root {
+  --hwi-dot-fill: rgba(255, 255, 255, 0.7);
+  --hwi-stroke: rgba(255, 255, 255, 0.25);
+  --hwi-shadow: rgba(239, 68, 68, 0.12);
+}
+
+.gbg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+
+/* Layer 1: Solid Base Surface */
+.gbg__base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #070709;
+  z-index: 1;
+  transition: background-color 0.15s linear;
+}
+
+/* Layer 2: Hero Video Layer */
+.gbg__video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 1;
+  overflow: hidden;
+  will-change: opacity, transform;
+}
+
+.gbg__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.gbg__video-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 7, 9, 0.25) 0%,
+    rgba(7, 7, 9, 0.45) 60%,
+    rgba(7, 7, 9, 0.95) 100%
+  );
+  z-index: 1;
+}
+
+/* Layer 2.5: Permanent HWI Watermark (ALWAYS VISIBLE across entire site) */
+.gbg__hwi-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.12; /* Visible immediately from frame 1 */
+  will-change: transform, opacity;
+}
+
+.gbg__hwi-svg {
+  width: min(88vw, 1150px);
+  height: auto;
+  max-height: 56vh;
+  display: block;
+  user-select: none;
+  filter: drop-shadow(0 0 60px var(--hwi-shadow));
+  transition: filter 0.3s ease-out;
+}
+
+/* Layer 3: Team-Specific Ambient Visual Atmospheres (Clean, abstract, secondary to cards) */
+.gbg__team-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+.gbg__team-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  will-change: opacity;
+  overflow: hidden;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Team 1: HWI 2025–26 (Subtle Red Particle & Ambient Glow Atmosphere) */
+.gbg__team-layer--0 {
+  background: radial-gradient(
+    ellipse 85% 70% at 50% 50%,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(185, 28, 28, 0.05) 50%,
+    transparent 85%
+  );
+}
+
+.gbg__team-layer--0::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.45;
+}
+
+/* Team 2: HWI 2026–27 (Subtle Geometric Atmosphere) */
+.gbg__team-layer--1 {
+  background: radial-gradient(
+    ellipse 80% 65% at 50% 48%,
+    rgba(220, 38, 38, 0.13) 0%,
+    rgba(15, 23, 42, 0.25) 55%,
+    transparent 85%
+  );
+}
+
+.gbg__team-layer--1::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(239, 68, 68, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 68, 68, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.5;
+}
+
+/* Team 3: Teacher Coordinator (Subtle Light & Warm Gradient Atmosphere) */
+.gbg__team-layer--2 {
+  background: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    rgba(251, 146, 60, 0.12) 0%,
+    rgba(239, 68, 68, 0.07) 45%,
+    transparent 80%
+  );
+}
+
+.gbg__team-layer--2::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 60%
+  );
+  opacity: 0.7;
+}
+
+/* Team 4: Principal (Subtle Structured & Precision Grid Atmosphere) */
+.gbg__team-layer--3 {
+  background: radial-gradient(
+    ellipse 80% 65% at 50% 50%,
+    rgba(148, 163, 184, 0.08) 0%,
+    rgba(239, 68, 68, 0.06) 45%,
+    transparent 80%
+  );
+}
+
+.gbg__team-layer--3::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.6;
+}
+
+/* Team 5: Faculty & Mentors (Subtle Particle & Light Atmosphere) */
+.gbg__team-layer--4 {
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    rgba(168, 85, 247, 0.09) 0%,
+    rgba(239, 68, 68, 0.09) 45%,
+    transparent 85%
+  );
+}
+
+.gbg__team-layer--4::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 35%, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    radial-gradient(circle at 75% 65%, rgba(239, 68, 68, 0.2) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 45% 75%, rgba(168, 85, 247, 0.15) 1px, transparent 1px);
+  background-size: 96px 96px;
+  opacity: 0.6;
+}
+
+/* Layer 4: Transparent Canvas Particle Engine */
+.gbg__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 1 !important;
+  will-change: transform;
+}
+
+/* Layer 5: Atmospheric Vignette */
+.gbg__vignette {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+}

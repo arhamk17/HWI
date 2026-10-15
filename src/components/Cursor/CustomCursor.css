@@ -1,0 +1,178 @@
+/* Global Native Cursor Control when HWI Custom Cursor is Active */
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role="button"],
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+
+  /* Preserve native cursor over interactive text inputs and form controls */
+  html.has-custom-cursor input,
+  html.has-custom-cursor textarea,
+  html.has-custom-cursor select,
+  html.has-custom-cursor [contenteditable="true"] {
+    cursor: auto !important;
+  }
+}
+
+.hwi-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none !important;
+  z-index: 999999;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+@media (pointer: coarse) {
+  .hwi-cursor {
+    display: none !important;
+  }
+}
+
+.hwi-cursor__follower {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none !important;
+  transform: translate3d(-50%, -50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.24s ease,
+              border-color 0.24s ease,
+              border-radius 0.24s ease,
+              box-shadow 0.24s ease;
+  will-change: transform, width, height;
+}
+
+/* Default state: small precise crosshair / dot */
+.hwi-cursor--default .hwi-cursor__follower {
+  width: 14px;
+  height: 14px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.hwi-cursor__dot {
+  width: 4px;
+  height: 4px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Text hover state: subtle expansion · -> ◉ */
+.hwi-cursor--text .hwi-cursor__follower {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.7);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
+}
+.hwi-cursor--text .hwi-cursor__dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff;
+}
+
+/* Link hover state: ↗ */
+.hwi-cursor--link .hwi-cursor__follower {
+  width: 32px;
+  height: 32px;
+  background: rgba(239, 68, 68, 0.95);
+  border: 1px solid #ef4444;
+  color: #ffffff;
+  font-size: 13px;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+}
+.hwi-cursor--link .hwi-cursor__dot {
+  display: none;
+}
+
+/* Image hover state: VIEW */
+.hwi-cursor--image .hwi-cursor__follower {
+  width: 58px;
+  height: 58px;
+  background: rgba(15, 17, 23, 0.88);
+  border: 1px solid rgba(239, 68, 68, 0.8);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 9px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(239, 68, 68, 0.4);
+}
+.hwi-cursor--image .hwi-cursor__dot {
+  display: none;
+}
+
+/* Team member hover state: VIEW */
+.hwi-cursor--team .hwi-cursor__follower {
+  width: 68px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(15, 17, 23, 0.92);
+  border: 1px solid #ef4444;
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 9px;
+  padding: 0 10px;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(239, 68, 68, 0.4);
+}
+.hwi-cursor--team .hwi-cursor__dot {
+  display: none;
+}
+
+/* Event hover state: EXPLORE */
+.hwi-cursor--event .hwi-cursor__follower {
+  width: 78px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.95);
+  border: 1px solid #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  padding: 0 10px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+}
+.hwi-cursor--event .hwi-cursor__dot {
+  display: none;
+}
+
+/* External link: ↗ OPEN */
+.hwi-cursor--external .hwi-cursor__follower {
+  width: 76px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(15, 17, 23, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 9px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+.hwi-cursor--external .hwi-cursor__dot {
+  display: none;
+}
+
+.hwi-cursor__label {
+  display: inline-block;
+  line-height: 1;
+  pointer-events: none;
+}

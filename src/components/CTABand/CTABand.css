@@ -1,0 +1,32 @@
+.cta-band {
+  width: 100%;
+  padding: var(--space-section) 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 5;
+  /* Background removed to let global nebula shine through */
+}
+
+.cta-band__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-16);
+  max-width: 600px;
+  padding: 0 var(--space-24);
+}
+
+.cta-band__title {
+  /* Let it be big */
+}
+
+.cta-band__desc {
+  /* Subtle */
+}
+
+.cta-band__btn {
+  margin-top: var(--space-32);
+}

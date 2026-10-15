@@ -1,0 +1,294 @@
+:root {
+  /* HWI COLOR SYSTEM */
+  
+  /* SURFACES */
+  --surface-primary: #070709;
+  --surface-secondary: #121016;
+  --surface-elevated: #18151D;
+  --surface-overlay: rgba(7, 7, 9, 0.85);
+  
+  /* TEXT */
+  --text-primary: #FFFFFF;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  
+  /* ACCENTS */
+  --accent: #EF4444;
+  --accent-secondary: #F87171;
+  --accent-tertiary: #FF5533;
+  --accent-muted: rgba(239, 68, 68, 0.2);
+  --accent-hover: #DC2626;
+  
+  /* BORDERS */
+  --border-default: rgba(239, 68, 68, 0.15);
+  --border-hover: rgba(239, 68, 68, 0.35);
+  
+  /* SCROLL-DRIVEN ENVIRONMENT (set by JS) */
+  --env-bg: #02010A;
+  --env-accent: #E83B3B;
+  --env-text: #FFFFFF;
+  
+  /* SPACING */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+  --space-128: 128px;
+  --space-section: 160px;
+  
+  /* RADIUS */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --space-section: 80px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smoothing */
+}
+
+body {
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* LENIS SCROLL */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ============================================ */
+/*  TYPOGRAPHY SYSTEM                           */
+/*  Oversized, cinematic, premium               */
+/* ============================================ */
+
+.type-massive {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(6rem, 18vw, 20rem);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.type-intro {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 10rem);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.type-display {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.type-heading-1 {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3.5vw, 3rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.type-heading-2 {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.type-eyebrow {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(10px, 1vw, 12px);
+  line-height: 1.3;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.type-body {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 400;
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.65;
+}
+
+.type-body-small {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 400;
+  font-size: clamp(13px, 1vw, 14px);
+  line-height: 1.5;
+}
+
+.type-label {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1vw, 13px);
+  line-height: 1.0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.type-number {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(3rem, 5vw, 5rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+
+.type-mono {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 400;
+  font-size: clamp(12px, 1vw, 14px);
+  line-height: 1.5;
+}
+
+/* ============================================ */
+/*  UTILITY CLASSES                             */
+/* ============================================ */
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-accent { color: var(--accent); }
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-24);
+}
+
+/* Section base — every chapter uses this */
+.chapter {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-section) 0;
+  overflow: hidden;
+}
+
+.chapter--half {
+  min-height: 60vh;
+}
+
+/* Divider lines */
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border-default);
+}
+
+/* Button system — restrained, not glassmorphic */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn--primary {
+  background-color: var(--accent);
+  color: #FFFFFF;
+}
+.btn--primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.btn--outline:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* For the white chapter */
+.btn--dark {
+  background-color: #111;
+  color: #FFFFFF;
+}
+.btn--dark:hover {
+  background-color: #222;
+}
+
+/* Hover link accent */
+.hover-accent {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.hover-accent:hover {
+  color: var(--accent);
+}
+
+/* ============================================ */
+/*  THEME OVERRIDES                             */
+/* ============================================ */
+
+.theme-light {
+  --text-primary: #111111;
+  --text-secondary: #444444;
+  --text-tertiary: #666666;
+  --border-default: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.2);
+}

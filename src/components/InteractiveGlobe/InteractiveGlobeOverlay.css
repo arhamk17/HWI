@@ -1,0 +1,297 @@
+.globe-overlay {
+  position: relative;
+  width: 100%;
+  margin-top: var(--space-48);
+  user-select: none;
+}
+
+.globe-interactive-surface {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  max-height: 60vh;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  background: radial-gradient(circle at center, rgba(239, 68, 68, 0.04) 0%, rgba(7, 7, 9, 0.4) 70%, transparent 100%);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.globe-interactive-surface:active {
+  cursor: grabbing;
+}
+
+.globe-hud {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.globe-hud__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  background: rgba(15, 17, 23, 0.7);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.globe-hud__pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: hwi-pulse 2s infinite ease-in-out;
+}
+
+@keyframes hwi-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.globe-hud__hint {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+/* Floating interactive location pins */
+.globe-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 20;
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.globe-pin--dimmed {
+  opacity: 0.25 !important;
+  filter: blur(1px);
+}
+
+.globe-pin__beacon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.globe-pin__core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #ef4444;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.globe-pin--flagship .globe-pin__core {
+  background-color: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+.globe-pin__ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.7);
+  animation: globe-ring 2s infinite ease-out;
+  pointer-events: none;
+}
+
+@keyframes globe-ring {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.globe-pin__label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(15, 17, 23, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.globe-pin:hover .globe-pin__label,
+.globe-pin--active .globe-pin__label {
+  color: #ffffff;
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateY(-2px);
+}
+
+.globe-pin:hover .globe-pin__core,
+.globe-pin--active .globe-pin__core {
+  transform: scale(1.6);
+  background-color: #ef4444;
+  box-shadow: 0 0 12px #ef4444;
+}
+
+/* Modal / Info card overlay */
+.globe-card {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  max-width: 340px;
+  width: calc(100% - 48px);
+  background: rgba(15, 17, 23, 0.92);
+  border: 1px solid #ef4444;
+  border-radius: 12px;
+  padding: var(--space-20, 20px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 20px rgba(239, 68, 68, 0.2);
+  z-index: 30;
+  animation: globeCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes globeCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.globe-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.globe-card__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.globe-card__close {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.globe-card__close:hover {
+  color: #ef4444;
+}
+
+.globe-card__region {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+
+.globe-card__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 14px;
+}
+
+.globe-card__stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.globe-card__stat-value {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.globe-card__stat-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+}
+
+.globe-card__desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* Location selector pill bar */
+.globe-pillbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.globe-pill {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.globe-pill:hover,
+.globe-pill--active {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .globe-interactive-surface {
+    height: 380px;
+  }
+  .globe-card {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
+  }
+}

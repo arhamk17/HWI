@@ -1,0 +1,922 @@
+/* ==========================================================================
+   HWI TEAMS DIRECTORY — LEVEL A & LEVEL B STYLING
+   A cohesive, responsive, and technical presentation for Core & Executive Teams
+   ========================================================================== */
+
+.teams-view {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: calc(64px + 40px) 0 100px;
+  background-color: var(--surface-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* ── Ambient Glows ── */
+.teams-view__glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.14;
+  z-index: 0;
+}
+
+.teams-view__glow--top {
+  top: 50px;
+  left: 20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+}
+
+.teams-view__glow--mid {
+  top: 45%;
+  right: 15%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.7) 0%, transparent 70%);
+}
+
+.teams-view__container {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================================================
+   HERO HEADER
+   ========================================================================== */
+
+.teams-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0 60px;
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: 60px;
+}
+
+.teams-hero__badge-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.teams-hero__tenure {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+}
+
+.teams-hero__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.teams-hero__tagline {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(15px, 1.3vw, 18px);
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* Stats Row */
+.teams-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 16px 32px;
+  background: rgba(18, 16, 22, 0.75);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(12px);
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+
+.teams-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.teams-stat__num {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.teams-stat__label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.teams-stat__divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Filter Bar */
+.teams-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 860px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.teams-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-secondary);
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-default);
+  flex-wrap: wrap;
+}
+
+.teams-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.teams-filter-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.teams-filter-pill--active {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+.teams-filter-pill--active:hover {
+  background: var(--accent-hover);
+  color: #FFFFFF;
+}
+
+.teams-cinematic-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid var(--border-default);
+  color: var(--accent);
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.teams-cinematic-trigger:hover {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   LEVEL HEADINGS & STRUCTURE
+   ========================================================================== */
+
+.team-level {
+  margin-bottom: 90px;
+}
+
+.team-level__header {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.team-level__eyebrow-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.team-level__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.team-level__tag--exec {
+  color: #F87171;
+}
+
+.team-level__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.team-level__desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   LEVEL A: CHAPTER CORE TEAM — APEX CHAPTER LEADERSHIP
+   ========================================================================== */
+
+.apex-leadership {
+  margin-bottom: 50px;
+}
+
+.apex-leadership__bar,
+.core-depts__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.apex-leadership__label,
+.core-depts__label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.apex-leadership__line,
+.core-depts__line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-default);
+}
+
+.apex-leadership__grid {
+  display: grid;
+  grid-templateColumns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.apex-card {
+  position: relative;
+  display: flex;
+  gap: 28px;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(24, 21, 29, 0.95) 0%, rgba(14, 12, 18, 0.95) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(239, 68, 68, 0.08);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.apex-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 45px rgba(239, 68, 68, 0.18);
+}
+
+.apex-card__avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.apex-card__avatar {
+  width: 110px;
+  height: 130px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, #1C1823 0%, #0F0D14 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.apex-card__initials {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.04em;
+}
+
+.apex-card__watermark {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.apex-card__avatar-glow {
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 70%);
+  z-index: -1;
+  filter: blur(8px);
+}
+
+.apex-card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.apex-card__badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.apex-card__role-pill {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: var(--accent);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.apex-card__dept-pill {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.apex-card__name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.apex-card__bio {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.apex-card__corner-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, transparent 50%, rgba(239, 68, 68, 0.25) 50%);
+  border-top-right-radius: var(--radius-lg);
+}
+
+/* ==========================================================================
+   LEVEL A: DEPARTMENT HEADS AND CO-HEADS
+   ========================================================================== */
+
+.core-depts__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.core-dept-group {
+  background: rgba(18, 16, 22, 0.6);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: border-color 0.25s ease;
+}
+
+.core-dept-group:hover {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.core-dept-group__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 12px;
+}
+
+.core-dept-group__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.core-dept-group__tagline {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.core-dept-group__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.core-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(24, 21, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.core-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(28, 24, 34, 0.95);
+}
+
+.core-card__avatar {
+  width: 48px;
+  height: 54px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #1A1721 0%, #100E15 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.core-card__initials {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.core-card__watermark {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 6.5px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.core-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.core-card__role {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.core-card__name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.core-card__dept-name {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   LEVEL B: EXECUTIVE MEMBERS
+   ========================================================================== */
+
+.team-level--exec {
+  margin-top: 40px;
+  border-top: 1px solid var(--border-default);
+  padding-top: 60px;
+}
+
+.exec-depts {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.exec-dept-block {
+  background: rgba(14, 12, 18, 0.7);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: border-color 0.25s ease;
+}
+
+.exec-dept-block:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.exec-dept-block__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.exec-dept-block__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exec-dept-block__idx {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  padding: 2px 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+.exec-dept-block__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.exec-dept-block__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.exec-dept-block__tagline {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin: 0;
+  max-width: 480px;
+}
+
+.exec-dept-block__count {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+/* ── Executive Grid ── */
+.exec-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.exec-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: rgba(24, 21, 29, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              background 0.25s ease,
+              box-shadow 0.25s ease;
+  min-height: 140px;
+}
+
+.exec-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(28, 24, 34, 0.95);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 0 15px rgba(239, 68, 68, 0.08);
+}
+
+.exec-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.exec-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 18, 26, 0.9) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exec-card__initials {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.exec-card__academic-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-pill);
+}
+
+.exec-card__year {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.05em;
+}
+
+.exec-card__bullet {
+  color: var(--accent);
+  font-size: 9px;
+}
+
+.exec-card__branch {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  letter-spacing: 0.05em;
+}
+
+.exec-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.exec-card__name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 15.5px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.exec-card__role {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.2;
+}
+
+.exec-card__role--special {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.exec-card__footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8px;
+}
+
+.exec-card__dept-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet & Medium Screens */
+@media (max-width: 1024px) {
+  .apex-card {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .apex-card__avatar {
+    width: 90px;
+    height: 110px;
+  }
+
+  .apex-card__initials {
+    font-size: 30px;
+  }
+
+  .core-depts__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exec-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small Tablets & Large Phones */
+@media (max-width: 768px) {
+  .teams-view {
+    padding: calc(64px + 20px) 0 80px;
+  }
+
+  .teams-hero {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+  }
+
+  .teams-stats {
+    padding: 12px 20px;
+    gap: 16px;
+  }
+
+  .teams-stat__num {
+    font-size: 18px;
+  }
+
+  .teams-stat__label {
+    font-size: 9px;
+  }
+
+  .teams-nav-bar {
+    justify-content: center;
+  }
+
+  .apex-leadership__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .exec-dept-block {
+    padding: 20px;
+  }
+}
+
+/* Mobile Screens */
+@media (max-width: 480px) {
+  .apex-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .apex-card__avatar {
+    width: 70px;
+    height: 80px;
+  }
+
+  .apex-card__initials {
+    font-size: 26px;
+  }
+
+  .core-dept-group__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .exec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teams-filter-pills {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .teams-filter-pill {
+    padding: 6px 12px;
+    font-size: 11.5px;
+  }
+}

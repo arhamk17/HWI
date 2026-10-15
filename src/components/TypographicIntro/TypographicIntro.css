@@ -1,0 +1,39 @@
+.intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--surface-primary);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Flash words — positioned absolutely so they overlap in center */
+.intro__word {
+  position: absolute;
+  color: var(--text-primary);
+  opacity: 0;
+}
+
+/* Final composition — stacked vertically */
+.intro__final {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.intro__final--1 {
+  color: var(--text-primary);
+  opacity: 0;
+}
+
+.intro__final--2 {
+  color: var(--accent);
+  opacity: 0;
+}

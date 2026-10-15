@@ -1,0 +1,99 @@
+.hwi-easter-egg {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(7, 7, 9, 0.92);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hwi-easter-egg--active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hwi-easter-egg__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hwi-easter-egg--active .hwi-easter-egg__content {
+  transform: scale(1);
+}
+
+.hwi-easter-egg__monogram {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(6rem, 18vw, 15rem);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  background: linear-gradient(135deg, #ffffff 0%, #ef4444 60%, #991b1b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 35px rgba(239, 68, 68, 0.6));
+  animation: monogramPulse 2s infinite ease-in-out;
+}
+
+@keyframes monogramPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 25px rgba(239, 68, 68, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 50px rgba(239, 68, 68, 0.8));
+  }
+}
+
+.hwi-easter-egg__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 3vw, 2.2rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: var(--space-24);
+  opacity: 0;
+  transform: translateY(15px);
+  animation: eggTextIn 0.5s ease 0.3s forwards;
+}
+
+.hwi-easter-egg__line {
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ef4444, transparent);
+  margin-top: 16px;
+  animation: eggLineIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+.hwi-easter-egg__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.3em;
+  margin-top: 16px;
+  opacity: 0;
+  animation: eggTextIn 0.5s ease 0.6s forwards;
+}
+
+@keyframes eggTextIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eggLineIn {
+  to {
+    width: 280px;
+  }
+}

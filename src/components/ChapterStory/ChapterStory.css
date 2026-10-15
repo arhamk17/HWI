@@ -1,0 +1,70 @@
+.story {
+  padding: var(--space-section) 0;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+  /* Background removed to let global nebula shine through */
+}
+
+.story__container {
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-24);
+}
+
+.story__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-48);
+}
+
+.story__title {
+  color: var(--text-primary);
+  max-width: 900px;
+}
+
+.story__body {
+  max-width: 600px;
+  margin-left: auto;
+  border-left: 1px solid var(--accent);
+  padding-left: var(--space-24);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.story__stats {
+  display: flex;
+  gap: var(--space-64);
+  margin-top: var(--space-64);
+  padding-top: var(--space-48);
+  border-top: 1px solid var(--border-default);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .story__body {
+    margin-left: 0;
+    padding-left: var(--space-16);
+  }
+  
+  .story__stats {
+    flex-direction: column;
+    gap: var(--space-32);
+  }
+}
