@@ -1,0 +1,169 @@
+/* ==========================================================================
+   STORY CHAPTER (CHAPTER 02) — SCROLLYTELLING CONTAINER
+   Smooth Lenis runway for Globe -> India particle transformation
+   ========================================================================== */
+
+.story-chapter {
+  position: relative;
+  width: 100%;
+  min-height: 240vh;
+  z-index: 2;
+  background: transparent;
+}
+
+.story-chapter__sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.story-chapter__viewport {
+  position: relative;
+  width: 100%;
+  max-width: var(--container-width, 1280px);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-container, 24px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+/* Phase 1: Global Vision Narrative (0% -> 40% morph) */
+.story-chapter__narrative-global {
+  position: absolute;
+  top: clamp(80px, 12vh, 140px);
+  left: var(--space-container, 24px);
+  right: var(--space-container, 24px);
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3vh, 32px);
+  pointer-events: auto;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 5;
+}
+
+.story-chapter__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent, #EF4444);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.story-chapter__pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #EF4444);
+  box-shadow: 0 0 8px var(--accent, #EF4444);
+  animation: pulseBeacon 2s ease-out infinite;
+}
+
+@keyframes pulseBeacon {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+.story-chapter__title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: clamp(1.6rem, 3.2vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.7);
+  max-width: 860px;
+}
+
+.story-chapter__body-wrap {
+  max-width: 580px;
+  margin-left: auto;
+  border-left: 2px solid var(--accent, #EF4444);
+  padding-left: clamp(16px, 2vw, 24px);
+}
+
+.story-chapter__body-text {
+  font-family: var(--font-body, sans-serif);
+  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  color: #D0D0D0;
+  line-height: 1.6;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+}
+
+.story-chapter__stats-row {
+  display: flex;
+  gap: clamp(24px, 4vw, 56px);
+  padding-top: clamp(16px, 2.5vh, 32px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  flex-wrap: wrap;
+}
+
+.story-chapter__stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.story-chapter__stat-num {
+  font-family: var(--font-heading, sans-serif);
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.9);
+}
+
+.story-chapter__stat-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9A9A9A;
+}
+
+/* Phase 2: Pan-India Network Layer (40% -> 100% morph) */
+.story-chapter__narrative-india {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  .story-chapter {
+    min-height: 200vh;
+  }
+  .story-chapter__narrative-global {
+    top: clamp(65px, 9vh, 90px);
+    gap: 16px;
+  }
+  .story-chapter__body-wrap {
+    margin-left: 0;
+  }
+  .story-chapter__stats-row {
+    gap: 20px;
+  }
+}

@@ -1,0 +1,138 @@
+.hero {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  padding-bottom: var(--space-section);
+  /* Background removed to let global nebula shine through */
+}
+
+/* Global Background provides the visuals */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.hero__container {
+  max-width: 1120px;
+  width: 100%;
+  padding: 0 var(--space-24);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 2; /* Content above collage */
+  position: relative;
+}
+
+
+
+.hero__content {
+  margin-top: var(--space-32);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  max-width: 800px;
+}
+
+.hero__title {
+  color: var(--text-primary);
+  margin-bottom: var(--space-16);
+}
+
+.hero__subtitle {
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.hero__tagline {
+  color: var(--text-primary);
+}
+
+.hero__descriptor {
+  color: var(--text-secondary);
+}
+
+.hero__cta-group {
+  margin-top: var(--space-48);
+  display: flex;
+  gap: var(--space-16);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button styles - can be moved to globals.css later if needed elsewhere */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-general-sans), sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1vw, 13px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: var(--accent);
+  color: #EDEDED;
+  border: none;
+}
+
+.btn--primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn--primary:active {
+  background-color: #A52D27;
+  transform: scale(0.98);
+}
+
+.btn--secondary {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn--secondary:hover {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+
+  .hero__cta-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}

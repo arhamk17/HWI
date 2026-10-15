@@ -1,0 +1,103 @@
+.feature-deck {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  /* Background removed to let global nebula shine through */
+}
+
+.feature-deck__container {
+  max-width: 1120px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: var(--space-64) var(--space-24) 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-deck__header {
+  margin-bottom: var(--space-32);
+}
+
+.feature-deck__content {
+  display: flex;
+  flex-direction: row-reverse; /* Put arm space on the right, cards on the left */
+  height: calc(100vh - 200px);
+  position: relative;
+}
+
+.feature-deck__arm-space {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  pointer-events: none;
+}
+
+.feature-deck__cards {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  perspective: 1000px;
+}
+
+.feature-card {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: var(--space-48) var(--space-32);
+  transform-origin: top center;
+  will-change: transform, opacity;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.feature-card__content-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  width: 100%;
+  height: 100%;
+}
+
+.feature-card__number {
+  margin-bottom: var(--space-16);
+}
+
+.feature-card__desc {
+  max-width: 400px;
+  margin-bottom: var(--space-32);
+}
+
+.feature-card__rule {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-default);
+  margin-top: auto;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .feature-deck__content {
+    flex-direction: column;
+  }
+  
+  .feature-deck__arm-space {
+    display: none; /* Hide empty space on mobile */
+  }
+  
+  .feature-deck__cards {
+    width: 100%;
+  }
+  
+  .feature-card {
+    padding: var(--space-32) var(--space-24);
+  }
+}

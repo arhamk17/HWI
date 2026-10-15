@@ -1,0 +1,561 @@
+/* ==========================================================================
+   INDIA MAP STAGE & INTERACTIVE NODES (NON-BOXED NATURAL ENVIRONMENT)
+   Zero rectangular cards or borders around the visual map.
+   ========================================================================== */
+
+.india-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(75px, 9vh, 105px) 0 clamp(24px, 4vh, 48px);
+  background: transparent;
+  border: none;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Stage Narrative Header */
+.india-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.india-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  margin-bottom: var(--space-12);
+}
+
+.india-header__pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: indiaPulseRing 2s ease-out infinite;
+}
+
+.india-header__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-8);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
+}
+
+.india-header__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 1.2vw, 1.05rem);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Surface Coordinate Anchor (Matches GlobalBackground Canvas scale precisely) */
+.india-surface {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Location Nodes (Nodes themselves are interactive) */
+.india-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  z-index: 12;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.india-node:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 50%;
+}
+
+.india-node:hover,
+.india-node--current {
+  z-index: 25;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Beacon styling (Red node + subtle expanding ring) */
+.india-node__beacon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.india-node__core {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.85);
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.india-node--flagship .india-node__core {
+  width: 9px;
+  height: 9px;
+  background: #ff4545;
+  box-shadow: 0 0 12px rgba(255, 69, 69, 1);
+}
+
+.india-node__ring {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.55);
+  animation: indiaPulseRing 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.india-node__ring-outer {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  animation: indiaPulseRing 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite 0.7s;
+}
+
+.india-node:hover .india-node__core {
+  transform: scale(1.35);
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
+
+/* Node City Label */
+.india-node__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.india-node__label--west {
+  margin-right: 8px;
+  order: -1;
+}
+
+.india-node__label--east {
+  margin-left: 8px;
+}
+
+.india-node:hover .india-node__label,
+.india-node--current .india-node__label {
+  color: #ffffff;
+}
+
+/* Quick Hover Tooltip */
+.india-tooltip {
+  position: absolute;
+  min-width: 190px;
+  padding: 10px 14px;
+  background: rgba(12, 12, 16, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.75), 0 0 12px rgba(239, 68, 68, 0.12);
+  pointer-events: none;
+  z-index: 30;
+  animation: tooltipFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.india-tooltip--right {
+  left: 24px;
+}
+
+.india-tooltip--left {
+  right: 24px;
+}
+
+.india-tooltip--down {
+  top: -8px;
+}
+
+.india-tooltip--up {
+  bottom: -8px;
+}
+
+.india-tooltip__city {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.india-tooltip__subtitle {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.india-tooltip__stats {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.75);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 6px;
+  margin-bottom: 4px;
+}
+
+.india-tooltip__hint {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.06em;
+}
+
+/* Detailed Expanded Floating Panel (Modal / Popup Card) */
+.india-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 360px;
+  padding: 24px 26px;
+  background: rgba(10, 10, 14, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.88), 0 0 24px rgba(239, 68, 68, 0.16);
+  pointer-events: auto;
+  z-index: 50;
+  animation: panelScaleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.india-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.india-panel__flagship {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #ff5252;
+  margin-bottom: 4px;
+}
+
+.india-panel__title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.india-panel__subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.india-panel__close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.india-panel__close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.india-panel__divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.4), transparent);
+  margin: 16px 0;
+}
+
+.india-panel__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.india-panel__stat-box {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.india-panel__stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.india-panel__stat-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+}
+
+.india-panel__latest {
+  background: rgba(239, 68, 68, 0.06);
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 14px;
+}
+
+.india-panel__latest-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  display: block;
+}
+
+.india-panel__latest-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+.india-panel__desc {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 18px;
+}
+
+.india-panel__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.india-panel__cta:hover {
+  background: #ff3333;
+  transform: translateY(-1px);
+}
+
+/* Quick Select Pills (Bottom Bar) */
+.india-pillbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-8);
+  pointer-events: auto;
+  z-index: 15;
+}
+
+.india-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.india-pill:hover,
+.india-pill:focus-visible {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.india-pill--active {
+  background: rgba(239, 68, 68, 0.24);
+  border-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+.india-pill__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.india-pill__star {
+  color: #ff5252;
+  font-size: 0.75rem;
+}
+
+/* Keyframes */
+@keyframes indiaPulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelScaleIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .india-node__ring,
+  .india-node__ring-outer,
+  .india-header__pulse {
+    animation: none;
+    opacity: 0.4;
+  }
+  .india-tooltip,
+  .india-panel,
+  .india-node {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .india-stage {
+    min-height: 520px;
+    padding: var(--space-32) 0 var(--space-24);
+  }
+  .india-surface {
+    height: 380px;
+  }
+  .india-node__label {
+    font-size: 0.6rem;
+  }
+  .india-panel {
+    top: auto;
+    bottom: 12px;
+    transform: translate(-50%, 0);
+    width: 95%;
+    padding: 18px 20px;
+  }
+  @keyframes panelScaleIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+}
