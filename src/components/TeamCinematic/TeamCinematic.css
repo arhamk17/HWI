@@ -405,12 +405,12 @@
   align-items: center;
 }
 
-/* Responsive Swipe Control Button / Pill */
-.head-intro-swipe-control {
+/* Responsive Roll Gesture Control Button / Pill */
+.head-intro-roll-control {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 8px 18px;
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.32);
   border-radius: 100px;
@@ -422,79 +422,85 @@
   outline: none;
 }
 
-.head-intro-swipe-control:hover,
-.head-intro-swipe-control:focus-visible {
+.head-intro-roll-control:hover,
+.head-intro-roll-control:focus-visible {
   background: rgba(239, 68, 68, 0.16);
   border-color: var(--tc-accent);
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.28);
-  transform: translateX(-3px);
+  transform: translateY(2px);
 }
 
-.head-intro-swipe-control:active {
+.head-intro-roll-control:active {
   transform: scale(0.98);
 }
 
-/* Animated Swipe Indicator */
-.swipe-indicator-track {
+/* Animated Trackpad / Mouse Roll Indicator */
+.roll-indicator-track {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
   color: var(--tc-accent);
   background: rgba(239, 68, 68, 0.14);
-  padding: 3px 8px;
+  padding: 4px 8px;
   border-radius: 20px;
 }
 
-.swipe-arrow-animated {
+.roll-mouse-frame {
+  width: 14px;
+  height: 20px;
+  border: 1.5px solid var(--tc-accent);
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 3px;
+  box-sizing: border-box;
+}
+
+.roll-mouse-dot {
+  width: 2.5px;
+  height: 5px;
+  border-radius: 2px;
+  background-color: var(--tc-accent);
+  box-shadow: 0 0 4px var(--tc-accent);
+  animation: rollDotSlide 1.6s ease-in-out infinite;
+}
+
+.roll-arrow-animated {
   font-size: 13px;
   line-height: 1;
   font-weight: 800;
-  animation: swipeArrowSlide 1.6s ease-in-out infinite;
-}
-
-.swipe-arrow--1 {
-  animation-delay: 0s;
-  opacity: 0.35;
-}
-
-.swipe-arrow--2 {
-  animation-delay: 0.2s;
-  opacity: 0.7;
-}
-
-.swipe-arrow--3 {
-  animation-delay: 0.4s;
-  opacity: 1;
-}
-
-.swipe-hand-icon {
-  display: inline-flex;
-  margin-left: 2px;
   color: #FFFFFF;
-  animation: swipeHandPulse 1.6s ease-in-out infinite;
+  animation: rollArrowBounce 1.6s ease-in-out infinite;
 }
 
-@keyframes swipeArrowSlide {
-  0%, 100% {
-    transform: translateX(0);
-    opacity: 0.4;
+@keyframes rollDotSlide {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
   }
-  50% {
-    transform: translateX(-4px);
+  65% {
+    transform: translateY(6px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
-@keyframes swipeHandPulse {
+@keyframes rollArrowBounce {
   0%, 100% {
-    transform: translateX(0);
+    transform: translateY(0);
+    opacity: 0.6;
   }
   50% {
-    transform: translateX(-4px);
+    transform: translateY(3px);
+    opacity: 1;
   }
 }
 
-.swipe-control-label-wrap {
+.roll-control-label-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -503,41 +509,63 @@
   letter-spacing: 0.08em;
 }
 
-.swipe-control-action {
+.roll-control-action {
   font-weight: 800;
   color: var(--tc-accent);
   letter-spacing: 0.12em;
 }
 
-.swipe-control-divider {
+.roll-control-divider {
   color: rgba(255, 255, 255, 0.2);
   font-size: 10px;
 }
 
-.swipe-control-text {
+.roll-control-text {
   color: var(--tc-text-sec);
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
-.swipe-control-or {
+.roll-control-or {
   color: var(--tc-text-ter);
   font-size: 10px;
 }
 
-.swipe-control-highlight {
+.roll-control-highlight {
   color: #FFFFFF;
   font-weight: 700;
 }
 
-.swipe-control-arrow {
+.roll-control-arrow {
   color: var(--tc-accent);
   transition: transform 0.2s ease;
 }
 
-.head-intro-swipe-control:hover .swipe-control-arrow {
+.head-intro-roll-control:hover .roll-control-arrow {
   transform: translate(2px, -2px);
+}
+
+/* Showcase Controls Roll Hint Badge */
+.showcase-controls__roll-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--tc-text-ter);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--tc-border-subtle);
+  margin-left: 8px;
+}
+
+.roll-hint-icon {
+  color: var(--tc-accent);
+  font-size: 12px;
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -1027,7 +1055,7 @@
     gap: 20px;
   }
 
-  .head-intro-swipe-control {
+  .head-intro-roll-control {
     width: 100%;
     justify-content: space-between;
     padding: 10px 14px;
