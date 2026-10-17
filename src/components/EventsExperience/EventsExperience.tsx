@@ -61,6 +61,13 @@ export function EventsExperience() {
     setSelectedId(EVENTS_DATA[newIdx].id);
   }, [currentIndex]);
 
+  const scrollGallery = useCallback((direction: 'left' | 'right') => {
+    if (galleryTrackRef.current) {
+      const scrollAmount = direction === 'left' ? -380 : 380;
+      galleryTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }, []);
+
   // Keyboard navigation for gallery: ArrowLeft / ArrowRight
   const handleGalleryKeyDown = useCallback(
     (e: React.KeyboardEvent, index: number) => {
@@ -131,7 +138,7 @@ export function EventsExperience() {
 
       {/* ================================================================= */}
       {/* C. EXPANDABLE HORIZONTAL EVENT / YEAR GALLERY (Section 4.C, 2, 5) */}
-      {/* Tall narrow panels side-by-side; active panel expands smoothly    */}
+      {/* Tall narrow panels side-by-side matching reference video          */}
       {/* ================================================================= */}
       <section className="hwi-gallery-section" aria-label="Year and Event Edition Gallery">
         <div className="container">
@@ -168,121 +175,112 @@ export function EventsExperience() {
             </div>
           </div>
 
-          {/* Horizontal Track of Expandable Panels */}
-          <div
-            ref={galleryTrackRef}
-            className="hwi-gallery-track"
-            role="tablist"
-            aria-label="Event Editions"
-          >
-            {EVENTS_DATA.map((event, idx) => {
-              const isActive = event.id === selectedId;
-              const accentColor = event.accentColor || '#EF4444';
+          {/* Horizontal Track with Floating Circular Arrows */}
+          <div className="hwi-gallery-wrapper">
+            <button
+              type="button"
+              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
+              onClick={() => scrollGallery('left')}
+              aria-label="Scroll editions backward"
+              data-cursor="link"
+              data-cursor-label="PREV"
+            >
+              <ChevronLeft size={22} />
+            </button>
 
-              return (
-                <div
-                  key={event.id}
-                  id={`panel-${event.id}`}
-                  className={`hwi-panel ${isActive ? 'hwi-panel--active' : 'hwi-panel--idle'}`}
-                  style={
-                    {
-                      '--panel-accent': accentColor,
-                    } as React.CSSProperties
-                  }
-                  role="tab"
-                  tabIndex={0}
-                  aria-selected={isActive}
-                  aria-controls={`feature-banner-${event.id}`}
-                  onClick={() => handleSelectEvent(event.id)}
-                  onKeyDown={(e) => handleGalleryKeyDown(e, idx)}
-                  data-cursor="link"
-                  data-cursor-label={isActive ? 'ACTIVE' : 'EXPAND'}
-                >
-                  {/* Expandable Palette Poster Background */}
-                  <div className="hwi-panel__bg">
-                    {event.cardImage ? (
-                      <img
-                        src={event.cardImage}
-                        alt={event.title}
-                        className="hwi-panel__poster-img"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <PanelArtwork graphicType={event.hudGraphicType || 'grid'} accent={accentColor} />
-                    )}
-                    <div className="hwi-panel__overlay" />
-                    <div className="hwi-panel__vignette" />
-                  </div>
+            <div
+              ref={galleryTrackRef}
+              className="hwi-gallery-track"
+              role="tablist"
+              aria-label="Event Editions"
+            >
+              {EVENTS_DATA.map((event, idx) => {
+                const isActive = event.id === selectedId;
+                const accentColor = event.accentColor || '#EF4444';
 
-                  {/* Corner Accent Brackets on Active Panel */}
-                  {isActive && (
-                    <div className="hwi-panel__brackets" aria-hidden="true">
-                      <span className="p-bracket p-bracket--tl" />
-                      <span className="p-bracket p-bracket--tr" />
-                      <span className="p-bracket p-bracket--bl" />
-                      <span className="p-bracket p-bracket--br" />
+                return (
+                  <div
+                    key={event.id}
+                    id={`panel-${event.id}`}
+                    className={`hwi-panel ${isActive ? 'hwi-panel--active' : 'hwi-panel--idle'}`}
+                    style={
+                      {
+                        '--panel-accent': accentColor,
+                      } as React.CSSProperties
+                    }
+                    role="tab"
+                    tabIndex={0}
+                    aria-selected={isActive}
+                    aria-controls={`feature-banner-${event.id}`}
+                    onClick={() => handleSelectEvent(event.id)}
+                    onKeyDown={(e) => handleGalleryKeyDown(e, idx)}
+                    data-cursor="link"
+                    data-cursor-label={isActive ? 'SELECTED' : 'SELECT'}
+                  >
+                    {/* Expandable Palette Poster Background */}
+                    <div className="hwi-panel__bg">
+                      {event.cardImage ? (
+                        <img
+                          src={event.cardImage}
+                          alt={event.title}
+                          className="hwi-panel__poster-img"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <PanelArtwork graphicType={event.hudGraphicType || 'grid'} accent={accentColor} />
+                      )}
+                      <div className="hwi-panel__overlay" />
+                      <div className="hwi-panel__vignette" />
                     </div>
-                  )}
 
-                  {/* Top Panel Meta */}
-                  <div className="hwi-panel__top">
-                    <span className="hwi-panel__edition-pill">
-                      {event.year}
-                    </span>
+                    {/* Corner Accent Brackets on Active Panel */}
                     {isActive && (
-                      <span className="hwi-panel__category-badge">
-                        {event.category}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Vertical / Rotated Title for Inactive State */}
-                  <div className="hwi-panel__vertical-title" aria-hidden={isActive}>
-                    <span className="vertical-label">{event.shortTitle || event.title}</span>
-                  </div>
-
-                  {/* Expanded Content (Visible when active) */}
-                  {isActive && (
-                    <div className="hwi-panel__expanded-content">
-                      {/* Media Region: Transitions to Video Player or HWI-Branded Video Placeholder */}
-                      <PanelMediaRegion event={event} />
-
-                      <div className="hwi-panel__expanded-info">
-                        <div className="hwi-panel__expanded-meta">
-                          <span className="expanded-badge">{event.badge}</span>
-                          <span className="expanded-date">{event.date}</span>
-                        </div>
-
-                        <h3 className="hwi-panel__expanded-title">{event.title}</h3>
-                        <p className="hwi-panel__expanded-theme">
-                          <Sparkles size={13} className="theme-icon" />
-                          <span>{event.theme}</span>
-                        </p>
-                        <p className="hwi-panel__expanded-desc">
-                          {event.shortDescription || event.desc}
-                        </p>
-
-                        <div className="hwi-panel__expanded-telemetry">
-                          <span className="telemetry-chip">{event.venue}</span>
-                          <span className="telemetry-chip">{event.duration}</span>
-                          <span className="telemetry-chip">
-                            {typeof event.participants === 'string' && (event.participants.includes('Builders') || event.participants.includes('Researchers'))
-                              ? event.participants
-                              : `${event.participants} Builders`}
-                          </span>
-                        </div>
+                      <div className="hwi-panel__brackets" aria-hidden="true">
+                        <span className="p-bracket p-bracket--tl" />
+                        <span className="p-bracket p-bracket--tr" />
+                        <span className="p-bracket p-bracket--bl" />
+                        <span className="p-bracket p-bracket--br" />
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Large Bottom Year Display */}
-                  <div className="hwi-panel__bottom">
-                    <span className="hwi-panel__year-num">{event.year}</span>
-                    <span className="hwi-panel__dot" />
+                    {/* Top-Left: TEDx Eyebrow + Bold Big Edition Number */}
+                    <div className="hwi-panel__tedx-header">
+                      <span className="hwi-panel__tedx-tag">EDITION</span>
+                      <span className="hwi-panel__tedx-num">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    {/* Right-Side: Vertical Rotated Theme / Title */}
+                    <div className="hwi-panel__tedx-vertical" aria-hidden="true">
+                      <span>{(event.theme || event.shortTitle || event.title).toUpperCase()}</span>
+                    </div>
+
+                    {/* Bottom-Left: Event Date & Active Badge */}
+                    <div className="hwi-panel__tedx-footer">
+                      <span className="tedx-footer-date">{event.date}</span>
+                      {isActive && (
+                        <span className="tedx-footer-active-badge">
+                          <span className="tedx-pulse-dot" />
+                          SELECTED
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
+              onClick={() => scrollGallery('right')}
+              aria-label="Scroll editions forward"
+              data-cursor="link"
+              data-cursor-label="NEXT"
+            >
+              <ChevronRight size={22} />
+            </button>
           </div>
         </div>
       </section>
@@ -290,6 +288,7 @@ export function EventsExperience() {
       {/* ================================================================= */}
       {/* D. SELECTED EVENT FEATURE BANNER (Section 4.D)                    */}
       {/* Wide landscape cinematic hero for the selected event              */}
+      {/* Matching frame 24 of reference video (TEDx style)                 */}
       {/* ================================================================= */}
       <section
         id={`feature-banner-${selectedEvent.id}`}
@@ -297,7 +296,14 @@ export function EventsExperience() {
         key={`banner-${selectedEvent.id}`}
       >
         <div className="container">
-          <div className="hwi-feature-banner">
+          <div
+            className="hwi-feature-banner"
+            style={
+              {
+                '--banner-accent': selectedEvent.accentColor || '#EF4444',
+              } as React.CSSProperties
+            }
+          >
             {/* Ambient Background Graphic & Vignette */}
             <div className="hwi-feature-banner__bg">
               {selectedEvent.heroImage || selectedEvent.cardImage ? (
@@ -316,63 +322,55 @@ export function EventsExperience() {
               <div className="hwi-feature-banner__overlay" />
             </div>
 
-            {/* Banner Content Layout */}
-            <div className="hwi-feature-banner__content">
-              {/* Eyebrow Badges */}
-              <div className="hwi-feature-banner__badges">
-                <span className="banner-badge banner-badge--category">
-                  {selectedEvent.category}
+            {/* Vertical Theme Title on Right Edge (TEDx reference frame 24) */}
+            <div className="cinematic-banner-vertical-theme" aria-hidden="true">
+              <span>{(selectedEvent.theme || selectedEvent.shortTitle || selectedEvent.title).toUpperCase()}</span>
+            </div>
+
+            {/* Top-Left Header & Edition Badges */}
+            <div className="cinematic-banner-header">
+              <div className="cinematic-banner-badges">
+                <span className="banner-badge banner-badge--edition">
+                  EDITION {String(currentIndex + 1).padStart(2, '0')}
                 </span>
                 <span className="banner-badge banner-badge--year">
                   {selectedEvent.year}
+                </span>
+                <span className="banner-badge banner-badge--category">
+                  {selectedEvent.category}
                 </span>
                 <span
                   className={`banner-badge ${selectedEvent.status === 'upcoming' ? 'banner-badge--upcoming' : 'banner-badge--past'}`}
                 >
                   {selectedEvent.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED RECAP'}
                 </span>
-                <span className="banner-badge banner-badge--edition">
-                  {selectedEvent.edition || selectedEvent.badge}
-                </span>
               </div>
+              <h2 className="cinematic-banner-title">{selectedEvent.title}</h2>
+            </div>
 
-              {/* Main Headline */}
-              <h2 className="hwi-feature-banner__title">
-                {selectedEvent.title}
-              </h2>
+            {/* Center Action: Play Theme Video pill button / interactive video player */}
+            <div className="cinematic-banner-center-action">
+              <PanelMediaRegion event={selectedEvent} />
+            </div>
 
-              {/* Theme Subtitle */}
-              <div className="hwi-feature-banner__theme">
-                <Sparkles size={16} className="theme-star" />
-                <span>THEME: {selectedEvent.theme}</span>
-              </div>
-
-              {/* Quick Telemetry Strip */}
-              <div className="hwi-feature-banner__meta-strip">
-                <div className="meta-strip-item">
-                  <Calendar size={15} className="meta-icon" />
+            {/* Bottom-Left Date, Venue & Quick Actions */}
+            <div className="cinematic-banner-footer">
+              <div className="cinematic-banner-meta-left">
+                <div className="cinematic-banner-meta-item">
+                  <Calendar size={15} />
                   <span>{selectedEvent.date}</span>
                 </div>
-                <div className="meta-strip-item">
-                  <MapPin size={15} className="meta-icon" />
+                <div className="cinematic-banner-meta-item">
+                  <MapPin size={15} />
                   <span>{selectedEvent.venue}</span>
                 </div>
-                <div className="meta-strip-item">
-                  <Clock size={15} className="meta-icon" />
+                <div className="cinematic-banner-meta-item">
+                  <Clock size={15} />
                   <span>{selectedEvent.duration}</span>
                 </div>
-                  <div className="meta-strip-item">
-                    <Users size={15} className="meta-icon" />
-                    <span>
-                      {typeof selectedEvent.participants === 'string' && (selectedEvent.participants.includes('Builders') || selectedEvent.participants.includes('Researchers'))
-                        ? selectedEvent.participants
-                        : `${selectedEvent.participants} Builders`}
-                    </span>
-                  </div>
               </div>
 
-              {/* Functional CTA */}
-              <div className="hwi-feature-banner__actions">
+              <div className="cinematic-banner-actions">
                 {selectedEvent.status === 'upcoming' ? (
                   <Link
                     href={selectedEvent.ctaUrl || '/join'}
@@ -402,15 +400,15 @@ export function EventsExperience() {
 
       {/* ================================================================= */}
       {/* E. EDITORIAL EVENT STORY & DETAILS (Section 4.E, 2, 3)            */}
-      {/* Clean high-contrast LIGHT SECTION as in the reference             */}
+      {/* Clean high-contrast LIGHT SECTION matching reference video        */}
       {/* ================================================================= */}
       <section id="editorial-story" className="hwi-story-light-section">
         <div className="container">
           <div className="hwi-story-container">
-            {/* Centered Editorial Section Header */}
+            {/* Centered Editorial Section Header matching frame 24 */}
             <div className="hwi-story-header">
-              <span className="hwi-story-kicker">OPERATIONAL DOSSIER & RECAP</span>
-              <h2 className="hwi-story-title">{selectedEvent.title}</h2>
+              <span className="hwi-story-kicker">EDITION {String(currentIndex + 1).padStart(2, '0')} DOSSIER // {selectedEvent.year}</span>
+              <h2 className="hwi-editorial-theme-title">Theme: {selectedEvent.theme}</h2>
               <div className="hwi-story-rule" />
               <p className="hwi-story-summary">
                 {selectedEvent.shortDescription || selectedEvent.desc}
@@ -739,9 +737,10 @@ function PanelArtwork({
 }
 
 // =========================================================================
+// =========================================================================
 // PANEL MEDIA REGION COMPONENT
-// Transitions media area from image preview to responsive video player
-// or designed HWI-branded video placeholder
+// Renders the frosted "Play Theme Video" pill (matching reference video)
+// and transitions into a video player or designed HWI broadcast reel
 // =========================================================================
 function PanelMediaRegion({ event }: { event: EventItem }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -749,14 +748,26 @@ function PanelMediaRegion({ event }: { event: EventItem }) {
   const [simulatedPlaying, setSimulatedPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Reset play state if selected event changes
+  useEffect(() => {
+    setIsPlaying(false);
+    setSimulatedPlaying(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, [event.id]);
+
   const toggleRealVideo = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!videoRef.current) return;
+    if (!videoRef.current) {
+      setIsPlaying(true);
+      return;
+    }
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(true));
     }
   };
 
@@ -772,12 +783,29 @@ function PanelMediaRegion({ event }: { event: EventItem }) {
     setSimulatedPlaying((prev) => !prev);
   };
 
+  const isAnyPlaying = isPlaying || simulatedPlaying;
+
   return (
-    <div className="hwi-panel__media-region">
-      {event.videoUrl ? (
-        /* Real Video Player with Cybernetic HUD */
+    <div className={`hwi-panel__media-region ${isAnyPlaying ? 'hwi-panel__media-region--active' : 'hwi-panel__media-region--idle'}`}>
+      {!isAnyPlaying ? (
+        /* Frosted Glass "Play Theme Video" Pill matching frame 24 of reference video */
+        <button
+          type="button"
+          className="hwi-tedx-play-pill"
+          onClick={event.videoUrl ? toggleRealVideo : toggleSimulatedVideo}
+          data-cursor="link"
+          data-cursor-label="PLAY"
+          aria-label="Play Theme Video"
+        >
+          <span className="play-pill-disc">
+            <Play size={15} fill="currentColor" className="play-pill-icon" />
+          </span>
+          <span className="play-pill-text">Play Theme Video</span>
+        </button>
+      ) : event.videoUrl ? (
+        /* Active Real Video Player with Cybernetic HUD */
         <div
-          className="hwi-video-player-container"
+          className="hwi-video-player-container hwi-video-player-container--cinematic"
           onClick={toggleRealVideo}
           role="button"
           tabIndex={0}
@@ -794,6 +822,7 @@ function PanelMediaRegion({ event }: { event: EventItem }) {
             src={event.videoUrl}
             poster={event.videoPoster || event.cardImage}
             playsInline
+            autoPlay
             muted={isMuted}
             loop
             className="hwi-video-element"
@@ -806,31 +835,38 @@ function PanelMediaRegion({ event }: { event: EventItem }) {
                 <span className={`video-rec-dot ${isPlaying ? 'video-rec-dot--active' : ''}`} />
                 {isPlaying ? 'PLAYING // 1080P' : 'PAUSED // 1080P'}
               </span>
-              <button
-                type="button"
-                className="video-mute-btn"
-                onClick={toggleMute}
-                aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-              >
-                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-              </button>
-            </div>
-            {!isPlaying && (
-              <div className="video-hud-center">
-                <div className="video-play-disc">
-                  <Play size={20} className="play-triangle-icon" />
-                </div>
+              <div className="video-hud-btns">
+                <button
+                  type="button"
+                  className="video-mute-btn"
+                  onClick={toggleMute}
+                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                >
+                  {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                </button>
+                <button
+                  type="button"
+                  className="video-close-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsPlaying(false);
+                    if (videoRef.current) videoRef.current.pause();
+                  }}
+                  aria-label="Close video"
+                >
+                  ✕
+                </button>
               </div>
-            )}
+            </div>
             <div className="video-hud-bottom">
               <span className="video-hud-label">{event.title} • RECAP BROADCAST</span>
             </div>
           </div>
         </div>
       ) : (
-        /* Designed HWI-branded Video Placeholder */
+        /* Active Designed HWI-branded Video Placeholder */
         <div
-          className={`hwi-video-placeholder-container ${simulatedPlaying ? 'hwi-video-placeholder--playing' : ''}`}
+          className="hwi-video-placeholder-container hwi-video-placeholder-container--cinematic hwi-video-placeholder--playing"
           onClick={toggleSimulatedVideo}
           role="button"
           tabIndex={0}
@@ -854,10 +890,23 @@ function PanelMediaRegion({ event }: { event: EventItem }) {
           <div className="placeholder-hud-overlay">
             <div className="placeholder-hud-top">
               <span className="placeholder-tag">
-                <span className={`placeholder-rec-dot ${simulatedPlaying ? 'rec-pulse' : ''}`} />
-                {simulatedPlaying ? 'STREAMING RECAP' : 'EVENT RECAP STREAM'}
+                <span className="placeholder-rec-dot rec-pulse" />
+                STREAMING RECAP
               </span>
-              <span className="placeholder-spec">1080P // 60FPS</span>
+              <div className="placeholder-top-right">
+                <span className="placeholder-spec">1080P // 60FPS</span>
+                <button
+                  type="button"
+                  className="video-close-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSimulatedPlaying(false);
+                  }}
+                  aria-label="Close reel"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             <div className="placeholder-hud-center">
