@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { IndiaMapOverlay } from '@/components/InteractiveGlobe/IndiaMapOverlay';
 import { indiaStore } from '@/lib/indiaStore';
 import './StoryChapter.css';
 
@@ -17,16 +16,16 @@ export function StoryChapter() {
   }, []);
 
   // Opacity calculations for smooth narrative crossfade during scroll
-  // Phase 1 (Global vision): 100% visible at start, fades out between 0.18 and 0.45
-  const globalOpacity = morphP <= 0.18 ? 1.0 : Math.max(0, 1.0 - (morphP - 0.18) / 0.25);
-  // Phase 2 (Pan-India overlay): Fades in between 0.35 and 0.60
-  const indiaOpacity = morphP <= 0.35 ? 0.0 : Math.min(1.0, (morphP - 0.35) / 0.25);
+  // Phase 1 (Global vision): 100% visible at start, fades out between 0.18 and 0.42
+  const globalOpacity = morphP <= 0.18 ? 1.0 : Math.max(0, 1.0 - (morphP - 0.18) / 0.24);
+  // Phase 2 (HWI Chapter Formation): Fades in as globe morphs into HWI lettering
+  const hwiOpacity = morphP <= 0.35 ? 0.0 : Math.min(1.0, (morphP - 0.35) / 0.25);
 
   return (
     <section className="story-chapter" ref={sectionRef} id="about">
       <div className="story-chapter__sticky">
         <div className="story-chapter__viewport">
-          {/* Phase 1: Global Vision Narrative (Visible when globe is round / initial flattening) */}
+          {/* Phase 1: Global Vision Narrative (Visible when globe is rotating in 3D) */}
           <div
             className="story-chapter__narrative-global"
             style={{
@@ -64,15 +63,25 @@ export function StoryChapter() {
             </div>
           </div>
 
-          {/* Phase 2: Pan-India Developer Network (Unboxed Natural Environment & Interactive Nodes) */}
+          {/* Phase 2: HWI Particle Formation Header (Clean framing leaving center completely open) */}
           <div
-            className="story-chapter__narrative-india"
+            className="story-chapter__narrative-hwi"
             style={{
-              opacity: indiaOpacity,
-              pointerEvents: indiaOpacity > 0.2 ? 'auto' : 'none',
+              opacity: hwiOpacity,
+              transform: `translateY(${(1 - hwiOpacity) * 20}px)`,
+              pointerEvents: hwiOpacity > 0.2 ? 'auto' : 'none',
             }}
           >
-            <IndiaMapOverlay />
+            <div className="story-chapter__eyebrow">
+              <span className="story-chapter__pulse-dot" />
+              <span>CHAPTER 02 // HACKWITHINDIA</span>
+            </div>
+            <h2 className="story-chapter__hwi-title">
+              Empowering India&apos;s Builders &amp; Innovators
+            </h2>
+            <p className="story-chapter__hwi-desc">
+              Uniting student engineers and builders under one banner to push the frontiers of technology and open innovation.
+            </p>
           </div>
         </div>
       </div>

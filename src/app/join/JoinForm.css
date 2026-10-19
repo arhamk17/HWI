@@ -55,9 +55,19 @@
   background: rgba(0, 0, 0, 0.6);
 }
 
+.join-form input::placeholder,
+.join-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .join-form select {
   appearance: none;
   cursor: pointer;
+}
+
+.join-form option {
+  background-color: #0c0a14;
+  color: #FFFFFF;
 }
 
 /* Success state */

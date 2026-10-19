@@ -16,49 +16,44 @@ import {
   Sparkles,
   ExternalLink,
   CheckCircle2,
-  Play,
-  Pause,
-  Volume2,
-  VolumeX,
-  Film,
 } from 'lucide-react';
-import { EVENTS_DATA, EventItem } from '@/data/events';
+import { EVENTS_DATA } from '@/data/events';
 import './EventsExperience.css';
 
 export function EventsExperience() {
-  // Documented selection rule (Section 5):
-  // Select upcoming event if there is one; otherwise latest published event.
-  const initialIndex = useMemo(() => {
-    const upcomingIdx = EVENTS_DATA.findIndex((e) => e.status === 'upcoming');
-    return upcomingIdx !== -1 ? upcomingIdx : 0;
-  }, []);
-
-  const [selectedId, setSelectedId] = useState<string>(
-    EVENTS_DATA[initialIndex]?.id || ''
-  );
+  // Requirement 1: All panels begin collapsed by default (no panel expanded on initial load)
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const galleryTrackRef = useRef<HTMLDivElement>(null);
 
-  // Drive all downstream content strictly from the selected event object
+  // Drive downstream content strictly from the selected event object if one is selected
   const selectedEvent = useMemo(() => {
-    return EVENTS_DATA.find((e) => e.id === selectedId) || EVENTS_DATA[0];
+    if (!selectedId) return null;
+    return EVENTS_DATA.find((e) => e.id === selectedId) || null;
   }, [selectedId]);
 
   const currentIndex = useMemo(() => {
+    if (!selectedEvent) return -1;
     return EVENTS_DATA.findIndex((e) => e.id === selectedEvent.id);
-  }, [selectedEvent.id]);
+  }, [selectedEvent]);
 
   const handleSelectEvent = useCallback((id: string) => {
     setSelectedId(id);
   }, []);
 
   const handlePrevEvent = useCallback(() => {
-    const newIdx = currentIndex === 0 ? EVENTS_DATA.length - 1 : currentIndex - 1;
-    setSelectedId(EVENTS_DATA[newIdx].id);
+    if (currentIndex <= 0) {
+      setSelectedId(EVENTS_DATA[EVENTS_DATA.length - 1].id);
+    } else {
+      setSelectedId(EVENTS_DATA[currentIndex - 1].id);
+    }
   }, [currentIndex]);
 
   const handleNextEvent = useCallback(() => {
-    const newIdx = currentIndex === EVENTS_DATA.length - 1 ? 0 : currentIndex + 1;
-    setSelectedId(EVENTS_DATA[newIdx].id);
+    if (currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1) {
+      setSelectedId(EVENTS_DATA[0].id);
+    } else {
+      setSelectedId(EVENTS_DATA[currentIndex + 1].id);
+    }
   }, [currentIndex]);
 
   const scrollGallery = useCallback((direction: 'left' | 'right') => {
@@ -87,13 +82,13 @@ export function EventsExperience() {
     []
   );
 
-  // Scroll active panel into view smoothly on mobile
+  // Scroll active panel into view smoothly when selected
   useEffect(() => {
-    if (galleryTrackRef.current) {
+    if (selectedId && galleryTrackRef.current) {
       const activeEl = galleryTrackRef.current.querySelector<HTMLElement>(
         '.hwi-panel--active'
       );
-      if (activeEl && window.innerWidth < 960) {
+      if (activeEl) {
         activeEl.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
@@ -103,7 +98,7 @@ export function EventsExperience() {
     }
   }, [selectedId]);
 
-  if (!selectedEvent) {
+  if (EVENTS_DATA.length === 0) {
     return (
       <div className="events-empty-state">
         <p>No chapter events currently published.</p>
@@ -148,7 +143,9 @@ export function EventsExperience() {
               <span className="bar-tag">EDITION ARCHIVE</span>
               <span className="bar-divider">//</span>
               <span className="bar-counter">
-                {String(currentIndex + 1).padStart(2, '0')} OF {String(EVENTS_DATA.length).padStart(2, '0')}
+                {selectedEvent
+                  ? `${String(currentIndex + 1).padStart(2, '0')} OF ${String(EVENTS_DATA.length).padStart(2, '0')} SELECTED`
+                  : `ALL ${String(EVENTS_DATA.length).padStart(2, '0')} EDITIONS`}
               </span>
             </div>
             <div className="hwi-gallery-bar__controls">
@@ -180,8 +177,8 @@ export function EventsExperience() {
             <button
               type="button"
               className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
-              onClick={() => scrollGallery('left')}
-              aria-label="Scroll editions backward"
+              onClick={handlePrevEvent}
+              aria-label="Previous edition"
               data-cursor="link"
               data-cursor-label="PREV"
             >
@@ -211,17 +208,17 @@ export function EventsExperience() {
                     role="tab"
                     tabIndex={0}
                     aria-selected={isActive}
-                    aria-controls={`feature-banner-${event.id}`}
+                    aria-controls={isActive ? 'editorial-story' : undefined}
                     onClick={() => handleSelectEvent(event.id)}
                     onKeyDown={(e) => handleGalleryKeyDown(e, idx)}
                     data-cursor="link"
-                    data-cursor-label={isActive ? 'SELECTED' : 'SELECT'}
+                    data-cursor-label={isActive ? 'SELECTED' : 'EXPAND'}
                   >
                     {/* Expandable Palette Poster Background */}
                     <div className="hwi-panel__bg">
                       {event.cardImage ? (
                         <img
-                          src={event.cardImage}
+                          src={isActive && event.heroImage ? event.heroImage : event.cardImage}
                           alt={event.title}
                           className="hwi-panel__poster-img"
                           loading="lazy"
@@ -243,6 +240,7 @@ export function EventsExperience() {
                       </div>
                     )}
 
+                    {/* ── COLLAPSED STATE ELEMENTS (Fades out when panel expands) ── */}
                     {/* Top-Left: TEDx Eyebrow + Bold Big Edition Number */}
                     <div className="hwi-panel__tedx-header">
                       <span className="hwi-panel__tedx-tag">EDITION</span>
@@ -253,19 +251,92 @@ export function EventsExperience() {
 
                     {/* Right-Side: Vertical Rotated Theme / Title */}
                     <div className="hwi-panel__tedx-vertical" aria-hidden="true">
-                      <span>{(event.theme || event.shortTitle || event.title).toUpperCase()}</span>
+                      <span>{(event.shortTitle || event.title).toUpperCase()}</span>
                     </div>
 
-                    {/* Bottom-Left: Event Date & Active Badge */}
+                    {/* Bottom-Left: Event Date */}
                     <div className="hwi-panel__tedx-footer">
                       <span className="tedx-footer-date">{event.date}</span>
-                      {isActive && (
-                        <span className="tedx-footer-active-badge">
-                          <span className="tedx-pulse-dot" />
-                          SELECTED
-                        </span>
-                      )}
                     </div>
+
+                    {/* ── EXPANDED STATE CONTENT (Revealed inside the expanding panel) ── */}
+                    {isActive && (
+                      <div className="hwi-panel__expanded-content" aria-hidden={false}>
+                        <div className="expanded-content__inner">
+                          {/* Top Badges Strip */}
+                          <div className="expanded-content__badges">
+                            <span className="banner-badge banner-badge--edition">
+                              EDITION {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span className="banner-badge banner-badge--year">{event.year}</span>
+                            <span className="banner-badge banner-badge--category">{event.category}</span>
+                            <span
+                              className={`banner-badge ${event.status === 'upcoming' ? 'banner-badge--upcoming' : 'banner-badge--past'}`}
+                            >
+                              {event.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED RECAP'}
+                            </span>
+                          </div>
+
+                          {/* Header: Title & Theme */}
+                          <div className="expanded-content__header">
+                            <h2 className="expanded-content__title">{event.title}</h2>
+                            <div className="expanded-content__theme">
+                              <span className="theme-accent-bar" />
+                              <span className="theme-text">THEME: {event.theme}</span>
+                            </div>
+                          </div>
+
+                          {/* Summary Narrative */}
+                          <p className="expanded-content__desc">
+                            {event.shortDescription || event.desc}
+                          </p>
+
+                          {/* Footer: Metadata & Actions */}
+                          <div className="expanded-content__footer">
+                            <div className="expanded-content__meta">
+                              <div className="expanded-meta-item">
+                                <Calendar size={14} />
+                                <span>{event.date}</span>
+                              </div>
+                              <div className="expanded-meta-item">
+                                <MapPin size={14} />
+                                <span>{event.venue}</span>
+                              </div>
+                              <div className="expanded-meta-item">
+                                <Clock size={14} />
+                                <span>{event.duration}</span>
+                              </div>
+                            </div>
+
+                            <div className="expanded-content__actions">
+                              {event.status === 'upcoming' ? (
+                                <Link
+                                  href={event.ctaUrl || '/join'}
+                                  className="banner-cta-btn banner-cta-btn--primary"
+                                  onClick={(e) => e.stopPropagation()}
+                                  data-cursor="link"
+                                  data-cursor-label="APPLY"
+                                >
+                                  <span>{event.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
+                                  <ArrowUpRight size={16} />
+                                </Link>
+                              ) : (
+                                <a
+                                  href="#editorial-story"
+                                  className="banner-cta-btn banner-cta-btn--secondary"
+                                  onClick={(e) => e.stopPropagation()}
+                                  data-cursor="link"
+                                  data-cursor-label="EXPLORE"
+                                >
+                                  <span>EXPLORE EVENT STORY</span>
+                                  <span className="action-arrow">↓</span>
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -274,8 +345,8 @@ export function EventsExperience() {
             <button
               type="button"
               className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
-              onClick={() => scrollGallery('right')}
-              aria-label="Scroll editions forward"
+              onClick={handleNextEvent}
+              aria-label="Next edition"
               data-cursor="link"
               data-cursor-label="NEXT"
             >
@@ -286,123 +357,28 @@ export function EventsExperience() {
       </section>
 
       {/* ================================================================= */}
-      {/* D. SELECTED EVENT FEATURE BANNER (Section 4.D)                    */}
-      {/* Wide landscape cinematic hero for the selected event              */}
-      {/* Matching frame 24 of reference video (TEDx style)                 */}
+      {/* INITIAL COLLAPSED PROMPT: Displayed when all panels are collapsed */}
       {/* ================================================================= */}
-      <section
-        id={`feature-banner-${selectedEvent.id}`}
-        className="hwi-feature-banner-section"
-        key={`banner-${selectedEvent.id}`}
-      >
-        <div className="container">
-          <div
-            className="hwi-feature-banner"
-            style={
-              {
-                '--banner-accent': selectedEvent.accentColor || '#EF4444',
-              } as React.CSSProperties
-            }
-          >
-            {/* Ambient Background Graphic & Vignette */}
-            <div className="hwi-feature-banner__bg">
-              {selectedEvent.heroImage || selectedEvent.cardImage ? (
-                <img
-                  src={selectedEvent.heroImage || selectedEvent.cardImage}
-                  alt={selectedEvent.title}
-                  className="hwi-feature-banner__hero-img"
-                  loading="lazy"
-                />
-              ) : (
-                <PanelArtwork
-                  graphicType={selectedEvent.hudGraphicType || 'grid'}
-                  accent={selectedEvent.accentColor || '#EF4444'}
-                />
-              )}
-              <div className="hwi-feature-banner__overlay" />
-            </div>
-
-            {/* Vertical Theme Title on Right Edge (TEDx reference frame 24) */}
-            <div className="cinematic-banner-vertical-theme" aria-hidden="true">
-              <span>{(selectedEvent.theme || selectedEvent.shortTitle || selectedEvent.title).toUpperCase()}</span>
-            </div>
-
-            {/* Top-Left Header & Edition Badges */}
-            <div className="cinematic-banner-header">
-              <div className="cinematic-banner-badges">
-                <span className="banner-badge banner-badge--edition">
-                  EDITION {String(currentIndex + 1).padStart(2, '0')}
-                </span>
-                <span className="banner-badge banner-badge--year">
-                  {selectedEvent.year}
-                </span>
-                <span className="banner-badge banner-badge--category">
-                  {selectedEvent.category}
-                </span>
-                <span
-                  className={`banner-badge ${selectedEvent.status === 'upcoming' ? 'banner-badge--upcoming' : 'banner-badge--past'}`}
-                >
-                  {selectedEvent.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED RECAP'}
-                </span>
-              </div>
-              <h2 className="cinematic-banner-title">{selectedEvent.title}</h2>
-            </div>
-
-            {/* Center Action: Play Theme Video pill button / interactive video player */}
-            <div className="cinematic-banner-center-action">
-              <PanelMediaRegion event={selectedEvent} />
-            </div>
-
-            {/* Bottom-Left Date, Venue & Quick Actions */}
-            <div className="cinematic-banner-footer">
-              <div className="cinematic-banner-meta-left">
-                <div className="cinematic-banner-meta-item">
-                  <Calendar size={15} />
-                  <span>{selectedEvent.date}</span>
-                </div>
-                <div className="cinematic-banner-meta-item">
-                  <MapPin size={15} />
-                  <span>{selectedEvent.venue}</span>
-                </div>
-                <div className="cinematic-banner-meta-item">
-                  <Clock size={15} />
-                  <span>{selectedEvent.duration}</span>
-                </div>
-              </div>
-
-              <div className="cinematic-banner-actions">
-                {selectedEvent.status === 'upcoming' ? (
-                  <Link
-                    href={selectedEvent.ctaUrl || '/join'}
-                    className="banner-cta-btn banner-cta-btn--primary"
-                    data-cursor="link"
-                    data-cursor-label="APPLY"
-                  >
-                    <span>{selectedEvent.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
-                    <ArrowUpRight size={16} />
-                  </Link>
-                ) : (
-                  <a
-                    href="#editorial-story"
-                    className="banner-cta-btn banner-cta-btn--secondary"
-                    data-cursor="link"
-                    data-cursor-label="EXPLORE"
-                  >
-                    <span>EXPLORE EVENT STORY</span>
-                    <span className="action-arrow">↓</span>
-                  </a>
-                )}
-              </div>
+      {!selectedEvent && (
+        <section className="hwi-dossier-prompt-section">
+          <div className="container">
+            <div className="hwi-dossier-prompt-card">
+              <span className="prompt-kicker">CHRONICLE ARCHIVE</span>
+              <h3 className="prompt-heading">SELECT AN EDITION ABOVE</h3>
+              <p className="prompt-sub">
+                Click any edition card in the timeline above to expand its interactive dossier, explore event telemetry, inspect podium winners, and browse official photographs.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ================================================================= */}
-      {/* E. EDITORIAL EVENT STORY & DETAILS (Section 4.E, 2, 3)            */}
-      {/* Clean high-contrast LIGHT SECTION matching reference video        */}
+      {/* E. EDITORIAL EVENT STORY & DETAILS                                */}
+      {/* Revealed only when an edition is expanded                         */}
       {/* ================================================================= */}
-      <section id="editorial-story" className="hwi-story-light-section">
+      {selectedEvent && (
+        <section id="editorial-story" className="hwi-story-light-section" key={`story-${selectedEvent.id}`}>
         <div className="container">
           <div className="hwi-story-container">
             {/* Centered Editorial Section Header matching frame 24 */}
@@ -471,12 +447,12 @@ export function EventsExperience() {
                     </h3>
                   </div>
                   <span className="story-gallery-badge">
-                    3 CURATED IMAGES
+                    {selectedEvent.images.length} CURATED {selectedEvent.images.length === 1 ? 'IMAGE' : 'IMAGES'}
                   </span>
                 </div>
 
                 <div className="story-photos-grid">
-                  {selectedEvent.images.slice(0, 3).map((img, idx) => (
+                  {selectedEvent.images.map((img, idx) => (
                     <div key={img.id || idx} className="story-photo-card">
                       <div className="story-photo-frame">
                         {img.src ? (
@@ -484,7 +460,6 @@ export function EventsExperience() {
                             src={img.src}
                             alt={img.title}
                             className="story-photo-img"
-                            loading="lazy"
                           />
                         ) : (
                           <div className="story-photo-fallback">
@@ -552,19 +527,42 @@ export function EventsExperience() {
               </div>
             )}
 
-            {/* Reserved Guest Speaker & Gallery Area (RocketRide Buildathon) */}
+            {/* Guest Speakers, Delegates & Faculty Coordinators */}
             {selectedEvent.speakers && selectedEvent.speakers.length > 0 && (
               <div className="hwi-story-speakers">
                 <div className="speaker-header-row">
-                  <h3 className="narrative-heading">GUEST SPEAKERS & VENTURE ARCHITECTS</h3>
-                  <span className="speaker-tag-reserved">[ GUEST PHOTO ASSETS RESERVED ]</span>
+                  <h3 className="narrative-heading">
+                    {selectedEvent.id === 'rocketride-buildathon'
+                      ? 'INDUSTRY DELEGATES & FACULTY COORDINATORS'
+                      : selectedEvent.id === 'ctf-zero-internet'
+                      ? 'FACULTY COORDINATOR & CHAPTER LEADERSHIP'
+                      : 'DISTINGUISHED SPEAKERS & MENTORS'}
+                  </h3>
+                  <span className="speaker-tag-reserved">
+                    {selectedEvent.id === 'rocketride-buildathon'
+                      ? '[ SAN FRANCISCO DELEGATION & BVUDET ]'
+                      : selectedEvent.id === 'ctf-zero-internet'
+                      ? '[ BVUDET FACULTY & HWI LEADERSHIP ]'
+                      : '[ VERIFIED SESSIONS ]'}
+                  </span>
                 </div>
                 <div className="speakers-grid">
                   {selectedEvent.speakers.map((sp, i) => (
                     <div key={i} className="speaker-card-placeholder">
                       <div className="speaker-avatar-frame">
-                        <Users size={32} className="speaker-placeholder-icon" />
-                        <span className="speaker-frame-tag">{sp.placeholderLabel || 'PHOTO TO BE SUPPLIED'}</span>
+                        {sp.image ? (
+                          <img
+                            src={sp.image}
+                            alt={sp.name}
+                            className="speaker-avatar-img"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                          />
+                        ) : (
+                          <>
+                            <Users size={28} className="speaker-placeholder-icon" />
+                            <span className="speaker-frame-tag">{sp.placeholderLabel || 'FACULTY'}</span>
+                          </>
+                        )}
                       </div>
                       <div className="speaker-info">
                         <h4 className="speaker-name">{sp.name}</h4>
@@ -597,7 +595,7 @@ export function EventsExperience() {
                   <div className="callout-text">
                     <h4 className="callout-heading">EXPLORE THE COMPLETE TIMELINE</h4>
                     <p className="callout-desc">
-                      Browse all six milestone editions from HackWithMumbai (2025) through Capture the Flag (2026).
+                      Browse all milestone editions from Learn IT Tour (2025) through Capture the Flag (2026).
                     </p>
                   </div>
                   <button
@@ -618,6 +616,7 @@ export function EventsExperience() {
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }
@@ -734,215 +733,5 @@ function PanelArtwork({
         </svg>
       );
   }
-}
-
-// =========================================================================
-// =========================================================================
-// PANEL MEDIA REGION COMPONENT
-// Renders the frosted "Play Theme Video" pill (matching reference video)
-// and transitions into a video player or designed HWI broadcast reel
-// =========================================================================
-function PanelMediaRegion({ event }: { event: EventItem }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [simulatedPlaying, setSimulatedPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // Reset play state if selected event changes
-  useEffect(() => {
-    setIsPlaying(false);
-    setSimulatedPlaying(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-  }, [event.id]);
-
-  const toggleRealVideo = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!videoRef.current) {
-      setIsPlaying(true);
-      return;
-    }
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(true));
-    }
-  };
-
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!videoRef.current) return;
-    videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
-  };
-
-  const toggleSimulatedVideo = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSimulatedPlaying((prev) => !prev);
-  };
-
-  const isAnyPlaying = isPlaying || simulatedPlaying;
-
-  return (
-    <div className={`hwi-panel__media-region ${isAnyPlaying ? 'hwi-panel__media-region--active' : 'hwi-panel__media-region--idle'}`}>
-      {!isAnyPlaying ? (
-        /* Frosted Glass "Play Theme Video" Pill matching frame 24 of reference video */
-        <button
-          type="button"
-          className="hwi-tedx-play-pill"
-          onClick={event.videoUrl ? toggleRealVideo : toggleSimulatedVideo}
-          data-cursor="link"
-          data-cursor-label="PLAY"
-          aria-label="Play Theme Video"
-        >
-          <span className="play-pill-disc">
-            <Play size={15} fill="currentColor" className="play-pill-icon" />
-          </span>
-          <span className="play-pill-text">Play Theme Video</span>
-        </button>
-      ) : event.videoUrl ? (
-        /* Active Real Video Player with Cybernetic HUD */
-        <div
-          className="hwi-video-player-container hwi-video-player-container--cinematic"
-          onClick={toggleRealVideo}
-          role="button"
-          tabIndex={0}
-          aria-label={isPlaying ? 'Pause recap video' : 'Play recap video'}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              toggleRealVideo(e as any);
-            }
-          }}
-        >
-          <video
-            ref={videoRef}
-            src={event.videoUrl}
-            poster={event.videoPoster || event.cardImage}
-            playsInline
-            autoPlay
-            muted={isMuted}
-            loop
-            className="hwi-video-element"
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-          />
-          <div className="hwi-video-hud-overlay">
-            <div className="video-hud-top">
-              <span className="video-rec-tag">
-                <span className={`video-rec-dot ${isPlaying ? 'video-rec-dot--active' : ''}`} />
-                {isPlaying ? 'PLAYING // 1080P' : 'PAUSED // 1080P'}
-              </span>
-              <div className="video-hud-btns">
-                <button
-                  type="button"
-                  className="video-mute-btn"
-                  onClick={toggleMute}
-                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-                >
-                  {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                </button>
-                <button
-                  type="button"
-                  className="video-close-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsPlaying(false);
-                    if (videoRef.current) videoRef.current.pause();
-                  }}
-                  aria-label="Close video"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="video-hud-bottom">
-              <span className="video-hud-label">{event.title} • RECAP BROADCAST</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* Active Designed HWI-branded Video Placeholder */
-        <div
-          className="hwi-video-placeholder-container hwi-video-placeholder-container--cinematic hwi-video-placeholder--playing"
-          onClick={toggleSimulatedVideo}
-          role="button"
-          tabIndex={0}
-          aria-label={simulatedPlaying ? 'Pause video recap reel' : 'Play video recap reel'}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setSimulatedPlaying((prev) => !prev);
-            }
-          }}
-        >
-          {event.cardImage && (
-            <img
-              src={event.cardImage}
-              alt={event.title}
-              className="placeholder-bg-art"
-              loading="lazy"
-            />
-          )}
-          <div className="placeholder-scanlines" />
-          <div className="placeholder-hud-overlay">
-            <div className="placeholder-hud-top">
-              <span className="placeholder-tag">
-                <span className="placeholder-rec-dot rec-pulse" />
-                STREAMING RECAP
-              </span>
-              <div className="placeholder-top-right">
-                <span className="placeholder-spec">1080P // 60FPS</span>
-                <button
-                  type="button"
-                  className="video-close-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSimulatedPlaying(false);
-                  }}
-                  aria-label="Close reel"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            <div className="placeholder-hud-center">
-              <div className="placeholder-play-button">
-                {simulatedPlaying ? (
-                  <Pause size={22} className="placeholder-icon" />
-                ) : (
-                  <Play size={22} className="placeholder-icon" />
-                )}
-              </div>
-              <span className="placeholder-caption">
-                {simulatedPlaying ? 'PAUSE CHAPTER REEL' : 'WATCH EVENT REEL'}
-              </span>
-            </div>
-
-            <div className="placeholder-hud-bottom">
-              <div className="placeholder-timecode">
-                <span>{simulatedPlaying ? '00:48 / 02:40' : '00:00 / 02:40'}</span>
-              </div>
-              <div className="placeholder-waveform" aria-hidden="true">
-                {Array.from({ length: 14 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={`wave-bar ${simulatedPlaying ? 'wave-bar--animated' : ''}`}
-                    style={{
-                      height: `${10 + ((i * 7) % 16)}px`,
-                      animationDelay: `${i * 0.08}s`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 }
 

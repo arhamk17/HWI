@@ -41,6 +41,13 @@ export interface ParticleSOA {
   sIndiaIsBorder: Uint8Array;
   sIndiaDensity: Float32Array;
 
+  // Target State HWI: Contours & Fill of the HWI Background Lettering
+  sHwiX: Float32Array;
+  sHwiY: Float32Array;
+  sHwiZ: Float32Array;
+  sHwiIsBorder: Uint8Array;
+  sHwiDensity: Float32Array;
+
   // Target State 4: Team Ambient Field
   s4x: Float32Array; s4y: Float32Array; s4z: Float32Array;
 }
@@ -65,6 +72,8 @@ export function createParticleSOA(N: number): ParticleSOA {
     s1x: new Float32Array(N), s1y: new Float32Array(N), s1z: new Float32Array(N), s1density: new Float32Array(N),
     sIndiaX: new Float32Array(N), sIndiaY: new Float32Array(N), sIndiaZ: new Float32Array(N),
     sIndiaIsBorder: new Uint8Array(N), sIndiaDensity: new Float32Array(N),
+    sHwiX: new Float32Array(N), sHwiY: new Float32Array(N), sHwiZ: new Float32Array(N),
+    sHwiIsBorder: new Uint8Array(N), sHwiDensity: new Float32Array(N),
     s2x: new Float32Array(N), s2y: new Float32Array(N), s2z: new Float32Array(N),
     s3x: new Float32Array(N), s3y: new Float32Array(N), s3z: new Float32Array(N), s3part: new Uint8Array(N), s3density: new Float32Array(N), s3size: new Float32Array(N),
     s4x: new Float32Array(N), s4y: new Float32Array(N), s4z: new Float32Array(N),
@@ -111,8 +120,8 @@ export function initInitialStates(soa: ParticleSOA, width: number, height: numbe
     soa.z[i] = soa.s0z[i];
   }
 
-  // Precompute India positions immediately on frame 0 (takes < 2ms)
-  populateIndiaState(soa);
+  // Precompute HWI positions immediately on frame 0 (takes < 2ms)
+  populateHWIState(soa);
 }
 
 // ==========================================================================
@@ -291,6 +300,178 @@ export function populateIndiaState(soa: ParticleSOA) {
     soa.sIndiaZ[gIdx] = tempZ[iIdx];
     soa.sIndiaIsBorder[gIdx] = tempIsBorder[iIdx];
     soa.sIndiaDensity[gIdx] = tempDensity[iIdx];
+  }
+}
+
+// ==========================================================================
+// 1.5 TARGET STATE HWI: Contours & Dot-Matrix of HWI Background Lettering
+// Reuses the exact SVG lettering geometry (900x340 viewBox) as particle target
+// ==========================================================================
+export function populateHWIState(soa: ParticleSOA) {
+  const N = soa.count;
+  const W = 900;
+  const H = 340;
+
+  const contourPoints: [number, number][] = [];
+  const interiorPoints: [number, number][] = [];
+
+  // 1. Attempt client-side canvas rasterization of HWI typography
+  if (typeof document !== 'undefined') {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (ctx) {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 280px "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Arial Black", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillText('HWI', W * 0.5, H * 0.70);
+
+        const imgData = ctx.getImageData(0, 0, W, H);
+        const data = imgData.data;
+        const step = 4; // 4px grid scan
+
+        for (let y = 12; y < H - 12; y += step) {
+          for (let x = 12; x < W - 12; x += step) {
+            const idx = (y * W + x) * 4;
+            const val = data[idx];
+            if (val > 110) {
+              // Edge detection: if any 4-neighbor is dark, this is an outline contour point
+              const left = data[(y * W + (x - step)) * 4];
+              const right = data[(y * W + (x + step)) * 4];
+              const up = data[((y - step) * W + x) * 4];
+              const down = data[((y + step) * W + x) * 4];
+
+              const normX = (x - 450) / 450;
+              const normY = (y - 170) / 170;
+
+              if (left < 90 || right < 90 || up < 90 || down < 90) {
+                contourPoints.push([normX, normY]);
+              } else if (x % 8 === 0 && y % 8 === 0) {
+                // Interior dot matrix point (matches SVG 6-8px pattern)
+                interiorPoints.push([normX, normY]);
+              }
+            }
+          }
+        }
+      }
+    } catch {
+      // Fallback to parametric geometry if canvas reading is restricted
+    }
+  }
+
+  // 2. High-precision parametric fallback if canvas sampling didn't yield enough points
+  if (contourPoints.length < 80) {
+    contourPoints.length = 0;
+    interiorPoints.length = 0;
+
+    const sampleBox = (rx1: number, ry1: number, rx2: number, ry2: number, step = 0.024) => {
+      for (let y = ry1; y <= ry2; y += step) {
+        for (let x = rx1; x <= rx2; x += step) {
+          const isEdge = x - rx1 < step * 1.3 || rx2 - x < step * 1.3 || y - ry1 < step * 1.3 || ry2 - y < step * 1.3;
+          if (isEdge) {
+            contourPoints.push([x, y]);
+          } else {
+            interiorPoints.push([x, y]);
+          }
+        }
+      }
+    };
+
+    const sampleSegment = (x1: number, y1: number, x2: number, y2: number, thick: number, steps = 28) => {
+      for (let s = 0; s <= steps; s++) {
+        const t = s / steps;
+        const cx = x1 + (x2 - x1) * t;
+        const cy = y1 + (y2 - y1) * t;
+        for (let ox = -thick; ox <= thick; ox += 0.022) {
+          const isEdge = Math.abs(ox - thick) < 0.016 || Math.abs(ox + thick) < 0.016 || s === 0 || s === steps;
+          if (isEdge) {
+            contourPoints.push([cx + ox, cy]);
+          } else {
+            interiorPoints.push([cx + ox, cy]);
+          }
+        }
+      }
+    };
+
+    // Letter 'H': Left bar, right bar, crossbar
+    sampleBox(-0.80, -0.60, -0.64, 0.42);
+    sampleBox(-0.44, -0.60, -0.28, 0.42);
+    sampleBox(-0.64, -0.16, -0.44, 0.00);
+
+    // Letter 'W': 4 diagonal thick strokes
+    sampleSegment(-0.20, -0.60, -0.11, 0.42, 0.05);
+    sampleSegment(-0.11, 0.42, -0.01, -0.15, 0.045);
+    sampleSegment(-0.01, -0.15, 0.09, 0.42, 0.045);
+    sampleSegment(0.09, 0.42, 0.18, -0.60, 0.05);
+
+    // Letter 'I': Central stem, top serif, bottom serif
+    sampleBox(0.38, -0.60, 0.54, 0.42);
+    sampleBox(0.30, -0.60, 0.62, -0.48);
+    sampleBox(0.30, 0.30, 0.62, 0.42);
+  }
+
+  // Ensure arrays have at least 1 point
+  if (contourPoints.length === 0) contourPoints.push([0, 0]);
+  if (interiorPoints.length === 0) interiorPoints.push([0, 0]);
+
+  // 3. Populate temporary buffers
+  const borderCount = Math.floor(N * 0.60);
+  const interiorCount = N - borderCount;
+
+  const tempX = new Float32Array(N);
+  const tempY = new Float32Array(N);
+  const tempZ = new Float32Array(N);
+  const tempIsBorder = new Uint8Array(N);
+  const tempDensity = new Float32Array(N);
+
+  for (let i = 0; i < borderCount; i++) {
+    const pt = contourPoints[i % contourPoints.length];
+    tempX[i] = pt[0] + (Math.random() - 0.5) * 0.006;
+    tempY[i] = pt[1] + (Math.random() - 0.5) * 0.006;
+    tempZ[i] = (Math.random() - 0.5) * 6;
+    tempIsBorder[i] = 1;
+    tempDensity[i] = 1.0;
+  }
+
+  for (let i = 0; i < interiorCount; i++) {
+    const idx = borderCount + i;
+    const pt = interiorPoints[i % interiorPoints.length];
+    tempX[idx] = pt[0] + (Math.random() - 0.5) * 0.008;
+    tempY[idx] = pt[1] + (Math.random() - 0.5) * 0.008;
+    tempZ[idx] = (Math.random() - 0.5) * 12;
+    tempIsBorder[idx] = 0;
+    tempDensity[idx] = 0.55 + 0.45 * Math.random();
+  }
+
+  // 4. Smooth particle pairing:
+  // Sort Globe particles along X (soa.s1x) and HWI targets along X (tempX).
+  // This produces an organic West-to-East flow where the Western globe hemisphere flows into 'H',
+  // the Central meridian flows into 'W', and the Eastern hemisphere flows into 'I'.
+  const globeIndices = Array.from({ length: N }, (_, i) => i).sort((a, b) => {
+    const dx = soa.s1x[a] - soa.s1x[b];
+    if (Math.abs(dx) > 0.04) return dx;
+    return soa.s1y[a] - soa.s1y[b];
+  });
+  const hwiIndices = Array.from({ length: N }, (_, i) => i).sort((a, b) => {
+    const dx = tempX[a] - tempX[b];
+    if (Math.abs(dx) > 0.04) return dx;
+    return tempY[a] - tempY[b];
+  });
+
+  for (let k = 0; k < N; k++) {
+    const gIdx = globeIndices[k];
+    const hIdx = hwiIndices[k];
+
+    soa.sHwiX[gIdx] = tempX[hIdx];
+    soa.sHwiY[gIdx] = tempY[hIdx];
+    soa.sHwiZ[gIdx] = tempZ[hIdx];
+    soa.sHwiIsBorder[gIdx] = tempIsBorder[hIdx];
+    soa.sHwiDensity[gIdx] = tempDensity[hIdx];
   }
 }
 

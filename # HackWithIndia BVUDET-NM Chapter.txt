@@ -1,0 +1,36 @@
+# HackWithIndia BVUDET-NM Chapter
+
+[HWI](http://localhost:3000/)
+[Home](http://localhost:3000/)
+[About](http://localhost:3000/about)
+[Events](http://localhost:3000/events)
+[Teams](http://localhost:3000/team)
+[Join](http://localhost:3000/join)
+[Join Us](http://localhost:3000/join)
+[Home](http://localhost:3000/)
+[About](http://localhost:3000/about)
+[Events](http://localhost:3000/events)
+[Teams](http://localhost:3000/team)
+[Join](http://localhost:3000/join)
+[Discord](https://discord.com)
+[GitHub](https://github.com)
+[Instagram](https://instagram.com)
+
+# CORE LEADERSHIP
+Driving organizational vision, partnerships, and student leadership.
+
+## Krishnakant Sharma
+Spearheads chapter operations, national collaborations, and overall community growth at BVUDET-NM.
+
+### HACK WITH INDIA
+BVUDET-NM Chapter
+A chapter of HackWithIndia
+[DISCORD](https://discord.com)
+[X](https://twitter.com)
+[GITHUB](https://github.com)
+[HOME](http://localhost:3000/)
+[ABOUT](http://localhost:3000/about)
+[EVENTS](http://localhost:3000/events)
+[TEAMS](http://localhost:3000/team)
+[JOIN](http://localhost:3000/join)
+© 2026 Hack With India. All rights reserved.

@@ -53,6 +53,45 @@ function LinkedinIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+function InstagramIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
+function MailIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
+
 // ─── Particles (brand-derived, lightweight) ──────────────────────────────
 function Particles({ theme }: { theme: 'dark' | 'light' }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -515,13 +554,20 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         aria-label={`${member.name}, ${member.role}`}
       >
         <div className="team-portrait-card__inner">
-          {member.image ? (
-            <img src={member.image} alt={member.name} className="team-portrait-card__img" />
-          ) : (
-            <div className="team-portrait-card__fallback">
-              <span className="team-portrait-card__initials">{member.initials}</span>
-              <span className="team-portrait-card__watermark">HWI // BVUDET</span>
-            </div>
+          <div className="team-portrait-card__fallback">
+            <span className="team-portrait-card__initials">{member.initials}</span>
+            <span className="team-portrait-card__watermark">HWI // BVUDET</span>
+          </div>
+          {member.image && (
+            <img
+              src={member.image}
+              alt={member.name}
+              className="team-portrait-card__img"
+              loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = 'none';
+              }}
+            />
           )}
           <div className="team-portrait-card__overlay" />
         </div>
@@ -700,9 +746,9 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 </div>
               )}
 
-              {head.socials && (
+              {(head.socials || head.email) && (
                 <div className="head-intro-layout__socials">
-                  {head.socials.github && (
+                  {head.socials?.github && (
                     <a
                       href={head.socials.github}
                       target="_blank"
@@ -713,7 +759,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                       <GithubIcon size={16} />
                     </a>
                   )}
-                  {head.socials.linkedin && (
+                  {head.socials?.linkedin && (
                     <a
                       href={head.socials.linkedin}
                       target="_blank"
@@ -722,6 +768,27 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                       aria-label={`${head.name}'s LinkedIn`}
                     >
                       <LinkedinIcon size={16} />
+                    </a>
+                  )}
+                  {head.socials?.instagram && (
+                    <a
+                      href={head.socials.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="head-intro-layout__social-link"
+                      aria-label={`${head.name}'s Instagram`}
+                    >
+                      <InstagramIcon size={16} />
+                    </a>
+                  )}
+                  {head.email && (
+                    <a
+                      href={`mailto:${head.email}`}
+                      className="head-intro-layout__social-link"
+                      aria-label={`Email ${head.name}`}
+                      title={head.email}
+                    >
+                      <MailIcon size={16} />
                     </a>
                   )}
                 </div>
@@ -834,9 +901,9 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         <p className="showcase-active-card__bio">{activeMember.bio}</p>
                       )}
 
-                      {activeMember.socials && (
+                      {(activeMember.socials || activeMember.email) && (
                         <div className="showcase-active-card__socials">
-                          {activeMember.socials.github && (
+                          {activeMember.socials?.github && (
                             <a
                               href={activeMember.socials.github}
                               target="_blank"
@@ -847,7 +914,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                               <GithubIcon size={16} />
                             </a>
                           )}
-                          {activeMember.socials.linkedin && (
+                          {activeMember.socials?.linkedin && (
                             <a
                               href={activeMember.socials.linkedin}
                               target="_blank"
@@ -856,6 +923,27 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                               aria-label={`${activeMember.name}'s LinkedIn`}
                             >
                               <LinkedinIcon size={16} />
+                            </a>
+                          )}
+                          {activeMember.socials?.instagram && (
+                            <a
+                              href={activeMember.socials.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="showcase-active-card__social-link"
+                              aria-label={`${activeMember.name}'s Instagram`}
+                            >
+                              <InstagramIcon size={16} />
+                            </a>
+                          )}
+                          {activeMember.email && (
+                            <a
+                              href={`mailto:${activeMember.email}`}
+                              className="showcase-active-card__social-link"
+                              aria-label={`Email ${activeMember.name}`}
+                              title={activeMember.email}
+                            >
+                              <MailIcon size={16} />
                             </a>
                           )}
                         </div>
@@ -884,6 +972,16 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                             aria-label={`View ${m.name}`}
                           >
                             <span className="showcase-rail-item__initials">{m.initials}</span>
+                            {m.image && (
+                              <img
+                                src={m.image}
+                                alt={m.name}
+                                className="showcase-rail-item__img"
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLElement).style.display = 'none';
+                                }}
+                              />
+                            )}
                             <span className="showcase-rail-item__preview-name">
                               {m.name.split(' ')[0]}
                             </span>
@@ -905,6 +1003,53 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                       <span className="showcase-grid-view__head-role">{head.role}</span>
                       <h3 className="showcase-grid-view__head-name">{head.name}</h3>
                       {head.bio && <p className="showcase-grid-view__head-bio">{head.bio}</p>}
+                      {(head.socials || head.email) && (
+                        <div className="showcase-grid-view__head-socials" onClick={(e) => e.stopPropagation()}>
+                          {head.socials?.github && (
+                            <a
+                              href={head.socials.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="showcase-grid-card__social-link"
+                              aria-label={`${head.name}'s GitHub`}
+                            >
+                              <GithubIcon size={14} />
+                            </a>
+                          )}
+                          {head.socials?.linkedin && (
+                            <a
+                              href={head.socials.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="showcase-grid-card__social-link"
+                              aria-label={`${head.name}'s LinkedIn`}
+                            >
+                              <LinkedinIcon size={14} />
+                            </a>
+                          )}
+                          {head.socials?.instagram && (
+                            <a
+                              href={head.socials.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="showcase-grid-card__social-link"
+                              aria-label={`${head.name}'s Instagram`}
+                            >
+                              <InstagramIcon size={14} />
+                            </a>
+                          )}
+                          {head.email && (
+                            <a
+                              href={`mailto:${head.email}`}
+                              className="showcase-grid-card__social-link"
+                              aria-label={`Email ${head.name}`}
+                              title={head.email}
+                            >
+                              <MailIcon size={14} />
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -924,7 +1069,17 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         }}
                       >
                         <div className="showcase-grid-card__avatar">
-                          <span>{m.initials}</span>
+                          <span className="showcase-grid-card__initials">{m.initials}</span>
+                          {m.image && (
+                            <img
+                              src={m.image}
+                              alt={m.name}
+                              className="showcase-grid-card__img"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          )}
                         </div>
                         <div className="showcase-grid-card__details">
                           <span className="showcase-grid-card__role">{m.role}</span>
@@ -933,6 +1088,53 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                             <span className="showcase-grid-card__academic">
                               {m.academicYear} • {m.branch}
                             </span>
+                          )}
+                          {(m.socials || m.email) && (
+                            <div className="showcase-grid-card__socials" onClick={(e) => e.stopPropagation()}>
+                              {m.socials?.github && (
+                                <a
+                                  href={m.socials.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="showcase-grid-card__social-link"
+                                  aria-label={`${m.name}'s GitHub`}
+                                >
+                                  <GithubIcon size={12} />
+                                </a>
+                              )}
+                              {m.socials?.linkedin && (
+                                <a
+                                  href={m.socials.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="showcase-grid-card__social-link"
+                                  aria-label={`${m.name}'s LinkedIn`}
+                                >
+                                  <LinkedinIcon size={12} />
+                                </a>
+                              )}
+                              {m.socials?.instagram && (
+                                <a
+                                  href={m.socials.instagram}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="showcase-grid-card__social-link"
+                                  aria-label={`${m.name}'s Instagram`}
+                                >
+                                  <InstagramIcon size={12} />
+                                </a>
+                              )}
+                              {m.email && (
+                                <a
+                                  href={`mailto:${m.email}`}
+                                  className="showcase-grid-card__social-link"
+                                  aria-label={`Email ${m.name}`}
+                                  title={m.email}
+                                >
+                                  <MailIcon size={12} />
+                                </a>
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>

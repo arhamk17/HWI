@@ -2,24 +2,41 @@
 
 import { useEffect, useRef } from 'react';
 import anime from 'animejs';
-import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
+import { introStore } from '@/lib/introStore';
 
 export function HeroChapter() {
   const contentRef = useRef<HTMLDivElement>(null);
+  const hasAnimatedRef = useRef(false);
 
   useEffect(() => {
     const el = contentRef.current;
     if (!el) return;
 
-    // Graceful, smooth stagger entrance on startup
-    anime({
-      targets: el.children,
-      opacity: [0, 1],
-      translateY: [24, 0],
-      delay: anime.stagger(100, { start: 150 }),
-      duration: 750,
-      easing: 'easeOutCubic',
-    });
+    const animateIn = () => {
+      if (hasAnimatedRef.current) return;
+      hasAnimatedRef.current = true;
+
+      // Graceful, smooth stagger entrance on startup
+      anime({
+        targets: el.children,
+        opacity: [0, 1],
+        translateY: [24, 0],
+        delay: anime.stagger(120),
+        duration: 750,
+        easing: 'easeOutCubic',
+      });
+    };
+
+    if (introStore.isComplete || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      animateIn();
+    } else {
+      const unsubscribe = introStore.subscribe(animateIn);
+      const fallbackTimer = setTimeout(animateIn, 1800);
+      return () => {
+        unsubscribe();
+        clearTimeout(fallbackTimer);
+      };
+    }
   }, []);
 
   return (
@@ -42,43 +59,42 @@ export function HeroChapter() {
       >
         <h1
           className="type-intro"
-          style={{ marginBottom: 'var(--space-24)', opacity: 0 }}
+          style={{
+            marginBottom: 'var(--space-24)',
+            opacity: 0,
+            textShadow: '0 4px 24px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.7)',
+          }}
           data-cursor="text"
         >
           HACK WITH<br />INDIA
         </h1>
         <p
           className="type-eyebrow text-accent"
-          style={{ marginBottom: 'var(--space-48)', letterSpacing: '0.3em', opacity: 0 }}
+          style={{
+            marginBottom: 'var(--space-24)',
+            letterSpacing: '0.3em',
+            opacity: 0,
+            textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
+          }}
           data-cursor="text"
         >
           BVUDET-NM CHAPTER
         </p>
         <p
           className="type-body text-secondary"
-          style={{ maxWidth: '500px', margin: '0 auto var(--space-48)', opacity: 0 }}
+          style={{
+            maxWidth: '520px',
+            margin: '0 auto',
+            opacity: 0,
+            textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
+          }}
           data-cursor="text"
         >
           Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.
         </p>
-        <div
-          style={{
-            display: 'flex',
-            gap: 'var(--space-16)',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            opacity: 0,
-          }}
-        >
-          <KokonutButton href="/join" variant="primary">
-            Join the Chapter
-          </KokonutButton>
-          <KokonutButton href="/events" variant="outline">
-            Our Events
-          </KokonutButton>
-        </div>
       </div>
     </section>
   );
 }
+
 
