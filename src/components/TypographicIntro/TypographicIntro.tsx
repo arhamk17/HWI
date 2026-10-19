@@ -1,21 +1,30 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import anime from 'animejs';
+import { introStore } from '@/lib/introStore';
 import './TypographicIntro.css';
 
 /*
-  AUTOMATIC INTRO — Fast, sleek opening flash sequence:
-  HACK → INDIA → CHAPTER → seamless dissolve into Hero.
-  Optimized for immediate first-viewport interactivity without stutter or duplicate text.
+  TYPOGRAPHIC INTRO — Cinematic opening typography sequence:
+  "HACK" → "WITH" → "INDIA" over the Sukuna anime video background,
+  smoothly dissolving into the Hero section without interrupting video playback.
 */
 export function TypographicIntro() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDone, setIsDone] = useState(false);
+  const hasFinishedRef = useRef(false);
+
+  const handleFinish = useCallback(() => {
+    if (hasFinishedRef.current) return;
+    hasFinishedRef.current = true;
+    setIsDone(true);
+    introStore.setComplete();
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setIsDone(true);
+      handleFinish();
       return;
     }
 
@@ -31,9 +40,7 @@ export function TypographicIntro() {
 
     const tl = anime.timeline({
       easing: 'easeOutExpo',
-      complete: () => {
-        setIsDone(true);
-      }
+      complete: handleFinish,
     });
 
     // Rapid, energetic kinetic flash sequence (~1.1s total)
@@ -42,62 +49,67 @@ export function TypographicIntro() {
       opacity: [0, 1],
       translateY: [25, 0],
       duration: 220,
-      easing: 'easeOutCubic'
+      easing: 'easeOutCubic',
     })
     .add({
       targets: word1,
       opacity: 0,
       duration: 120,
-      easing: 'linear'
+      easing: 'linear',
     }, '+=120')
     .add({
       targets: word2,
       opacity: [0, 1],
       translateY: [25, 0],
       duration: 220,
-      easing: 'easeOutCubic'
+      easing: 'easeOutCubic',
     })
     .add({
       targets: word2,
       opacity: 0,
       duration: 120,
-      easing: 'linear'
+      easing: 'linear',
     }, '+=120')
     .add({
       targets: word3,
       opacity: [0, 1],
       translateY: [25, 0],
       duration: 220,
-      easing: 'easeOutCubic'
+      easing: 'easeOutCubic',
     })
     .add({
       targets: word3,
       opacity: 0,
       duration: 140,
-      easing: 'linear'
+      easing: 'linear',
     }, '+=120')
-    // Dissolve overlay smoothly to reveal the already-rendered Hero
+    // Dissolve intro overlay smoothly over the continuous video to reveal Hero content
     .add({
       targets: el,
       opacity: 0,
       duration: 400,
-      easing: 'easeOutQuad'
+      easing: 'easeOutQuad',
     }, '+=60');
 
+    // Safety fallback timer matching timeline duration
+    const fallbackTimer = setTimeout(handleFinish, 1800);
+
     return () => {
+      clearTimeout(fallbackTimer);
       tl.pause();
     };
-  }, []);
+  }, [handleFinish]);
 
   if (isDone) return null;
 
   return (
     <section className="intro" ref={containerRef} style={{ pointerEvents: 'none' }}>
-      {/* Rapid Flash Words: HACK WITH INDIA */}
+      {/* Rapid Kinetic Flash Words: HACK WITH INDIA over the Sukuna video */}
       <span className="intro__word intro__word--1 type-massive">HACK</span>
       <span className="intro__word intro__word--2 type-massive">WITH</span>
       <span className="intro__word intro__word--3 type-massive">INDIA</span>
     </section>
   );
 }
+
 

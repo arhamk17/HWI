@@ -59,10 +59,10 @@
   display: flex;
   align-items: center;
   gap: var(--space-8);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--navbar-pill-bg, rgba(255, 255, 255, 0.04));
   padding: 4px 8px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--navbar-pill-border, rgba(255, 255, 255, 0.08));
 }
 
 .navbar__desktop-link {
@@ -70,7 +70,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--navbar-text, var(--text-primary));
-  opacity: 0.75;
+  opacity: 0.85;
   text-decoration: none;
   padding: 6px 16px;
   border-radius: var(--radius-pill);
@@ -79,7 +79,7 @@
 
 .navbar__desktop-link:hover {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--navbar-pill-hover-bg, rgba(255, 255, 255, 0.08));
   color: var(--accent);
 }
 

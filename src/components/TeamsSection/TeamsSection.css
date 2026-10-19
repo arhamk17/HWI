@@ -920,3 +920,34 @@
     font-size: 11.5px;
   }
 }
+
+/* ── Social Icon Links in Cards ── */
+.teams-card-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.teams-card-social-link {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.teams-card-social-link:hover {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}

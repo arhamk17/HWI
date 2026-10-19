@@ -194,22 +194,28 @@
   overflow: hidden;
 }
 
-.team-portrait-card__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 .team-portrait-card__fallback {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
   background: linear-gradient(150deg, var(--tc-surface) 0%, var(--tc-surface-card) 100%);
+  z-index: 1;
+}
+
+.team-portrait-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 2;
+  transition: opacity 0.4s ease;
 }
 
 .team-portrait-card__initials {
@@ -249,6 +255,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 3;
   transition: background 0.6s ease;
 }
 
@@ -758,6 +765,8 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .showcase-rail-item__initials {
@@ -766,6 +775,17 @@
   font-size: 11px;
   color: var(--tc-text);
   letter-spacing: 0.02em;
+  z-index: 1;
+}
+
+.showcase-rail-item__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  z-index: 2;
 }
 
 .showcase-rail-item--active {
@@ -1856,5 +1876,226 @@
   font-size: 10px;
   color: var(--tc-text-ter);
   text-align: right;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   FULL TEAM GRID VIEW STYLES
+   ────────────────────────────────────────────────────────────────────────── */
+.showcase-grid-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  max-height: calc(100vh - 280px);
+  padding: 4px 12px 16px 4px;
+  width: 100%;
+}
+
+.showcase-grid-view__head-featured {
+  background: var(--tc-surface-card);
+  border: 1px solid var(--tc-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.showcase-grid-view__head-tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--tc-accent);
+}
+
+.showcase-grid-view__head-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.showcase-grid-view__head-card .team-portrait-card--compact {
+  width: 76px;
+  height: 98px;
+  flex-shrink: 0;
+}
+
+.showcase-grid-view__head-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.showcase-grid-view__head-role {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--tc-accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.showcase-grid-view__head-name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  color: var(--tc-text);
+  margin: 0;
+}
+
+.showcase-grid-view__head-bio {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  color: var(--tc-text-sec);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 580px;
+}
+
+.showcase-grid-view__members-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.showcase-grid-view__members-title {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--tc-text-ter);
+}
+
+.showcase-grid-view__members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.showcase-grid-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--tc-surface-card);
+  border: 1px solid var(--tc-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.showcase-grid-card:hover {
+  border-color: var(--tc-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--tc-card-glow);
+}
+
+.showcase-grid-card__avatar {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--tc-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.showcase-grid-card__initials {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--tc-text);
+  opacity: 0.75;
+}
+
+.showcase-grid-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.showcase-grid-card__details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.showcase-grid-card__role {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9.5px;
+  color: var(--tc-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.showcase-grid-card__name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--tc-text);
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.showcase-grid-card__academic {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  color: var(--tc-text-ter);
+  margin-top: 2px;
+}
+
+.showcase-grid-view__head-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.showcase-grid-card__socials {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.showcase-grid-card__social-link {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--tc-border-subtle);
+  color: var(--tc-text-sec);
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.team-cinematic[data-theme="dark"] .showcase-grid-card__social-link {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.showcase-grid-card__social-link:hover {
+  background: var(--tc-accent);
+  color: #FFFFFF;
+  border-color: var(--tc-accent);
+  transform: translateY(-1px) scale(1.08);
 }
 

@@ -1,4 +1,3 @@
-import { Navigation } from '@/components/Navigation/Navigation';
 import { Footer } from '@/components/Footer/Footer';
 
 export default function GalleryPage() {
@@ -15,8 +14,7 @@ export default function GalleryPage() {
         zIndex: 1,
         pointerEvents: 'none'
       }} />
-
-      <Navigation />
+      
       
       <div style={{ padding: 'calc(var(--space-section) + 64px) 0 var(--space-section)', minHeight: '100vh', position: 'relative', zIndex: 2 }}>
         <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 var(--space-24)' }}>
