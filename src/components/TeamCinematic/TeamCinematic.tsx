@@ -1,18 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import {
   ArrowUpRight,
-  Sparkles,
-  Users,
-  X,
-  ChevronDown,
-  ChevronUp,
   ShieldCheck,
-  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Users,
 } from 'lucide-react';
-import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
+import { DEPARTMENTS, Department, DepartmentMember } from '@/data/teamDepartments';
 import { scrollBus } from '@/lib/scrollBus';
+import { teamStore } from '@/lib/teamStore';
 import './TeamCinematic.css';
 
 interface TeamCinematicProps {
@@ -20,7 +19,7 @@ interface TeamCinematicProps {
 }
 
 // ─── Inline SVG Brand Icons ──────────────────────────────────────────────────
-function GithubIcon({ size = 16 }: { size?: number }) {
+function GithubIcon({ size = 15 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -39,7 +38,7 @@ function GithubIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function LinkedinIcon({ size = 16 }: { size?: number }) {
+function LinkedinIcon({ size = 15 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -59,7 +58,7 @@ function LinkedinIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function InstagramIcon({ size = 16 }: { size?: number }) {
+function InstagramIcon({ size = 15 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -79,7 +78,7 @@ function InstagramIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function MailIcon({ size = 16 }: { size?: number }) {
+function MailIcon({ size = 15 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -98,432 +97,364 @@ function MailIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-// ─── Decorative Technical Cyan Barcode ───────────────────────────────────────
+// ─── Technical Cyan Barcode Graphic ──────────────────────────────────────────
 function CyanIdBarcode() {
   return (
     <svg
-      className="team-id-card__barcode-svg"
-      viewBox="0 0 240 28"
+      className="team-card__barcode-svg"
+      viewBox="0 0 220 22"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <rect x="0" y="0" width="3" height="28" fill="#06B6D4" />
-      <rect x="5" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.6" />
-      <rect x="9" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="15" y="0" width="2" height="28" fill="#06B6D4" opacity="0.8" />
-      <rect x="19" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="23" y="0" width="5" height="28" fill="#06B6D4" />
-      <rect x="31" y="0" width="2" height="28" fill="#06B6D4" opacity="0.7" />
-      <rect x="35" y="0" width="3" height="28" fill="#06B6D4" />
-      <rect x="40" y="0" width="1" height="28" fill="#06B6D4" />
-      <rect x="44" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="51" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="56" y="0" width="3" height="28" fill="#06B6D4" opacity="0.6" />
-      <rect x="62" y="0" width="5" height="28" fill="#06B6D4" />
-      <rect x="70" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="74" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="78" y="0" width="4" height="28" fill="#06B6D4" opacity="0.9" />
-      <rect x="85" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="89" y="0" width="3" height="28" fill="#06B6D4" />
-      <rect x="94" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.5" />
-      <rect x="98" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="105" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="110" y="0" width="5" height="28" fill="#06B6D4" opacity="0.8" />
-      <rect x="118" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="123" y="0" width="3" height="28" fill="#06B6D4" />
-      <rect x="128" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="132" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="138" y="0" width="2" height="28" fill="#06B6D4" opacity="0.7" />
-      <rect x="142" y="0" width="3" height="28" fill="#06B6D4" />
-      <rect x="147" y="0" width="5" height="28" fill="#06B6D4" />
-      <rect x="155" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="159" y="0" width="3" height="28" fill="#06B6D4" opacity="0.9" />
-      <rect x="165" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="170" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="176" y="0" width="2" height="28" fill="#06B6D4" opacity="0.6" />
-      <rect x="180" y="0" width="5" height="28" fill="#06B6D4" />
-      <rect x="188" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="192" y="0" width="3" height="28" fill="#06B6D4" opacity="0.8" />
-      <rect x="198" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="202" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="208" y="0" width="1.5" height="28" fill="#06B6D4" />
-      <rect x="212" y="0" width="3" height="28" fill="#06B6D4" opacity="0.7" />
-      <rect x="217" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="221" y="0" width="4" height="28" fill="#06B6D4" />
-      <rect x="227" y="0" width="2" height="28" fill="#06B6D4" />
-      <rect x="231" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.8" />
-      <rect x="235" y="0" width="5" height="28" fill="#06B6D4" />
+      <rect x="0" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="4" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
+      <rect x="7" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="12" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="16" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
+      <rect x="19" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="24" y="0" width="1" height="22" fill="#06B6D4" />
+      <rect x="27" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="32" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
+      <rect x="35" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="39" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="43" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="48" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
+      <rect x="51" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="56" y="0" width="1" height="22" fill="#06B6D4" />
+      <rect x="59" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="63" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="67" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="72" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
+      <rect x="75" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="79" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="83" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="88" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
+      <rect x="91" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="96" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="100" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="104" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
+      <rect x="107" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="112" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="116" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="120" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
+      <rect x="123" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="128" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="132" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="137" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
+      <rect x="140" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="144" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="148" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="153" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
+      <rect x="156" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="161" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="165" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="169" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
+      <rect x="172" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="177" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="181" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="186" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
+      <rect x="189" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="193" y="0" width="1.5" height="22" fill="#06B6D4" />
+      <rect x="197" y="0" width="3" height="22" fill="#06B6D4" />
+      <rect x="202" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
+      <rect x="205" y="0" width="2.5" height="22" fill="#06B6D4" />
+      <rect x="210" y="0" width="1" height="22" fill="#06B6D4" />
+      <rect x="213" y="0" width="2" height="22" fill="#06B6D4" />
+      <rect x="217" y="0" width="3" height="22" fill="#06B6D4" />
     </svg>
   );
 }
 
-// ─── Ambient Particles ───────────────────────────────────────────────────────
-function AmbientParticles() {
-  return (
-    <div className="team-cinematic__particles" aria-hidden="true">
-      {Array.from({ length: 16 }).map((_, i) => (
-        <div
-          key={i}
-          className="team-cinematic__particle"
-          style={{
-            width: `${(i % 3) * 2 + 3}px`,
-            height: `${(i % 3) * 2 + 3}px`,
-            left: `${(i * 7 + 11) % 96}%`,
-            top: `${(i * 13 + 5) % 92}%`,
-            animationDelay: `${(i * 0.4).toFixed(1)}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
+// ─── Physical ID Card Component ──────────────────────────────────────────────
+interface PhysicalIdCardProps {
+  member: DepartmentMember;
+  dept: Department;
+  index: number;
+  total: number;
+  diff: number;
+  prefersReduced: boolean;
+  onSelect: () => void;
 }
 
-// ─── Team Member Interactive ID Card Modal ──────────────────────────────────
-interface MemberModalProps {
-  member: DepartmentMember | null;
-  deptName: string;
-  deptId: string;
-  onClose: () => void;
-}
+function PhysicalIdCard({
+  member,
+  dept,
+  index,
+  total,
+  diff,
+  prefersReduced,
+  onSelect,
+}: PhysicalIdCardProps) {
+  const [imgFailed, setImgFailed] = useState(false);
 
-function MemberDetailModal({ member, deptName, deptId, onClose }: MemberModalProps) {
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (member) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [member, onClose]);
-
-  if (!member) return null;
-
-  const serialId = `HWI-2026-${(deptId || 'COR').slice(0, 3).toUpperCase()}-${member.id
+  const serialId = `HWI-2026-${(dept.id || 'COR').slice(0, 3).toUpperCase()}-${member.id
     .replace(/[^a-zA-Z0-9]/g, '')
     .slice(0, 6)
     .toUpperCase()}`;
 
   const rankLabel =
     member.rank === 'head'
-      ? deptId === 'core-leadership'
-        ? 'Chapter Leadership'
-        : 'Department Head'
+      ? dept.id === 'core-leadership'
+        ? 'CHAPTER LEADERSHIP'
+        : 'DEPARTMENT HEAD'
       : member.rank === 'co-head'
-      ? 'Department Co-Head'
-      : 'Executive Member';
+      ? 'DEPARTMENT CO-HEAD'
+      : 'EXECUTIVE MEMBER';
+
+  // Compute physical 3D stacking style
+  const cardStyle = useMemo<React.CSSProperties>(() => {
+    if (prefersReduced) {
+      const isCurrent = Math.abs(diff) < 0.5;
+      return {
+        opacity: isCurrent ? 1 : 0,
+        transform: 'none',
+        zIndex: isCurrent ? 25 : 1,
+        pointerEvents: isCurrent ? 'auto' : 'none',
+        visibility: isCurrent ? 'visible' : 'hidden',
+      };
+    }
+
+    // Active Card (diff near 0): prominent, centered, foreground focus
+    if (Math.abs(diff) <= 0.2) {
+      const tilt = (index % 2 === 0 ? 0.8 : -0.8) * (1 - Math.abs(diff) * 2);
+      return {
+        transform: `translate3d(0px, 0px, 0px) rotate(${tilt.toFixed(2)}deg) scale(1)`,
+        opacity: 1,
+        zIndex: 25,
+        pointerEvents: 'auto',
+        visibility: 'visible',
+      };
+    }
+
+    // Exited Card (diff < -0.2): slides up and peels away smoothly to the left
+    if (diff < -0.2) {
+      const t = Math.min(1, (-diff - 0.2) / 0.8);
+      const x = -55 * t;
+      const y = -125 * t;
+      const rot = -6 * t;
+      const scale = 1 - 0.05 * t;
+      const opacity = Math.max(0, 1 - t * 1.5);
+      return {
+        transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0px) rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
+        opacity: Number(opacity.toFixed(3)),
+        zIndex: Math.max(1, 30 - Math.round(t * 10)),
+        pointerEvents: 'none',
+        visibility: opacity <= 0.01 ? 'hidden' : 'visible',
+      };
+    }
+
+    // Stacked Upcoming Cards (diff > 0.2): stacked behind with depth & realistic perspective
+    const stackPos = diff;
+    const x = Math.min(56, 22 * stackPos);
+    const y = Math.min(38, 15 * stackPos);
+    const scale = Math.max(0.82, 1 - 0.06 * stackPos);
+    const rot = stackPos % 2 === 0 ? -2.5 : 3.2;
+    const opacity = Math.max(0, 0.9 - stackPos * 0.2);
+
+    return {
+      transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0px) rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
+      opacity: Number(opacity.toFixed(3)),
+      zIndex: Math.max(1, 20 - Math.round(stackPos * 2)),
+      pointerEvents: 'auto',
+      visibility: opacity <= 0.01 ? 'hidden' : 'visible',
+    };
+  }, [diff, index, prefersReduced]);
+
+  const isActive = Math.abs(diff) <= 0.5;
 
   return (
-    <div
-      className="team-id-modal-backdrop"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${member.name} Chapter ID Card`}
+    <article
+      className={`team-physical-card ${isActive ? 'is-active' : 'is-stacked'}`}
+      style={cardStyle}
+      onClick={onSelect}
+      aria-label={`${member.name} — ${member.role}`}
     >
-      <div
-        className="team-id-card-dossier"
-        onClick={(e) => e.stopPropagation()}
-        tabIndex={-1}
-      >
-        {/* Top Glowing Cyan Accent Strip */}
-        <div className="team-id-card-dossier__cyan-strip" />
+      {/* Top Lanyard Punch Slot */}
+      <div className="team-card__lanyard-slot" aria-hidden="true" />
 
-        {/* Reticles / Corner Tech Crosshairs */}
-        <span className="team-id-card-reticle top-left" aria-hidden="true">+</span>
-        <span className="team-id-card-reticle top-right" aria-hidden="true">+</span>
-        <span className="team-id-card-reticle bottom-left" aria-hidden="true">+</span>
-        <span className="team-id-card-reticle bottom-right" aria-hidden="true">+</span>
+      {/* Cyan Security Accent Line */}
+      <div className="team-card__cyan-strip" />
 
-        {/* Card Header Bar */}
-        <div className="team-id-card-dossier__header">
-          <div className="team-id-card-dossier__brand">
-            <span className="team-id-card-dossier__emblem">HWI</span>
-            <div className="team-id-card-dossier__brand-text">
-              <span className="team-id-card-dossier__org">HACKWITHINDIA BVUDET-NM</span>
-              <span className="team-id-card-dossier__suborg">OFFICIAL MEMBER ID DOSSIER</span>
-            </div>
-          </div>
+      {/* Corner Technical Registration Crosshairs */}
+      <span className="team-card__reticle top-left" aria-hidden="true">+</span>
+      <span className="team-card__reticle top-right" aria-hidden="true">+</span>
+      <span className="team-card__reticle bottom-left" aria-hidden="true">+</span>
+      <span className="team-card__reticle bottom-right" aria-hidden="true">+</span>
 
-          <div className="team-id-card-dossier__actions">
-            <div className="team-id-card-dossier__status-pill">
-              <span className="team-id-card-dossier__pulse-dot" />
-              <span>ACTIVE</span>
-            </div>
-            <button
-              type="button"
-              className="team-id-card-dossier__close"
-              onClick={onClose}
-              aria-label="Close ID dossier"
-            >
-              <X size={16} />
-            </button>
+      {/* Card Header: Brand & Security Watermark */}
+      <div className="team-card__header">
+        <div className="team-card__brand">
+          <span className="team-card__emblem">HWI</span>
+          <div className="team-card__brand-text">
+            <span className="team-card__org">HACKWITHINDIA</span>
+            <span className="team-card__suborg">OFFICIAL CHAPTER CREDENTIAL</span>
           </div>
         </div>
 
-        {/* Identity Main Section: Portrait + Name & Credentials */}
-        <div className="team-id-card-dossier__identity">
-          <div className="team-id-card-dossier__photo-frame">
-            <div className="team-id-card-dossier__photo-inner">
-              <div className="team-id-card-dossier__photo-fallback">
-                <span className="team-id-card-dossier__initials">{member.initials}</span>
-                <span className="team-id-card-dossier__watermark">HWI // 26</span>
-              </div>
-              {member.image && (
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="team-id-card-dossier__photo-img"
-                  loading="lazy"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLElement).style.display = 'none';
-                  }}
-                />
-              )}
-            </div>
-            <div className="team-id-card-dossier__photo-badge">
-              <ShieldCheck size={11} />
-              <span>VERIFIED</span>
-            </div>
-          </div>
-
-          <div className="team-id-card-dossier__info-block">
-            <div className="team-id-card-dossier__meta-tags">
-              <span className="team-id-card-dossier__dept-tag">{deptName}</span>
-              <span className="team-id-card-dossier__rank-tag">{rankLabel}</span>
-            </div>
-
-            <h3 className="team-id-card-dossier__name">{member.name}</h3>
-            <p className="team-id-card-dossier__role">{member.role}</p>
-
-            {member.academicYear && member.branch && (
-              <div className="team-id-card-dossier__academic">
-                <span className="team-id-card-dossier__academic-label">ACADEMIC //</span>
-                <span>{member.academicYear} • {member.branch}</span>
-              </div>
-            )}
-
-            <div className="team-id-card-dossier__serial-row">
-              <span className="team-id-card-dossier__serial-label">ID SERIAL</span>
-              <code className="team-id-card-dossier__serial-code">{serialId}</code>
-            </div>
-          </div>
-        </div>
-
-        {/* Bio / Statement */}
-        {member.bio && (
-          <div className="team-id-card-dossier__bio-section">
-            <span className="team-id-card-dossier__section-label">OPERATIONAL STATEMENT</span>
-            <p className="team-id-card-dossier__bio-text">{member.bio}</p>
-          </div>
-        )}
-
-        {/* Technical Metadata Spec Grid */}
-        <div className="team-id-card-dossier__specs-grid">
-          <div className="team-id-spec-item">
-            <span className="team-id-spec-item__key">TENURE</span>
-            <span className="team-id-spec-item__val">2026–2027</span>
-          </div>
-          <div className="team-id-spec-item">
-            <span className="team-id-spec-item__key">CHAPTER</span>
-            <span className="team-id-spec-item__val">BVUDET-NM</span>
-          </div>
-          <div className="team-id-spec-item">
-            <span className="team-id-spec-item__key">DESIGNATION</span>
-            <span className="team-id-spec-item__val">{member.rank.toUpperCase()}</span>
-          </div>
-        </div>
-
-        {/* Verified Social & Contact Network */}
-        {(member.socials || member.email) && (
-          <div className="team-id-card-dossier__contacts-section">
-            <span className="team-id-card-dossier__section-label">AUTHENTICATED CONTACT NODES</span>
-            <div className="team-id-card-dossier__links">
-              {member.socials?.github && (
-                <a
-                  href={member.socials.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="team-id-contact-btn"
-                  aria-label={`${member.name}'s GitHub profile`}
-                >
-                  <GithubIcon size={14} />
-                  <span>GitHub</span>
-                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
-                </a>
-              )}
-              {member.socials?.linkedin && (
-                <a
-                  href={member.socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="team-id-contact-btn"
-                  aria-label={`${member.name}'s LinkedIn profile`}
-                >
-                  <LinkedinIcon size={14} />
-                  <span>LinkedIn</span>
-                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
-                </a>
-              )}
-              {member.socials?.instagram && (
-                <a
-                  href={member.socials.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="team-id-contact-btn"
-                  aria-label={`${member.name}'s Instagram profile`}
-                >
-                  <InstagramIcon size={14} />
-                  <span>Instagram</span>
-                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
-                </a>
-              )}
-              {member.email && (
-                <a
-                  href={`mailto:${member.email}`}
-                  className="team-id-contact-btn"
-                  aria-label={`Send email to ${member.name}`}
-                >
-                  <MailIcon size={14} />
-                  <span>Direct Mail</span>
-                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
-                </a>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Bottom ID Barcode & Watermark */}
-        <div className="team-id-card-dossier__footer">
-          <CyanIdBarcode />
-          <div className="team-id-card-dossier__footer-text">
-            <span>HACKWITHINDIA • BVUDET NAVI MUMBAI</span>
-            <span>VERIFIED IDENTITY PROTOCOL // DISPATCH 2026–27</span>
-          </div>
+        <div className="team-card__status-beacon">
+          <span className="team-card__pulse-dot" />
+          <span>VERIFIED</span>
         </div>
       </div>
-    </div>
+
+      {/* Photo Frame Container */}
+      <div className="team-card__photo-container">
+        <div className="team-card__photo-frame">
+          {member.image && !imgFailed ? (
+            <img
+              src={member.image}
+              alt={member.name}
+              className="team-card__photo-img"
+              loading="lazy"
+              onError={() => setImgFailed(true)}
+            />
+          ) : (
+            <div className="team-card__photo-fallback">
+              <span className="team-card__initials">{member.initials}</span>
+              <span className="team-card__watermark">HWI // 26</span>
+            </div>
+          )}
+        </div>
+
+        <div className="team-card__verified-badge">
+          <ShieldCheck size={11} />
+          <span>OFFICIAL</span>
+        </div>
+      </div>
+
+      {/* Card Body: Name, Role & Department */}
+      <div className="team-card__body">
+        <div className="team-card__meta-tags">
+          <span className="team-card__dept-tag">{dept.name}</span>
+          <span className="team-card__rank-tag">{rankLabel}</span>
+        </div>
+
+        <h3 className="team-card__name">{member.name}</h3>
+        <p className="team-card__role">{member.role}</p>
+
+        {member.academicYear && member.branch && (
+          <div className="team-card__academic">
+            <span>{member.academicYear} • {member.branch}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Technical Barcode & Serial */}
+      <div className="team-card__footer">
+        <div className="team-card__barcode-wrap">
+          <CyanIdBarcode />
+        </div>
+        <div className="team-card__serial-row">
+          <span className="team-card__serial-label">CREDENTIAL ID</span>
+          <code className="team-card__serial-code">{serialId}</code>
+        </div>
+      </div>
+    </article>
   );
 }
 
-// ─── Main TeamCinematic Component ────────────────────────────────────────────
+// ─── Main TeamCinematic Redesign Component ───────────────────────────────────
 export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [selectedMember, setSelectedMember] = useState<{
-    member: DepartmentMember;
-    deptName: string;
-    deptId: string;
-  } | null>(null);
+  const [activeDeptIdx, setActiveDeptIdx] = useState(0);
+  const [activeMemberIdx, setActiveMemberIdx] = useState(0);
+  const [memberFloat, setMemberFloat] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const progressBarRef = useRef<HTMLDivElement>(null);
   const tickingRef = useRef(false);
-  const lastActiveRef = useRef(0);
 
-  const numDepts = DEPARTMENTS.length;
-  const currentDept = DEPARTMENTS[activeIdx] || DEPARTMENTS[0];
+  const currentDept = DEPARTMENTS[activeDeptIdx] || DEPARTMENTS[0];
+  const members = currentDept.members;
+  const currentMember = members[activeMemberIdx] || members[0];
 
-  // Helper: Smooth scroll to specific department
-  const scrollToDept = useCallback(
+  // Dynamic scroll height based on department member count
+  const trackHeightVh = Math.max(160, members.length * 75 + 40);
+
+  // Smooth scroll to a specific member index within the department
+  const scrollToMember = useCallback(
     (index: number) => {
+      const clamped = Math.max(0, Math.min(members.length - 1, index));
+      setActiveMemberIdx(clamped);
+      setMemberFloat(clamped);
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
       if (totalScrollable <= 0) return;
 
-      const targetRatio = index / (numDepts - 1);
+      const targetRatio = members.length > 1 ? clamped / (members.length - 1) : 0;
       const targetY = scrollY + rect.top + targetRatio * totalScrollable;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     },
-    [numDepts]
+    [members.length]
   );
 
-  // ─── Scroll-Driven Continuous Cinematic Transition Engine ─────────────────
-  useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Switch department cleanly
+  const selectDepartment = useCallback(
+    (deptIdx: number) => {
+      if (deptIdx === activeDeptIdx) return;
+      setActiveDeptIdx(deptIdx);
+      setActiveMemberIdx(0);
+      setMemberFloat(0);
 
-    const updateTransitions = () => {
+      // Smooth scroll back to top of container if currently scrolled down
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const scrollY = window.scrollY || document.documentElement.scrollTop;
+        if (rect.top < -50) {
+          window.scrollTo({ top: scrollY + rect.top, behavior: 'smooth' });
+        }
+      }
+    },
+    [activeDeptIdx]
+  );
+
+  // Step to previous / next member with accessible buttons
+  const handlePrevMember = useCallback(() => {
+    if (activeMemberIdx > 0) {
+      scrollToMember(activeMemberIdx - 1);
+    } else if (activeDeptIdx > 0) {
+      // Step to previous department's last member
+      const prevDeptIdx = activeDeptIdx - 1;
+      selectDepartment(prevDeptIdx);
+    }
+  }, [activeMemberIdx, activeDeptIdx, scrollToMember, selectDepartment]);
+
+  const handleNextMember = useCallback(() => {
+    if (activeMemberIdx < members.length - 1) {
+      scrollToMember(activeMemberIdx + 1);
+    } else if (activeDeptIdx < DEPARTMENTS.length - 1) {
+      // Step to next department
+      selectDepartment(activeDeptIdx + 1);
+    }
+  }, [activeMemberIdx, members.length, activeDeptIdx, scrollToMember, selectDepartment]);
+
+  // ─── Continuous Scroll-Linked Animation Engine ───────────────────────────
+  useEffect(() => {
+    const updateScrollProgress = () => {
       if (!containerRef.current || !stickyRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
       if (totalScrollable <= 0) return;
 
-      // Normalized scroll progress: 0 at top entry, 1 at bottom exit
+      // Normalized progress (0 to 1) through the pinned section
       const rawP = -rect.top / totalScrollable;
       const p = Math.max(0, Math.min(1, rawP));
 
-      // Continuous team index coordinate (0.00 to (numDepts - 1))
-      const teamFloat = p * (numDepts - 1);
-      const nearestIdx = Math.min(numDepts - 1, Math.max(0, Math.round(teamFloat)));
+      // Continuous float coordinate across members
+      const count = members.length;
+      const curFloat = count > 1 ? p * (count - 1) : 0;
+      setMemberFloat(curFloat);
 
-      // Synchronize active department index for header pills & counter
-      if (nearestIdx !== lastActiveRef.current) {
-        lastActiveRef.current = nearestIdx;
-        setActiveIdx(nearestIdx);
-      }
+      const nearestIdx = Math.min(count - 1, Math.max(0, Math.round(curFloat)));
+      setActiveMemberIdx(nearestIdx);
 
-      // Update miniature progress bar
-      if (progressBarRef.current) {
-        progressBarRef.current.style.transform = `scaleX(${p})`;
-      }
+      // Synchronize with global background particles
+      teamStore.update(activeDeptIdx, p);
 
-      // If user reaches final team threshold, signal completion if prop exists
       if (p >= 0.98 && onCompleteAll) {
         onCompleteAll(true);
       }
-
-      // Continuous interpolation of each slide: strictly isolated to eliminate any collision/overlap
-      slidesRef.current.forEach((slide, idx) => {
-        if (!slide) return;
-        const diff = idx - teamFloat;
-        const absDiff = Math.abs(diff);
-
-        // Strict isolation threshold: slides with absDiff > 0.50 are completely hidden
-        if (absDiff > 0.50) {
-          slide.style.display = 'none';
-          slide.style.opacity = '0';
-          slide.style.pointerEvents = 'none';
-          return;
-        }
-
-        slide.style.display = 'flex';
-
-        if (prefersReduced) {
-          const isCurrent = absDiff <= 0.5;
-          slide.style.opacity = isCurrent ? '1' : '0';
-          slide.style.transform = 'none';
-          slide.style.pointerEvents = isCurrent ? 'auto' : 'none';
-          slide.style.zIndex = isCurrent ? '10' : '1';
-          return;
-        }
-
-        // Dwell zone: active slide (|diff| <= 0.15) stays solid, centered, and interactive
-        if (absDiff <= 0.15) {
-          slide.style.opacity = '1';
-          slide.style.transform = 'translate3d(0, 0, 0) scale(1)';
-          slide.style.pointerEvents = 'auto';
-          slide.style.zIndex = '10';
-          return;
-        }
-
-        // Transition zone (0.15 < absDiff <= 0.50)
-        const t = (absDiff - 0.15) / 0.35;
-        const opacity = Math.max(0, 1 - t * t);
-        const translateY = (diff < 0 ? -1 : 1) * (t * 90);
-        const scale = 1 - t * 0.04;
-
-        slide.style.opacity = opacity.toFixed(3);
-        slide.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
-        slide.style.pointerEvents = 'none';
-        slide.style.zIndex = '5';
-      });
     };
 
     const handleScroll = () => {
@@ -531,7 +462,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       tickingRef.current = true;
       requestAnimationFrame(() => {
         tickingRef.current = false;
-        updateTransitions();
+        updateScrollProgress();
       });
     };
 
@@ -539,337 +470,271 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
     window.addEventListener('resize', handleScroll, { passive: true });
     const unsubscribeBus = scrollBus.subscribe(handleScroll);
 
-    // Initial positioning calculation
-    updateTransitions();
+    // Initial calculation
+    updateScrollProgress();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
       unsubscribeBus();
     };
-  }, [numDepts, onCompleteAll]);
+  }, [members.length, activeDeptIdx, onCompleteAll]);
+
+  // Keyboard navigation shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+        // If container is currently visible in viewport
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 200) {
+          handleNextMember();
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 200) {
+          handlePrevMember();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNextMember, handlePrevMember]);
+
+  const prefersReduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const rankLabel =
+    currentMember.rank === 'head'
+      ? currentDept.id === 'core-leadership'
+        ? 'Chapter Leadership'
+        : 'Department Head'
+      : currentMember.rank === 'co-head'
+      ? 'Department Co-Head'
+      : 'Executive Member';
 
   return (
-    <div
-      className="team-cinematic-track"
+    <section
+      className="team-showcase-track"
       ref={containerRef}
-      style={{ '--team-count': numDepts } as React.CSSProperties}
+      style={{ height: `${trackHeightVh}vh` }}
       id="team"
+      aria-label="HackWithIndia Team Showcase"
     >
-      <div className="team-cinematic-sticky" ref={stickyRef}>
-        <AmbientParticles />
-
-        {/* ─── Top Header Bar: Synchronized Breadcrumbs & Secondary Nav ─────── */}
-        <header className="team-scroll-header">
-          <div className="team-scroll-header__left">
-            <div className="team-scroll-header__kicker">
-              <span className="team-scroll-header__dot" />
-              <span>HWI // 2026–27 CHAPTER ROSTER</span>
+      <div className="team-showcase-sticky" ref={stickyRef}>
+        {/* ─── Top Header: Sleek Department Selector Bar ─────────────────── */}
+        <header className="team-showcase-header">
+          <div className="team-header-identity">
+            <div className="team-header-kicker">
+              <span className="team-header-dot" />
+              <span>HWI 2026–27 // CHAPTER ROSTER</span>
             </div>
-            <h1 className="team-scroll-header__title">{currentDept.name}</h1>
-            <p className="team-scroll-header__tagline">{currentDept.tagline}</p>
+            <span className="team-header-divider" aria-hidden="true" />
+            <span className="team-header-tagline">{currentDept.tagline}</span>
           </div>
 
-          <div className="team-scroll-header__right">
-            <div className="team-scroll-counter">
-              <span className="team-scroll-counter__current">
-                {String(activeIdx + 1).padStart(2, '0')}
-              </span>
-              <span className="team-scroll-counter__sep">/</span>
-              <span className="team-scroll-counter__total">
-                {String(numDepts).padStart(2, '0')}
-              </span>
-            </div>
-            <div className="team-scroll-progress-wrap" aria-hidden="true">
-              <div className="team-scroll-progress-bar" ref={progressBarRef} />
-            </div>
-          </div>
+          {/* Minimalist Department Selection Pills */}
+          <nav className="team-dept-nav" role="tablist" aria-label="Select Team Department">
+            {DEPARTMENTS.map((dept, dIdx) => {
+              const isActive = dIdx === activeDeptIdx;
+              return (
+                <button
+                  key={dept.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  className={`team-dept-pill ${isActive ? 'is-active' : ''}`}
+                  onClick={() => selectDepartment(dIdx)}
+                  title={dept.name}
+                >
+                  <span className="team-dept-pill__dot" />
+                  <span className="team-dept-pill__name">{dept.name}</span>
+                  <span className="team-dept-pill__count">{dept.members.length}</span>
+                </button>
+              );
+            })}
+          </nav>
         </header>
 
-        {/* ─── Department Quick-Navigation Switcher (Compact Interactive Pills) ── */}
-        <nav
-          className="team-scroll-switcher"
-          aria-label="Department navigation switcher"
-        >
-          {DEPARTMENTS.map((dept, idx) => {
-            const isActive = idx === activeIdx;
-            return (
-              <button
-                key={dept.id}
-                type="button"
-                className={`team-switcher-tab ${isActive ? 'is-active' : ''}`}
-                onClick={() => scrollToDept(idx)}
-                aria-current={isActive ? 'true' : undefined}
-                aria-label={`Jump to ${dept.name}`}
-              >
-                <span className="team-switcher-tab__num">
-                  {String(idx + 1).padStart(2, '0')}
+        {/* ─── Main 2-Column Showcase Stage ───────────────────────────────── */}
+        <div className="team-showcase-stage">
+          {/* ── Left Side: Member Information Panel ── */}
+          <div className="team-showcase__left">
+            <div className="team-info-wrap">
+              {/* Department & Rank Kicker */}
+              <div className="team-info__header-row">
+                <span className="team-info__dept-tag">
+                  <span className="team-info__dot" />
+                  {currentDept.name}
                 </span>
-                <span className="team-switcher-tab__name">{dept.name}</span>
-                {isActive && <span className="team-switcher-tab__indicator" />}
-              </button>
-            );
-          })}
-        </nav>
+                <span className="team-info__rank-tag">{rankLabel}</span>
+              </div>
 
-        {/* ─── Slide Showcase Container ────────────────────────────────────── */}
-        <main className="team-scroll-showcase" aria-label="Team showcase slideshow">
-          {DEPARTMENTS.map((dept, idx) => {
-            const head = dept.members[0];
-            const otherMembers = dept.members.slice(1);
+              {/* Large Display Heading: Full Name */}
+              <h1 className="team-info__name" key={`name-${currentMember.id}`}>
+                {currentMember.name}
+              </h1>
 
-            return (
-              <div
-                key={dept.id}
-                className="team-scroll-slide"
-                ref={(el) => {
-                  slidesRef.current[idx] = el;
-                }}
-                data-dept-id={dept.id}
-              >
-                <div className="team-slide-inner">
-                  {/* Left Column: Interactive Department Head ID Card */}
-                  <div className="team-slide-portrait-col">
-                    <button
-                      type="button"
-                      className="team-portrait-card team-id-card--head"
-                      onClick={() =>
-                        setSelectedMember({
-                          member: head,
-                          deptName: dept.name,
-                          deptId: dept.id,
-                        })
-                      }
-                      title={`Inspect ${head.name}'s ID credentials`}
-                      aria-label={`Inspect ${head.name}'s ID credentials`}
+              {/* Role Title */}
+              <div className="team-info__role-wrap" key={`role-${currentMember.id}`}>
+                <span className="team-info__role-pill">{currentMember.role}</span>
+                {currentMember.academicYear && currentMember.branch && (
+                  <span className="team-info__academic-pill">
+                    {currentMember.academicYear} • {currentMember.branch}
+                  </span>
+                )}
+              </div>
+
+              {/* Concise Description / Responsibilities */}
+              <p className="team-info__bio" key={`bio-${currentMember.id}`}>
+                {currentMember.bio ||
+                  `Active contributor in ${currentDept.name} for the HackWithIndia BVUDET-NM student chapter.`}
+              </p>
+
+              {/* Relevant Social & Contact Links */}
+              {(currentMember.socials || currentMember.email) && (
+                <div className="team-info__socials-row">
+                  {currentMember.socials?.github && (
+                    <a
+                      href={currentMember.socials.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="team-social-btn"
+                      aria-label={`${currentMember.name}'s GitHub`}
                     >
-                      {/* Cyan top strip */}
-                      <div className="team-id-card__top-cyan-strip" />
+                      <GithubIcon size={14} />
+                      <span>GitHub</span>
+                      <ArrowUpRight size={12} className="team-social-btn__arrow" />
+                    </a>
+                  )}
+                  {currentMember.socials?.linkedin && (
+                    <a
+                      href={currentMember.socials.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="team-social-btn"
+                      aria-label={`${currentMember.name}'s LinkedIn`}
+                    >
+                      <LinkedinIcon size={14} />
+                      <span>LinkedIn</span>
+                      <ArrowUpRight size={12} className="team-social-btn__arrow" />
+                    </a>
+                  )}
+                  {currentMember.socials?.instagram && (
+                    <a
+                      href={currentMember.socials.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="team-social-btn"
+                      aria-label={`${currentMember.name}'s Instagram`}
+                    >
+                      <InstagramIcon size={14} />
+                      <span>Instagram</span>
+                      <ArrowUpRight size={12} className="team-social-btn__arrow" />
+                    </a>
+                  )}
+                  {currentMember.email && (
+                    <a
+                      href={`mailto:${currentMember.email}`}
+                      className="team-social-btn"
+                      aria-label={`Send email to ${currentMember.name}`}
+                    >
+                      <MailIcon size={14} />
+                      <span>Email</span>
+                      <ArrowUpRight size={12} className="team-social-btn__arrow" />
+                    </a>
+                  )}
+                </div>
+              )}
 
-                      {/* Technical ID Header bar on the card */}
-                      <div className="team-id-card__top-meta">
-                        <span className="team-id-card__top-code">
-                          HWI // {dept.id.slice(0, 4).toUpperCase()}-01
-                        </span>
-                        <span className="team-id-card__top-status">
-                          <span className="team-id-card__dot" />
-                          ACTIVE
-                        </span>
-                      </div>
+              {/* Member Navigation & Counter Controls */}
+              <div className="team-info__nav-controls">
+                <div className="team-info__counter">
+                  <span className="counter-current">
+                    {String(activeMemberIdx + 1).padStart(2, '0')}
+                  </span>
+                  <span className="counter-sep">/</span>
+                  <span className="counter-total">
+                    {String(members.length).padStart(2, '0')}
+                  </span>
+                </div>
 
-                      <div className="team-portrait-frame__inner">
-                        <div className="team-portrait-fallback">
-                          <span className="team-portrait-initials">{head.initials}</span>
-                          <span className="team-portrait-watermark">HWI // BVUDET</span>
-                        </div>
-                        {head.image && (
-                          <img
-                            src={head.image}
-                            alt={head.name}
-                            className="team-portrait-img"
-                            loading="lazy"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLElement).style.display = 'none';
-                            }}
-                          />
-                        )}
-                        <div className="team-portrait-overlay" />
-                      </div>
-
-                      {/* Bottom ID bar on the card with rank badge & click-to-inspect prompt */}
-                      <div className="team-id-card__bottom-bar">
-                        <div className="team-portrait-rank-badge">
-                          <span>
-                            {dept.id === 'core-leadership'
-                              ? 'CHAPTER LEADERSHIP'
-                              : 'DEPARTMENT HEAD'}
-                          </span>
-                        </div>
-                        <span className="team-id-card__hover-cta">
-                          <span>INSPECT ID</span>
-                          <ArrowUpRight size={13} />
-                        </span>
-                      </div>
-                    </button>
-                  </div>
-
-                  {/* Right Column: Head Bio, Roles & Interactive Member Roster */}
-                  <div className="team-slide-details-col">
-                    <div className="team-slide-badges">
-                      <span className="team-slide-role-badge">{head.role}</span>
-                      <span className="team-slide-count-badge">
-                        <Users size={12} />
-                        {dept.members.length} {dept.members.length === 1 ? 'MEMBER' : 'MEMBERS'}
-                      </span>
-                      {/* Interactive Inspect Button for Head (accessible on all screen sizes) */}
-                      <button
-                        type="button"
-                        className="team-head-inspect-btn"
-                        onClick={() =>
-                          setSelectedMember({
-                            member: head,
-                            deptName: dept.name,
-                            deptId: dept.id,
-                          })
-                        }
-                        aria-label={`View ID Card for ${head.name}`}
-                      >
-                        <span className="team-head-inspect-btn__dot" />
-                        <span>VIEW ID CARD</span>
-                        <ArrowUpRight size={12} />
-                      </button>
-                    </div>
-
-                    <h2 className="team-slide-name">{head.name}</h2>
-                    {head.bio && <p className="team-slide-bio">{head.bio}</p>}
-
-                    {/* Socials & Contact for Head */}
-                    {(head.socials || head.email) && (
-                      <div className="team-slide-socials">
-                        {head.socials?.github && (
-                          <a
-                            href={head.socials.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="team-social-icon-btn"
-                            aria-label={`${head.name}'s GitHub`}
-                          >
-                            <GithubIcon size={15} />
-                          </a>
-                        )}
-                        {head.socials?.linkedin && (
-                          <a
-                            href={head.socials.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="team-social-icon-btn"
-                            aria-label={`${head.name}'s LinkedIn`}
-                          >
-                            <LinkedinIcon size={15} />
-                          </a>
-                        )}
-                        {head.socials?.instagram && (
-                          <a
-                            href={head.socials.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="team-social-icon-btn"
-                            aria-label={`${head.name}'s Instagram`}
-                          >
-                            <InstagramIcon size={15} />
-                          </a>
-                        )}
-                        {head.email && (
-                          <a
-                            href={`mailto:${head.email}`}
-                            className="team-social-icon-btn"
-                            aria-label={`Email ${head.name}`}
-                          >
-                            <MailIcon size={15} />
-                          </a>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Department Members Roster (Co-Heads & Executives) with Interactive ID Cards */}
-                    {otherMembers.length > 0 && (
-                      <div className="team-slide-roster-section">
-                        <div className="team-slide-roster-heading">
-                          <span>TEAM MEMBERS IN {dept.name}</span>
-                          <span className="team-roster-hint">
-                            (Select to inspect ID credentials)
-                          </span>
-                        </div>
-                        <div className="team-slide-roster-chips">
-                          {otherMembers.map((m, mIdx) => (
-                            <button
-                              key={m.id}
-                              type="button"
-                              className="team-member-chip"
-                              onClick={() =>
-                                setSelectedMember({
-                                  member: m,
-                                  deptName: dept.name,
-                                  deptId: dept.id,
-                                })
-                              }
-                              title={`Inspect ${m.name}'s ID credentials`}
-                              aria-label={`Inspect ${m.name}'s ID credentials`}
-                            >
-                              <span className="team-member-chip__accent-strip" />
-                              <span className="team-member-chip__initials">
-                                {m.initials}
-                              </span>
-                              <div className="team-member-chip__info">
-                                <div className="team-member-chip__top-line">
-                                  <span className="team-member-chip__name">{m.name}</span>
-                                  <span className="team-member-chip__rank-badge">
-                                    {m.rank === 'co-head' ? 'CO-HEAD' : 'EXEC'}
-                                  </span>
-                                </div>
-                                <span className="team-member-chip__role">{m.role}</span>
-                              </div>
-                              <ArrowUpRight size={12} className="team-member-chip__arrow" />
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div className="team-info__nav-buttons">
+                  <button
+                    type="button"
+                    className="team-nav-arrow-btn"
+                    onClick={handlePrevMember}
+                    disabled={activeMemberIdx === 0 && activeDeptIdx === 0}
+                    aria-label="Previous member"
+                  >
+                    <ChevronLeft size={16} />
+                    <span>PREV</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="team-nav-arrow-btn"
+                    onClick={handleNextMember}
+                    disabled={
+                      activeMemberIdx === members.length - 1 &&
+                      activeDeptIdx === DEPARTMENTS.length - 1
+                    }
+                    aria-label="Next member"
+                  >
+                    <span>NEXT</span>
+                    <ChevronRight size={16} />
+                  </button>
                 </div>
               </div>
-            );
-          })}
-        </main>
-
-        {/* ─── Bottom Scroll Guidance Bar ──────────────────────────────────── */}
-        <footer className="team-scroll-footer">
-          <div className="team-scroll-cue-wrap">
-            <div className="team-scroll-mouse" aria-hidden="true">
-              <span className="team-scroll-mouse__wheel" />
             </div>
-            <span className="team-scroll-cue__text">
-              {activeIdx === numDepts - 1
-                ? 'CONTINUE SCROLLING FOR CHAPTER ARCHIVE'
-                : 'SCROLL DOWN TO ADVANCE TEAMS'}
+          </div>
+
+          {/* ── Right Side: Physical ID-Card Stacked Deck ── */}
+          <div className="team-showcase__right">
+            <div className="team-deck-container" aria-label="Physical ID Card Deck">
+              {members.map((m, idx) => {
+                const diff = idx - memberFloat;
+                return (
+                  <PhysicalIdCard
+                    key={m.id}
+                    member={m}
+                    dept={currentDept}
+                    index={idx}
+                    total={members.length}
+                    diff={diff}
+                    prefersReduced={prefersReduced}
+                    onSelect={() => scrollToMember(idx)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* ─── Bottom Footer Bar: Scroll Progress & Department Jumps ─────── */}
+        <footer className="team-showcase-footer">
+          <div className="team-footer__cue">
+            <div className="team-footer__mouse" aria-hidden="true">
+              <span className="team-footer__wheel" />
+            </div>
+            <span className="team-footer__cue-text">
+              {activeMemberIdx === members.length - 1 && activeDeptIdx === DEPARTMENTS.length - 1
+                ? 'CONTINUE SCROLLING FOR CHAPTER FOOTER'
+                : 'SCROLL TO ADVANCE MEMBER CREDENTIALS'}
             </span>
           </div>
 
-          {/* Secondary manual jump buttons */}
-          <div className="team-scroll-nav-secondary">
-            {activeIdx > 0 && (
-              <button
-                type="button"
-                className="team-secondary-arrow-btn"
-                onClick={() => scrollToDept(activeIdx - 1)}
-                aria-label="Previous team"
-              >
-                <ChevronUp size={14} />
-                <span>PREV</span>
-              </button>
-            )}
-            {activeIdx < numDepts - 1 && (
-              <button
-                type="button"
-                className="team-secondary-arrow-btn"
-                onClick={() => scrollToDept(activeIdx + 1)}
-                aria-label="Next team"
-              >
-                <span>NEXT</span>
-                <ChevronDown size={14} />
-              </button>
-            )}
+          {/* Secondary Department Quick Navigator */}
+          <div className="team-footer__dept-jump">
+            <span className="team-footer__dept-label">DEPARTMENT:</span>
+            <span className="team-footer__dept-name">{currentDept.name}</span>
           </div>
         </footer>
       </div>
-
-      {/* ─── Interactive Member ID Card Modal Dossier ─────────────────────── */}
-      <MemberDetailModal
-        member={selectedMember?.member || null}
-        deptName={selectedMember?.deptName || ''}
-        deptId={selectedMember?.deptId || ''}
-        onClose={() => setSelectedMember(null)}
-      />
-    </div>
+    </section>
   );
 }

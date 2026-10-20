@@ -3,12 +3,15 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useLenis } from 'lenis/react';
 import { scrollBus } from '@/lib/scrollBus';
+import { introStore } from '@/lib/introStore';
+import { useState } from 'react';
 import './RulerScrollbar.css';
 
 const THUMB_HEIGHT = 28; // Height of the vertical red thumb capsule in px
 const PADDING_Y = 3;     // Vertical padding inside each pill track in px
 
 export function RulerScrollbar() {
+  const [isVisible, setIsVisible] = useState(() => introStore.isComplete);
   const leftTrackRef = useRef<HTMLDivElement>(null);
   const rightTrackRef = useRef<HTMLDivElement>(null);
   const leftThumbRef = useRef<HTMLDivElement>(null);
@@ -16,6 +19,21 @@ export function RulerScrollbar() {
   const isDraggingRef = useRef<boolean>(false);
   const activeIslandRef = useRef<'left' | 'right' | null>(null);
   const lenis = useLenis();
+
+  useEffect(() => {
+    if (introStore.isComplete) {
+      setIsVisible(true);
+      return;
+    }
+    const unsub = introStore.subscribe((phase) => {
+      if (phase === 'complete') {
+        setIsVisible(true);
+      }
+    });
+    return () => {
+      unsub();
+    };
+  }, []);
 
   // Position thumbs along both vertical tracks in lockstep using translate3d for 60/120fps
   const setThumbPosition = useCallback((progress: number) => {
@@ -227,6 +245,8 @@ export function RulerScrollbar() {
       window.scrollTo({ top: targetScroll, behavior: 'smooth' });
     }
   };
+
+  if (!isVisible) return null;
 
   return (
     <>

@@ -1,0 +1,55 @@
+/* ==========================================================================
+   HWI Cursor-Driven Fluid Text Distortion
+   Fluid-like ink mass deforms across typography with glowing crimson meniscus
+   ========================================================================== */
+
+.fluid-text-container {
+  position: relative;
+  display: inline-block;
+  cursor: default;
+  user-select: none;
+  margin-bottom: var(--space-24);
+  /* Ensure container bounds receive pointer events without blocking lower CTA buttons */
+  pointer-events: auto;
+  overflow: visible;
+}
+
+/* Base typographic styling preserved with crisp HWI brand typography */
+.fluid-text-title {
+  position: relative;
+  margin: 0;
+  color: #ffffff;
+  z-index: 1;
+  transition: filter 0.08s ease-out;
+  will-change: filter;
+  pointer-events: none;
+}
+
+/* Viscous ink fluid overlay */
+.fluid-text-canvas {
+  position: absolute;
+  pointer-events: none !important;
+  z-index: 3;
+  /* Blend fluid gracefully over the typography */
+  mix-blend-mode: normal;
+  will-change: transform;
+}
+
+/* Hidden SVG definitions */
+.fluid-text-svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Accessibility: disable fluid simulation when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+  .fluid-text-canvas {
+    display: none !important;
+  }
+  .fluid-text-title {
+    filter: none !important;
+  }
+}

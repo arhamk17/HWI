@@ -1,24 +1,34 @@
-type IntroListener = () => void;
+export type IntroPhase = 'multilingual-loader' | 'fluid-transition' | 'hero-revealed' | 'complete';
+
+type IntroListener = (phase: IntroPhase) => void;
 
 class IntroStore {
-  private _isComplete = false;
+  private _phase: IntroPhase = 'multilingual-loader';
   private _listeners: Set<IntroListener> = new Set();
 
-  get isComplete(): boolean {
-    return this._isComplete;
+  get phase(): IntroPhase {
+    return this._phase;
   }
 
-  setComplete(): void {
-    if (!this._isComplete) {
-      this._isComplete = true;
+  get isComplete(): boolean {
+    return this._phase === 'complete';
+  }
+
+  setPhase(nextPhase: IntroPhase): void {
+    if (this._phase !== nextPhase) {
+      this._phase = nextPhase;
       this._listeners.forEach((listener) => {
         try {
-          listener();
+          listener(this._phase);
         } catch {
           // ignore error
         }
       });
     }
+  }
+
+  setComplete(): void {
+    this.setPhase('complete');
   }
 
   subscribe(listener: IntroListener): () => void {

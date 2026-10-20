@@ -225,7 +225,7 @@ export function EventsExperience() {
   // activeCardId: tracks which of the 7 cards is currently expanded in the horizontal row
   // selectedId: tracks which event has its full editorial detail dossier open below (null = closed)
   const [activeCardId, setActiveCardId] = useState<string>(EVENTS_DATA[0].id);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(EVENTS_DATA[0].id);
   const [animatingId, setAnimatingId] = useState<string | null>(null);
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('ALL');
 
@@ -238,6 +238,8 @@ export function EventsExperience() {
   const heroMetaRef = useRef<HTMLDivElement>(null);
 
   const gallerySectionRef = useRef<HTMLElement>(null);
+  const detailPanelRef = useRef<HTMLDivElement>(null);
+  const detailPanelCardRef = useRef<HTMLDivElement>(null);
   const galleryTrackRef = useRef<HTMLDivElement>(null);
   const photosSectionRef = useRef<HTMLElement>(null);
   const photosGridRef = useRef<HTMLDivElement>(null);
@@ -350,158 +352,31 @@ export function EventsExperience() {
     }
   }, [selectedId]);
 
-  const panelTimelineRef = useRef<anime.AnimeTimelineInstance | null>(null);
-
-  // Coordinated Detail Panel Opening Sequence:
-  // Phase A: Lift from 24px and scale 0.96 upward to final position
-  // Phase B: Left-to-right horizontal reveal via clip-path
-  // Phase C: 5-step content entrance stagger
+    // Staggered entrance of detail panel content when selected edition changes
   useEffect(() => {
-    if (panelTimelineRef.current) {
-      panelTimelineRef.current.pause();
-      panelTimelineRef.current = null;
-    }
-
-    if (!selectedId || !galleryTrackRef.current) return;
-
-    // Reset inline styles on any previous/sibling panels to ensure clean state
-    galleryTrackRef.current.querySelectorAll<HTMLElement>('.hwi-panel').forEach((p) => {
-      p.style.transform = '';
-      p.style.clipPath = '';
-      p.querySelectorAll<HTMLElement>('.expanded-top-strip, .expanded-theme-line, .expanded-headline, .expanded-narrative, .expanded-meta-strip, .expanded-main-right, .expanded-bottom-actions').forEach((el) => {
-        el.style.opacity = '';
-        el.style.transform = '';
-      });
-    });
-
+    if (!selectedId || !detailPanelCardRef.current) return;
+    const cardEl = detailPanelCardRef.current;
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const activePanel = galleryTrackRef.current.querySelector<HTMLElement>('.hwi-panel--active');
-    if (!activePanel) return;
+    if (prefersReducedMotion) return;
 
-    const topStrip = activePanel.querySelector<HTMLElement>('.expanded-top-strip');
-    const themeLine = activePanel.querySelector<HTMLElement>('.expanded-theme-line');
-    const headline = activePanel.querySelector<HTMLElement>('.expanded-headline');
-    const narrative = activePanel.querySelector<HTMLElement>('.expanded-narrative');
-    const metaStrip = activePanel.querySelector<HTMLElement>('.expanded-meta-strip');
-    const monumentalTitle = activePanel.querySelector<HTMLElement>('.expanded-main-right');
-    const bottomActions = activePanel.querySelector<HTMLElement>('.expanded-bottom-actions');
-    const contentItems = [topStrip, themeLine, headline, narrative, metaStrip, monumentalTitle, bottomActions].filter(Boolean) as HTMLElement[];
+    const items = cardEl.querySelectorAll<HTMLElement>(
+      '.detail-panel__tag-cluster, .expanded-theme-line, .detail-panel__headline, .detail-panel__narrative, .expanded-meta-strip, .expanded-bottom-actions'
+    );
 
-    if (prefersReducedMotion) {
-      activePanel.style.transform = '';
-      activePanel.style.clipPath = '';
-      contentItems.forEach((el) => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-      setAnimatingId(null);
-      return;
-    }
-
-    // Clean transform on activePanel
-    activePanel.style.transform = '';
-    activePanel.style.clipPath = '';
-    contentItems.forEach((el) => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(12px)';
+    anime({
+      targets: items,
+      opacity: [0, 1],
+      translateY: [10, 0],
+      duration: 320,
+      delay: anime.stagger(30),
+      easing: 'easeOutCubic',
     });
-
-    const revealObj = { progress: 0 };
-    const tl = anime.timeline({
-      easing: 'cubicBezier(0.16, 1, 0.3, 1)',
-      complete: () => {
-        if (activePanel) {
-          activePanel.style.transform = '';
-          activePanel.style.clipPath = '';
-        }
-        contentItems.forEach((el) => {
-          el.style.opacity = '';
-          el.style.transform = '';
-        });
-        setAnimatingId(null);
-      },
-    });
-
-    panelTimelineRef.current = tl;
-
-    // Subtle opacity settle for content items
-    tl.add({
-      targets: revealObj,
-      progress: [0, 100],
-      duration: 300,
-      easing: 'easeOutQuad',
-    }, 0);
-
-    // Phase C: Restrained Staggered Content Entrance (starts once panel is ~80% revealed)
-    // 1. Edition/category badges and theme label
-    const step1 = [topStrip, themeLine].filter(Boolean) as HTMLElement[];
-    if (step1.length) {
-      tl.add({
-        targets: step1,
-        opacity: [0, 1],
-        translateY: [12, 0],
-        duration: 340,
-        easing: 'easeOutQuad',
-      }, 450);
-    }
-
-    // 2. Main event display heading
-    if (headline) {
-      tl.add({
-        targets: headline,
-        opacity: [0, 1],
-        translateY: [12, 0],
-        duration: 340,
-        easing: 'easeOutQuad',
-      }, 530);
-    }
-
-    // 3. Description narrative
-    if (narrative) {
-      tl.add({
-        targets: narrative,
-        opacity: [0, 1],
-        translateY: [12, 0],
-        duration: 340,
-        easing: 'easeOutQuad',
-      }, 610);
-    }
-
-    // 4. Date, location, time, and attendance metadata (+ vertical title)
-    const step4 = [metaStrip, monumentalTitle].filter(Boolean) as HTMLElement[];
-    if (step4.length) {
-      tl.add({
-        targets: step4,
-        opacity: [0, 1],
-        translateY: [12, 0],
-        duration: 340,
-        easing: 'easeOutQuad',
-      }, 690);
-    }
-
-    // 5. Call-to-action and secondary hints
-    if (bottomActions) {
-      tl.add({
-        targets: bottomActions,
-        opacity: [0, 1],
-        translateY: [12, 0],
-        duration: 350,
-        easing: 'easeOutQuad',
-      }, 770);
-    }
-
-    return () => {
-      if (panelTimelineRef.current) {
-        panelTimelineRef.current.pause();
-        panelTimelineRef.current = null;
-      }
-    };
   }, [selectedId]);
 
-  // Staggered reveal of editorial dossier items when event changes
+  // Staggered reveal of editorial dossier items when event changes  // Staggered reveal of editorial dossier items when event changes
   useEffect(() => {
     if (!selectedEvent || !editorialStoryRef.current) return;
     const prefersReducedMotion =
@@ -978,231 +853,232 @@ export function EventsExperience() {
             </div>
           </div>
 
-          {/* Horizontal Gallery Wrapper */}
+          {/* Main Gallery Area: Split Layout with Dedicated Detail Panel & Card Gallery */}
           <div className="hwi-gallery-wrapper">
-            <button
-              type="button"
-              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
-              onClick={handlePrevEvent}
-              aria-label="Previous edition"
-              data-cursor="link"
-              data-cursor-label="PREV"
-            >
-              <ChevronLeft size={22} />
-            </button>
-
-            {/* Horizontal Flex Track: Compact row in default state, 100% full-width on click */}
             <div
-              className="hwi-gallery-track"
-              ref={galleryTrackRef}
-              onPointerLeave={handleTrackLeave}
+              className={`hwi-events-split-layout ${
+                selectedEvent ? 'has-active-detail' : 'is-overview-only'
+              }`}
             >
-              {EVENTS_DATA.map((event, idx) => {
-                const isExpanded = activeCardId === event.id;
-                const isSelected = selectedId === event.id;
-
-                return (
+              {/* ── REGION 1: DEDICATED EVENT DETAIL PANEL ── */}
+              {selectedEvent && (
+                <div className="hwi-detail-panel-region" ref={detailPanelRef}>
                   <div
-                    key={event.id}
-                    className={`hwi-panel ${
-                      isExpanded ? 'hwi-panel--active' : 'hwi-panel--idle'
-                    } ${isSelected ? 'hwi-panel--selected' : ''}`}
+                    ref={detailPanelCardRef}
+                    className="hwi-detail-panel-card"
                     style={
                       {
-                        '--panel-accent': event.accentColor || '#EF4444',
+                        '--panel-accent': selectedEvent.accentColor || '#8B5CF6',
                       } as React.CSSProperties
                     }
-                    onClick={() => handleSelectEvent(event.id)}
-                    onMouseEnter={() => handleCardHover(event.id)}
-                    onPointerEnter={() => handleCardHover(event.id)}
-                    onFocus={() => handleCardHover(event.id)}
-                    role="button"
-                    tabIndex={0}
-                    aria-expanded={isExpanded}
-                    aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
-                    data-cursor="link"
-                    data-cursor-label={isSelected ? 'CLOSE' : 'EXPAND'}
                   >
-                    {/* Visual Background: Event Photo or Vector Art */}
-                    {event.cardImage ? (
+                    {/* Background Visual Photo */}
+                    {selectedEvent.cardImage && (
                       <div
-                        className="hwi-panel__bg-photo"
-                        style={{ backgroundImage: `url(${event.cardImage})` }}
+                        className="hwi-detail-panel-card__bg"
+                        style={{ backgroundImage: `url(${selectedEvent.cardImage})` }}
                       />
-                    ) : (
-                      <div className="hwi-panel__bg-art">
-                        <PanelArtwork
-                          graphicType={event.hudGraphicType || 'grid'}
-                          accent={event.accentColor || '#EF4444'}
-                        />
-                      </div>
                     )}
+                    <div className="hwi-detail-panel-card__scrim" />
 
-                    {/* Gradient Overlay Scrim */}
-                    <div className="hwi-panel__scrim" />
-
-                    {/* ── COLLAPSED STATE ELEMENTS (Fades out when panel expands) ── */}
-                    {/* Top-Left: TEDx Eyebrow + Bold Big Edition Number */}
-                    <div className="hwi-panel__tedx-header">
-                      <span className="hwi-panel__tedx-tag">EDITION</span>
-                      <span className="hwi-panel__tedx-num">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    {/* Right-Side: Vertical Rotated Theme / Title */}
-                    <div className="hwi-panel__tedx-vertical" aria-hidden="true">
-                      <span>{(event.shortTitle || event.title).toUpperCase()}</span>
-                    </div>
-
-                    {/* Bottom-Left: Event Date */}
-                    <div className="hwi-panel__tedx-footer">
-                      <span className="tedx-footer-date">{event.date}</span>
-                    </div>
-
-                    {/* ── EXPANDED STATE CONTENT (Smooth CSS enter & exit, inert when idle) ── */}
-                    <div
-                      className="hwi-panel__expanded-content"
-                      aria-hidden={!isExpanded}
-                      inert={!isExpanded}
-                    >
-                        {/* Top Strip: Edition badge, category, and collapse chip */}
-                        <div className="expanded-top-strip">
-                          <div className="expanded-tag-cluster">
-                            <span className="expanded-edition-pill">
-                              Edition {String(idx + 1).padStart(2, '0')} · {event.year}
-                            </span>
-                            <span className="expanded-category-pill">{event.category}</span>
-                            <span
-                              className={`expanded-status-pill ${
-                                event.status === 'upcoming' ? 'is-upcoming' : 'is-archived'
-                              }`}
-                            >
-                              {event.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED DOSSIER'}
-                            </span>
-                          </div>
-
-                          <button
-                            type="button"
-                            className="expanded-collapse-chip"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedId(null);
-                            }}
-                            aria-label="Restore all panels"
-                            data-cursor="link"
-                            data-cursor-label="RESTORE"
+                    <div className="hwi-detail-panel-card__content">
+                      {/* Top Strip: Badges & Restore Overview Button */}
+                      <div className="detail-panel__top-strip">
+                        <div className="detail-panel__tag-cluster">
+                          <span className="expanded-edition-pill">
+                            Edition {String(currentIndex + 1).padStart(2, '0')} · {selectedEvent.year}
+                          </span>
+                          <span className="expanded-category-pill">{selectedEvent.category}</span>
+                          <span
+                            className={`expanded-status-pill ${
+                              selectedEvent.status === 'upcoming' ? 'is-upcoming' : 'is-archived'
+                            }`}
                           >
-                            <span>RESTORE OVERVIEW</span>
-                            <X size={14} />
-                          </button>
+                            {selectedEvent.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED DOSSIER'}
+                          </span>
                         </div>
 
-                        {/* Main Middle Row: Heroic Typography & Asymmetric Editorial Context */}
-                        <div className="expanded-main-hero">
-                          <div className="expanded-main-left">
-                            <div className="expanded-theme-line">
-                              <span className="theme-line-rule" />
-                              <span className="theme-line-text">Theme: {event.theme}</span>
-                            </div>
+                        <button
+                          type="button"
+                          className="expanded-collapse-chip"
+                          onClick={() => setSelectedId(null)}
+                          aria-label="Restore overview mode"
+                          data-cursor="link"
+                          data-cursor-label="OVERVIEW"
+                        >
+                          <span>RESTORE OVERVIEW</span>
+                          <X size={14} />
+                        </button>
+                      </div>
 
-                            <h2 className="expanded-headline">{event.title}</h2>
-
-                            <p className="expanded-narrative">
-                              {event.shortDescription || event.desc}
-                            </p>
-
-                            {/* Minimal Essential Context Strip */}
-                            <div className="expanded-meta-strip">
-                              <div className="meta-strip-item">
-                                <Calendar size={14} />
-                                <span>{event.date}</span>
-                              </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <MapPin size={14} />
-                                <span>{event.venue}</span>
-                              </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <Clock size={14} />
-                                <span>{event.duration}</span>
-                              </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <Users size={14} />
-                                <span>
-                                  {typeof event.participants === 'string' &&
-                                  (event.participants.includes('Builders') ||
-                                    event.participants.includes('Researchers'))
-                                    ? event.participants
-                                    : `${event.participants} Participants`}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Right Side: Monumental Vertical Rotated Title (Echoing Reference Video) */}
-                          <div className="expanded-main-right" aria-hidden="true">
-                            <span className="monumental-vertical-title">
-                              {(event.shortTitle || event.title).toUpperCase()}
-                            </span>
-                          </div>
+                      {/* Main Middle Row: Theme, Headline, Narrative, Metadata */}
+                      <div className="detail-panel__body">
+                        <div className="expanded-theme-line">
+                          <span className="theme-line-rule" />
+                          <span className="theme-line-text">Theme: {selectedEvent.theme}</span>
                         </div>
 
-                        {/* Bottom Actions Row */}
-                        <div className="expanded-bottom-actions">
-                          {event.status === 'upcoming' ? (
-                            <Link
-                              href={event.ctaUrl || '/join'}
-                              className="expanded-cta-btn expanded-cta-btn--primary"
-                              onClick={(e) => e.stopPropagation()}
-                              data-cursor="link"
-                              data-cursor-label="APPLY"
-                            >
-                              <span>{event.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
-                              <ArrowUpRight size={16} />
-                            </Link>
-                          ) : (
-                            <a
-                              href="#editorial-story"
-                              className="expanded-cta-btn expanded-cta-btn--primary"
-                              onClick={(e) => e.stopPropagation()}
-                              data-cursor="link"
-                              data-cursor-label="EXPLORE"
-                            >
-                              <span>EXPLORE COMPLETE EVENT CHRONICLE</span>
-                              <span className="action-arrow">↓</span>
-                            </a>
-                          )}
+                        <h2 className="detail-panel__headline">{selectedEvent.title}</h2>
 
-                          <button
-                            type="button"
-                            className="expanded-hint-text"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedId(null);
-                            }}
-                          >
-                            <span>{isSelected ? '● Dossier active below (Esc to close)' : 'Click card to view complete chronicle below'}</span>
-                          </button>
+                        <p className="detail-panel__narrative">
+                          {selectedEvent.shortDescription || selectedEvent.desc}
+                        </p>
+
+                        <div className="expanded-meta-strip">
+                          <div className="meta-strip-item">
+                            <Calendar size={14} />
+                            <span>{selectedEvent.date}</span>
+                          </div>
+                          <span className="meta-strip-sep">•</span>
+                          <div className="meta-strip-item">
+                            <MapPin size={14} />
+                            <span>{selectedEvent.venue}</span>
+                          </div>
+                          <span className="meta-strip-sep">•</span>
+                          <div className="meta-strip-item">
+                            <Clock size={14} />
+                            <span>{selectedEvent.duration}</span>
+                          </div>
+                          <span className="meta-strip-sep">•</span>
+                          <div className="meta-strip-item">
+                            <Users size={14} />
+                            <span>
+                              {typeof selectedEvent.participants === 'string' &&
+                              (selectedEvent.participants.includes('Builders') ||
+                                selectedEvent.participants.includes('Researchers'))
+                                ? selectedEvent.participants
+                                : `${selectedEvent.participants} Participants`}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                  </div>
-                );
-              })}
-            </div>
 
-            <button
-              type="button"
-              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
-              onClick={handleNextEvent}
-              aria-label="Next edition"
-              data-cursor="link"
-              data-cursor-label="NEXT"
-            >
-              <ChevronRight size={22} />
-            </button>
+                      {/* Bottom Actions Row */}
+                      <div className="expanded-bottom-actions">
+                        {selectedEvent.status === 'upcoming' ? (
+                          <Link
+                            href={selectedEvent.ctaUrl || '/join'}
+                            className="expanded-cta-btn expanded-cta-btn--primary"
+                            data-cursor="link"
+                            data-cursor-label="APPLY"
+                          >
+                            <span>{selectedEvent.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
+                            <ArrowUpRight size={16} />
+                          </Link>
+                        ) : (
+                          <a
+                            href="#editorial-story"
+                            className="expanded-cta-btn expanded-cta-btn--primary"
+                            data-cursor="link"
+                            data-cursor-label="EXPLORE"
+                          >
+                            <span>EXPLORE COMPLETE EVENT CHRONICLE</span>
+                            <span className="action-arrow">↓</span>
+                          </a>
+                        )}
+
+                        <span className="detail-panel__hint">
+                          ● Active edition (click any card to switch)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── REGION 2: DEDICATED EVENT CARD GALLERY ── */}
+              <div className="hwi-gallery-region">
+                <button
+                  type="button"
+                  className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
+                  onClick={handlePrevEvent}
+                  aria-label="Previous edition"
+                  data-cursor="link"
+                  data-cursor-label="PREV"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+
+                <div
+                  className="hwi-gallery-track"
+                  ref={galleryTrackRef}
+                  onPointerLeave={handleTrackLeave}
+                >
+                  {EVENTS_DATA.map((event, idx) => {
+                    const isCardSelected = selectedEvent?.id === event.id;
+                    const isCardActive = activeCardId === event.id;
+
+                    return (
+                      <div
+                        key={event.id}
+                        className={`hwi-panel ${
+                          isCardActive ? 'hwi-panel--active' : 'hwi-panel--idle'
+                        } ${isCardSelected ? 'hwi-panel--selected' : ''}`}
+                        style={
+                          {
+                            '--panel-accent': event.accentColor || '#EF4444',
+                          } as React.CSSProperties
+                        }
+                        onClick={() => handleSelectEvent(event.id)}
+                        onMouseEnter={() => handleCardHover(event.id)}
+                        onPointerEnter={() => handleCardHover(event.id)}
+                        onFocus={() => handleCardHover(event.id)}
+                        role="button"
+                        tabIndex={0}
+                        aria-expanded={isCardActive}
+                        aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
+                        data-cursor="link"
+                        data-cursor-label="SELECT"
+                      >
+                        {/* Background Visual */}
+                        {event.cardImage ? (
+                          <div
+                            className="hwi-panel__bg-photo"
+                            style={{ backgroundImage: `url(${event.cardImage})` }}
+                          />
+                        ) : (
+                          <div className="hwi-panel__bg-art">
+                            <PanelArtwork
+                              graphicType={event.hudGraphicType || 'grid'}
+                              accent={event.accentColor || '#EF4444'}
+                            />
+                          </div>
+                        )}
+
+                        <div className="hwi-panel__scrim" />
+
+                        {/* Collapsed Spine Elements */}
+                        <div className="hwi-panel__tedx-header">
+                          <span className="hwi-panel__tedx-tag">EDITION</span>
+                          <span className="hwi-panel__tedx-num">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+
+                        <div className="hwi-panel__tedx-vertical" aria-hidden="true">
+                          <span>{(event.shortTitle || event.title).toUpperCase()}</span>
+                        </div>
+
+                        <div className="hwi-panel__tedx-footer">
+                          <span className="tedx-footer-date">{event.date}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
+                  onClick={handleNextEvent}
+                  aria-label="Next edition"
+                  data-cursor="link"
+                  data-cursor-label="NEXT"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

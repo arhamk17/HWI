@@ -280,9 +280,13 @@
 }
 
 /* When incoming page arrives: reveals smoothly from behind receding liquid */
-.page-transition-content.stage-arrival,
-.page-transition-content.stage-idle {
+.page-transition-content.stage-arrival {
   animation: pageFluidReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-transition-content.stage-idle {
+  animation: none;
+  transform: none;
 }
 
 @keyframes pageFluidReveal {

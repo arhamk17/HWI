@@ -5,6 +5,7 @@ import anime from 'animejs';
 import { scrollBus } from '@/lib/scrollBus';
 import { introStore } from '@/lib/introStore';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
+import { FluidTextDistortion } from '@/components/Hero/FluidTextDistortion';
 
 export function HeroChapter() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -56,18 +57,20 @@ export function HeroChapter() {
       el.style.visibility = 'hidden';
       el.style.pointerEvents = 'none';
 
-      // Subscribe to introStore completion event
-      unsubscribeIntro = introStore.subscribe(() => {
-        revealHero();
+      // Subscribe to introStore events: reveal as soon as fluid-transition reaches covered / hero-revealed
+      unsubscribeIntro = introStore.subscribe((phase) => {
+        if (phase === 'hero-revealed' || phase === 'complete') {
+          revealHero();
+        }
       });
 
-      // Safety timeout: Ensure hero is NEVER permanently stuck even if loader is interrupted
+      // Safety timeout: Ensure hero is NEVER permanently stuck
       safetyTimeout = setTimeout(() => {
         if (!hasAnimatedRef.current) {
           introStore.setComplete();
           revealHero();
         }
-      }, 5000);
+      }, 7500);
     }
 
     // Fade out hero headline and copy smoothly as user scrolls down
@@ -121,17 +124,7 @@ export function HeroChapter() {
           pointerEvents: isIntroComplete ? 'auto' : 'none',
         }}
       >
-        <h1
-          className="type-intro"
-          style={{
-            marginBottom: 'var(--space-24)',
-            opacity: 0,
-            textShadow: '0 4px 28px rgba(0, 0, 0, 0.85), 0 1px 3px rgba(0, 0, 0, 0.95)',
-          }}
-          data-cursor="text"
-        >
-          HACK WITH<br />INDIA
-        </h1>
+        <FluidTextDistortion />
         <p
           className="type-eyebrow text-accent"
           style={{ marginBottom: 'var(--space-48)', letterSpacing: '0.3em', opacity: 0 }}

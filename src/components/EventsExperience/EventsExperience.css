@@ -344,19 +344,226 @@
   color: #FFFFFF;
 }
 
-/* Horizontal Gallery Wrapper with Floating Circular Arrows */
+/* =========================================================================
+   SPLIT LAYOUT: SEPARATE DEDICATED DETAIL PANEL & CARD GALLERY REGIONS
+   ========================================================================= */
+
+.hwi-gallery-section.chronicles-panels-section {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+}
+
 .hwi-gallery-wrapper {
   position: relative;
   width: 100%;
+}
+
+/* Split Layout Container */
+.hwi-events-split-layout {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  align-items: stretch;
+  position: relative;
+  min-height: 540px;
+  transition: all 0.35s ease;
+}
+
+/* Overview Mode (Full-width gallery when detail panel closed) */
+.hwi-events-split-layout.is-overview-only {
+  display: block;
+}
+
+.hwi-events-split-layout.is-overview-only .hwi-gallery-region {
+  width: 100%;
+}
+
+.hwi-events-split-layout.is-overview-only .hwi-gallery-track {
+  width: 100%;
+  height: 520px;
+  display: flex;
+  gap: 12px;
+}
+
+.hwi-events-split-layout.is-overview-only .hwi-panel--idle {
+  flex: 1 1 0px;
+  min-width: 80px;
+}
+
+.hwi-events-split-layout.is-overview-only .hwi-panel--active {
+  flex: 3.5 1 0px;
+  min-width: 280px;
+}
+
+/* Split Mode (Detail Panel + Gallery side by side) */
+.hwi-events-split-layout.has-active-detail {
+  display: flex;
+  gap: 24px;
+}
+
+.hwi-events-split-layout.has-active-detail .hwi-detail-panel-region {
+  flex: 0 0 500px;
+  max-width: 500px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hwi-events-split-layout.has-active-detail .hwi-gallery-region {
+  flex: 1 1 0%;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hwi-events-split-layout.has-active-detail .hwi-gallery-track {
+  display: flex;
+  gap: 10px;
+  height: 540px;
+  width: 100%;
+  padding: 4px 2px;
+  box-sizing: border-box;
+}
+
+.hwi-events-split-layout.has-active-detail .hwi-panel--idle {
+  flex: 1 1 0px;
+  min-width: 54px;
+}
+
+.hwi-events-split-layout.has-active-detail .hwi-panel--active {
+  flex: 2.2 1 0px;
+  min-width: 140px;
+}
+
+/* ─── DEDICATED EVENT DETAIL PANEL CARD ──────────────────────────────────── */
+.hwi-detail-panel-card {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  border-radius: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #0b0910;
+  border: 1px solid var(--panel-accent, #8B5CF6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85),
+              0 0 35px color-mix(in srgb, var(--panel-accent, #8B5CF6) 35%, transparent);
+  padding: clamp(24px, 2.6vw, 36px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  transition: border-color 0.3s ease, box-shadow 0.35s ease;
+}
+
+.hwi-detail-panel-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hwi-detail-panel-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.hwi-detail-panel-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22;
+  filter: blur(1px);
+  pointer-events: none;
+  z-index: 1;
+  transition: background-image 0.4s ease;
+}
+
+.hwi-detail-panel-card__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(20, 16, 28, 0.88) 0%, rgba(10, 8, 14, 0.98) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hwi-detail-panel-card__content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Detail Panel Top Strip */
+.detail-panel__top-strip {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.detail-panel__tag-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Detail Panel Body */
+.detail-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-panel__headline {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.65rem, 2.2vw, 2.45rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+  text-wrap: balance;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.75);
+}
+
+.detail-panel__narrative {
+  font-size: clamp(0.92rem, 1.1vw, 1.02rem);
+  line-height: 1.6;
+  color: #CBD5E1;
+  margin: 0 0 18px;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.detail-panel__hint {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.03em;
+}
+
+/* ─── EVENT CARD GALLERY REGION ─────────────────────────────────────────── */
+.hwi-gallery-region {
+  position: relative;
 }
 
 .hwi-palette-floating-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 20;
-  width: 48px;
-  height: 48px;
+  z-index: 25;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: rgba(14, 12, 18, 0.9);
   backdrop-filter: blur(14px);
@@ -378,30 +585,18 @@
   box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
 }
 
-.hwi-palette-floating-arrow--left {
-  left: -24px;
+.hwi-gallery-region .hwi-palette-floating-arrow--left {
+  left: -20px;
 }
 
-.hwi-palette-floating-arrow--right {
-  right: -24px;
-}
-
-/* Horizontal Flex Track - Skiper UI HoverExpand_001 Interaction */
-.hwi-gallery-track {
-  display: flex;
-  gap: 12px;
-  height: 520px;
-  width: 100%;
-  padding: 4px 2px;
-  box-sizing: border-box;
-  position: relative;
-  transition: gap 0.35s ease;
+.hwi-gallery-region .hwi-palette-floating-arrow--right {
+  right: -20px;
 }
 
 /* Base Event Panel */
 .hwi-panel {
   position: relative;
-  height: 520px;
+  height: 100%;
   border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
@@ -423,10 +618,7 @@
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
 }
 
-/* Inactive (Collapsed/Narrow) State: Narrow vertical spine, all 7 cards stay visible */
 .hwi-panel--idle {
-  flex: 1 1 0px;
-  min-width: 68px;
   opacity: 0.82;
   visibility: visible;
   pointer-events: auto;
@@ -434,111 +626,95 @@
 
 .hwi-panel--idle:hover {
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.32);
 }
 
-/* Active (Expanded) State: Expands smoothly to become wide while others contract */
-.hwi-panel--active {
-  flex: 4.2 1 0px;
-  min-width: 340px;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  border-color: var(--panel-accent, #EF4444);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8),
-              0 0 30px color-mix(in srgb, var(--panel-accent, #EF4444) 30%, transparent);
-}
-
-/* When the expanded card also has its full detail dossier selected */
+.hwi-panel--active,
 .hwi-panel--selected {
-  border-color: var(--panel-accent, #EF4444);
-  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.9),
-              0 0 35px color-mix(in srgb, var(--panel-accent, #EF4444) 45%, transparent);
-}
-
-/* Cross-fade between Collapsed and Expanded Content */
-.hwi-panel--idle .hwi-panel__tedx-header,
-.hwi-panel--idle .hwi-panel__tedx-vertical,
-.hwi-panel--idle .hwi-panel__tedx-footer {
   opacity: 1;
-  pointer-events: auto;
-  transition: opacity 0.25s ease 0.1s;
-}
-
-.hwi-panel--active .hwi-panel__tedx-header,
-.hwi-panel--active .hwi-panel__tedx-vertical,
-.hwi-panel--active .hwi-panel__tedx-footer {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-
-.hwi-panel--idle .hwi-panel__expanded-content {
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s;
-}
-
-.hwi-panel--active .hwi-panel__expanded-content {
-  opacity: 1;
-  pointer-events: auto;
   visibility: visible;
-  transition: opacity 0.3s ease 0.12s;
+  pointer-events: auto;
+  border-color: var(--panel-accent, #8B5CF6);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8),
+              0 0 26px color-mix(in srgb, var(--panel-accent, #8B5CF6) 30%, transparent);
 }
 
-/* Responsive Scaling for Tablets and Mobile */
-@media (max-width: 1024px) {
-  .hwi-gallery-track {
-    gap: 8px;
-    height: 490px;
+/* Responsive Breakpoints */
+@media (min-width: 768px) and (max-width: 1079px) {
+  .hwi-events-split-layout.has-active-detail {
+    gap: 16px;
   }
-  .hwi-panel {
-    height: 490px;
+  .hwi-events-split-layout.has-active-detail .hwi-detail-panel-region {
+    flex: 0 0 420px;
+    max-width: 420px;
   }
-  .hwi-panel--idle {
-    min-width: 52px;
-  }
-  .hwi-panel--active {
-    flex: 3.4 1 0px;
-    min-width: 250px;
-  }
-}
-
-@media (max-width: 768px) {
-  .hwi-gallery-track {
+  .hwi-events-split-layout.has-active-detail .hwi-gallery-region {
     overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    height: 460px;
-    padding: 6px 4px;
-    gap: 10px;
   }
-  .hwi-gallery-track::-webkit-scrollbar {
+  .hwi-events-split-layout.has-active-detail .hwi-panel--idle {
+    flex: 0 0 64px;
+    min-width: 64px;
+  }
+  .hwi-events-split-layout.has-active-detail .hwi-panel--active {
+    flex: 0 0 140px;
+    min-width: 140px;
+  }
+  .hwi-palette-floating-arrow {
     display: none;
   }
+}
+
+@media (max-width: 767px) {
+  .hwi-events-split-layout.has-active-detail {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .hwi-events-split-layout.has-active-detail .hwi-detail-panel-region {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+  }
+  .hwi-detail-panel-card {
+    height: auto;
+    min-height: 420px;
+    padding: 22px 18px;
+  }
+  .hwi-events-split-layout.has-active-detail .hwi-gallery-region {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .hwi-events-split-layout.has-active-detail .hwi-gallery-track {
+    height: 380px;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 2px;
+  }
   .hwi-panel {
-    height: 460px;
+    height: 380px;
     border-radius: 14px;
   }
   .hwi-panel--idle {
     flex: 0 0 84px !important;
-    width: 84px !important;
     min-width: 84px !important;
     scroll-snap-align: start;
   }
   .hwi-panel--active {
-    flex: 0 0 290px !important;
-    width: 290px !important;
-    min-width: 290px !important;
+    flex: 0 0 160px !important;
+    min-width: 160px !important;
     scroll-snap-align: center;
+  }
+  .hwi-palette-floating-arrow {
+    display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hwi-panel {
+  .hwi-panel,
+  .hwi-detail-panel-card {
     transition: none !important;
   }
 }
