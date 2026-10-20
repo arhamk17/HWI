@@ -8,6 +8,7 @@ import { globeStore } from '@/lib/globeStore';
 import { indiaStore } from '@/lib/indiaStore';
 import { whatWeDoStore } from '@/lib/whatWeDoStore';
 import { easterEggStore } from '@/lib/easterEggStore';
+import { eventsParticleStore } from '@/lib/eventsParticleStore';
 import {
   ParticleSOA,
   createParticleSOA,
@@ -214,6 +215,12 @@ export function GlobalBackground() {
     let isEasterEggActive = false;
     const unsubscribeEasterEgg = easterEggStore.subscribe((active) => {
       isEasterEggActive = active;
+    });
+
+    // Particle Chronicles subscription for /events page
+    let eventsState = eventsParticleStore.getState();
+    const unsubscribeEvents = eventsParticleStore.subscribe((state) => {
+      eventsState = state;
     });
 
     // Simulation states
@@ -824,6 +831,53 @@ export function GlobalBackground() {
         }
 
         // ====================================================
+        // H.2 PARTICLE CHRONICLES: /events SCROLL-DRIVEN JOURNEY
+        // ====================================================
+        if (currentPath === '/events') {
+          const { section, heroConvergence, pulseIntensity } = eventsState;
+
+          // 1. Hero Ignition: Controlled subtle convergence during Anime.js entrance
+          if (heroConvergence > 0.001) {
+            const pullFactor = heroConvergence * 0.35;
+            const targetX = centerX + (soa.stagger[i] - 0.25) * (width * 0.38);
+            const targetY = centerY * 0.72 + Math.sin(time * 2.5 + i) * 35;
+            x += (targetX - x) * pullFactor;
+            y += (targetY - y) * pullFactor;
+            opacity = Math.min(1.0, opacity + 0.22 * heroConvergence);
+          }
+
+          // 2. Section Transitions & Stream
+          if (section === 'panels') {
+            // Lateral drift framing the 7 vertical edition panels
+            const lateral = Math.sin(y * 0.006 + time * 0.8) * 18;
+            x += lateral;
+          } else if (section === 'photos' || section === 'awards') {
+            // Continuous, low-intensity red particle stream as visual connector
+            if (i % 6 === 0) {
+              const streamSpeed = 42;
+              const streamY = (y + time * streamSpeed + (i * 29)) % (height + 60) - 30;
+              const streamSway = Math.sin(streamY * 0.005 + time * 0.5 + (i % 3)) * (width * 0.14);
+              x = centerX + streamSway + (soa.stagger[i] - 0.25) * 140;
+              y = streamY;
+              cr = 225;
+              cg = 38;
+              cb = 38;
+              opacity = Math.min(0.38, opacity);
+            }
+          }
+
+          // 3. Awards Section Pulse: One brief subtle pulse on entering active awards
+          if (pulseIntensity > 0.001) {
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const dist = Math.hypot(dx, dy) || 1;
+            x += (dx / dist) * (20 * pulseIntensity);
+            y += (dy / dist) * (16 * pulseIntensity);
+            opacity = Math.min(1.0, opacity + 0.25 * pulseIntensity);
+          }
+        }
+
+        // ====================================================
         // I. PARTICLE MOUSE PROXIMITY RESPONSE (Feature 12)
         // Subtle influence field (radius 85px) - gentle displacement
         // ====================================================
@@ -966,6 +1020,7 @@ export function GlobalBackground() {
       unsubscribeTeam();
       unsubscribeWhatWeDo();
       unsubscribeEasterEgg();
+      unsubscribeEvents();
     };
   }, []);
 
