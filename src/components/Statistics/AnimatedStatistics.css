@@ -1,31 +1,82 @@
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-32);
-  width: 100%;
+/* ==========================================================================
+   COMMUNITY METRICS — SPYLT-STYLE TILTED CARDS & SPRING ANIMATION
+   ========================================================================== */
+
+.impact-header {
+  margin-bottom: var(--space-48);
 }
 
+.impact-eyebrow-mask,
+.impact-title-line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.impact-eyebrow {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.impact-title-line {
+  display: inline-block;
+  transform-origin: bottom left;
+  will-change: transform, opacity;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-24);
+  width: 100%;
+  perspective: 1000px;
+}
+
+/* Base stat card */
 .stat-card {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-12);
   padding: var(--space-32);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(18, 18, 22, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  border-top: 2px solid rgba(239, 68, 68, 0.4);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-top: 2px solid rgba(239, 68, 68, 0.5);
   cursor: pointer;
   overflow: hidden;
+  will-change: transform, opacity;
+  transform-origin: center center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
 }
 
+/* Signature Spylt tilt angles that persist cleanly */
+.stat-card--tilt-0 {
+  transform: rotate(-3.5deg);
+}
+.stat-card--tilt-1 {
+  transform: rotate(3deg);
+}
+.stat-card--tilt-2 {
+  transform: rotate(-3deg);
+}
+.stat-card--tilt-3 {
+  transform: rotate(3.5deg);
+}
+
+/* Hover state: lifts, straightens, and glows */
 .stat-card:hover {
-  background: rgba(239, 68, 68, 0.05);
-  border-color: rgba(239, 68, 68, 0.8);
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.85);
   border-top-color: #ef4444;
-  transform: translateY(-4px) scale(1.015);
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(239, 68, 68, 0.15);
+  transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 35px rgba(239, 68, 68, 0.25);
+  z-index: 10;
 }
 
 .stat-card__number-wrap {
@@ -37,7 +88,7 @@
 .stat-card__number {
   font-family: var(--font-satoshi), sans-serif;
   font-weight: 800;
-  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-size: clamp(2.5rem, 4vw, 4rem);
   line-height: 1;
   color: #ffffff;
   letter-spacing: -0.04em;
@@ -90,9 +141,9 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.18), transparent 70%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.2), transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -102,13 +153,35 @@
   opacity: 1;
 }
 
-@media (max-width: 540px) {
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-20);
+  }
+}
+
+@media (max-width: 580px) {
   .stats-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: var(--space-16);
   }
 
   .stat-card {
-    padding: 20px 16px;
+    padding: var(--space-20);
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .impact-eyebrow,
+  .impact-title-line {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

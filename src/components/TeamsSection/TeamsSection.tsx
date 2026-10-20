@@ -41,6 +41,115 @@ function InstagramIcon({ size = 14 }: { size?: number }) {
   );
 }
 
+// ─── Leadership Aura Palettes (Exact match to reference video) ────────
+export interface LeadershipPalette {
+  primary: string;
+  secondary: string;
+  gradient: string;
+}
+
+export function getLeadershipPalette(member: DepartmentMember, deptId?: string): LeadershipPalette {
+  const roleLower = member.role.toLowerCase();
+
+  // President (Crimson / Hot Red to Warm Sunset Orange)
+  if (roleLower.includes('president') && !roleLower.includes('vice')) {
+    return {
+      primary: '#FF1E56',
+      secondary: '#FF6B00',
+      gradient: 'linear-gradient(135deg, #FF1E56 0%, #FF6B00 100%)',
+    };
+  }
+
+  // Vice-President (Electric Cyan to Neon Mint / Emerald Green)
+  if (roleLower.includes('vice') || roleLower.includes('vice-president')) {
+    return {
+      primary: '#00D2FF',
+      secondary: '#10B981',
+      gradient: 'linear-gradient(135deg, #00D2FF 0%, #10B981 100%)',
+    };
+  }
+
+  const dId = (deptId || member.department || '').toLowerCase();
+
+  // Technical Lead (Vivid Magenta / Violet to Electric Blue)
+  if (dId.includes('tech') || roleLower.includes('tech')) {
+    return {
+      primary: '#D946EF',
+      secondary: '#2563EB',
+      gradient: 'linear-gradient(135deg, #D946EF 0%, #2563EB 100%)',
+    };
+  }
+
+  // Social Media Lead (Hot Pink to Bright Purple)
+  if (dId.includes('social') || roleLower.includes('social')) {
+    return {
+      primary: '#EC4899',
+      secondary: '#8B5CF6',
+      gradient: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
+    };
+  }
+
+  // Design Lead (Electric Rose / Fuchsia to Golden Amber)
+  if (dId.includes('design') || roleLower.includes('design')) {
+    return {
+      primary: '#F43F5E',
+      secondary: '#F59E0B',
+      gradient: 'linear-gradient(135deg, #F43F5E 0%, #F59E0B 100%)',
+    };
+  }
+
+  // Photography / Video Editing Lead (Electric Azure to Deep Indigo)
+  if (dId.includes('photo') || dId.includes('edit') || roleLower.includes('edit')) {
+    return {
+      primary: '#00C0FF',
+      secondary: '#4F46E5',
+      gradient: 'linear-gradient(135deg, #00C0FF 0%, #4F46E5 100%)',
+    };
+  }
+
+  // PR & Marketing Lead (Ruby Rose to Violet)
+  if (dId.includes('pr') || dId.includes('market') || roleLower.includes('pr')) {
+    return {
+      primary: '#E11D48',
+      secondary: '#9333EA',
+      gradient: 'linear-gradient(135deg, #E11D48 0%, #9333EA 100%)',
+    };
+  }
+
+  // Event & Logistics Lead (Flame Orange to Sunset Amber)
+  if (dId.includes('event') || dId.includes('logistic') || roleLower.includes('event')) {
+    return {
+      primary: '#FF5722',
+      secondary: '#F59E0B',
+      gradient: 'linear-gradient(135deg, #FF5722 0%, #F59E0B 100%)',
+    };
+  }
+
+  // Documentation Lead (Emerald Green to Cyan)
+  if (dId.includes('doc') || roleLower.includes('doc')) {
+    return {
+      primary: '#10B981',
+      secondary: '#06B6D4',
+      gradient: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)',
+    };
+  }
+
+  // Sponsorship & Partnerships Lead (Gold to Ruby Crimson)
+  if (dId.includes('sponsor') || dId.includes('partner')) {
+    return {
+      primary: '#F59E0B',
+      secondary: '#E11D48',
+      gradient: 'linear-gradient(135deg, #F59E0B 0%, #E11D48 100%)',
+    };
+  }
+
+  return {
+    primary: '#F59E0B',
+    secondary: '#FF1E56',
+    gradient: 'linear-gradient(135deg, #F59E0B 0%, #FF1E56 100%)',
+  };
+}
+
 function MemberSocialLinks({ member }: { member: DepartmentMember }) {
   if (!member.socials) return null;
   return (
@@ -209,27 +318,66 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
               </div>
 
               <div className="apex-leadership__grid">
-                {leadershipDept.members.map((leader: DepartmentMember) => (
-                  <article key={leader.id} className="apex-card" tabIndex={0}>
-                    <div className="apex-card__avatar-wrap">
-                      <div className="apex-card__avatar">
-                        <span className="apex-card__initials">{leader.initials}</span>
-                        <span className="apex-card__watermark">HWI // LEADERSHIP</span>
+                {leadershipDept.members.map((leader: DepartmentMember) => {
+                  const palette = getLeadershipPalette(leader, 'core-leadership');
+                  return (
+                    <article
+                      key={leader.id}
+                      className="apex-card apex-card--lead"
+                      tabIndex={0}
+                      style={{
+                        ['--lead-primary' as string]: palette.primary,
+                        ['--lead-secondary' as string]: palette.secondary,
+                        ['--lead-gradient' as string]: palette.gradient,
+                      }}
+                    >
+                      <div className="leadership-aura-container" aria-hidden="true">
+                        <div
+                          className="leadership-aura-glow"
+                          style={{ background: palette.gradient }}
+                        />
                       </div>
-                      <div className="apex-card__avatar-glow" />
-                    </div>
 
-                    <div className="apex-card__content">
-                      <div className="apex-card__badge-row">
-                        <span className="apex-card__role-pill">{leader.role}</span>
-                        <span className="apex-card__dept-pill">Core Governance</span>
+                      <div className="apex-card__avatar-wrap">
+                        <div className="apex-card__avatar">
+                          {leader.image ? (
+                            <img
+                              src={leader.image}
+                              alt={leader.name}
+                              className="apex-card__img"
+                              onError={(e) => {
+                                (e.currentTarget as HTMLElement).style.display = 'none';
+                              }}
+                            />
+                          ) : null}
+                          <span className="apex-card__initials">{leader.initials}</span>
+                          <span className="apex-card__watermark">HWI // LEADERSHIP</span>
+                        </div>
+                        <div
+                          className="apex-card__avatar-glow"
+                          style={{
+                            background: `radial-gradient(circle, ${palette.primary}44 0%, transparent 70%)`
+                          }}
+                        />
                       </div>
-                      <h3 className="apex-card__name">{leader.name}</h3>
-                      {leader.bio && <p className="apex-card__bio">{leader.bio}</p>}
-                      <MemberSocialLinks member={leader} />
-                    </div>
-                  </article>
-                ))}
+
+                      <div className="apex-card__content">
+                        <div className="apex-card__badge-row">
+                          <span
+                            className="apex-card__role-pill"
+                            style={{ background: palette.gradient }}
+                          >
+                            {leader.role}
+                          </span>
+                          <span className="apex-card__dept-pill">Core Governance</span>
+                        </div>
+                        <h3 className="apex-card__name">{leader.name}</h3>
+                        {leader.bio && <p className="apex-card__bio">{leader.bio}</p>}
+                        <MemberSocialLinks member={leader} />
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             </div>
 
@@ -250,21 +398,55 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
                       </div>
 
                       <div className="core-dept-group__cards">
-                        {heads.map((member: DepartmentMember) => (
-                          <article key={member.id} className="core-card" tabIndex={0}>
-                            <div className="core-card__avatar">
-                              <span className="core-card__initials">{member.initials}</span>
-                              <span className="core-card__watermark">HWI</span>
-                            </div>
+                        {heads.map((member: DepartmentMember) => {
+                          const palette = getLeadershipPalette(member, dept.id);
+                          return (
+                            <article
+                              key={member.id}
+                              className="core-card core-card--lead"
+                              tabIndex={0}
+                              style={{
+                                ['--lead-primary' as string]: palette.primary,
+                                ['--lead-secondary' as string]: palette.secondary,
+                                ['--lead-gradient' as string]: palette.gradient,
+                              }}
+                            >
+                              <div className="leadership-aura-container leadership-aura-container--compact" aria-hidden="true">
+                                <div
+                                  className="leadership-aura-glow"
+                                  style={{ background: palette.gradient }}
+                                />
+                              </div>
 
-                            <div className="core-card__info">
-                              <span className="core-card__role">{member.role}</span>
-                              <h4 className="core-card__name">{member.name}</h4>
-                              <span className="core-card__dept-name">{dept.name}</span>
-                              <MemberSocialLinks member={member} />
-                            </div>
-                          </article>
-                        ))}
+                              <div className="core-card__avatar">
+                                {member.image ? (
+                                  <img
+                                    src={member.image}
+                                    alt={member.name}
+                                    className="core-card__img"
+                                    onError={(e) => {
+                                      (e.currentTarget as HTMLElement).style.display = 'none';
+                                    }}
+                                  />
+                                ) : null}
+                                <span className="core-card__initials">{member.initials}</span>
+                                <span className="core-card__watermark">HWI</span>
+                              </div>
+
+                              <div className="core-card__info">
+                                <span
+                                  className="core-card__role"
+                                  style={{ color: palette.primary }}
+                                >
+                                  {member.role}
+                                </span>
+                                <h4 className="core-card__name">{member.name}</h4>
+                                <span className="core-card__dept-name">{dept.name}</span>
+                                <MemberSocialLinks member={member} />
+                              </div>
+                            </article>
+                          );
+                        })}
                       </div>
                     </div>
                   );

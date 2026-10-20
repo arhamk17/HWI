@@ -173,8 +173,8 @@ export function GlobalBackground() {
     // ========================================================
     const unsubscribeTeam = teamStore.subscribe((activeTeam, progress) => {
       if (!teamContainerRef.current) return;
-      const p = Math.max(0, Math.min(4, progress * 4));
-      const activeIdx = Math.min(3, Math.floor(p));
+      const p = Math.max(0, Math.min(3, progress * 3));
+      const activeIdx = Math.min(2, Math.floor(p));
       const fraction = p - activeIdx;
 
       teamLayersRef.current.forEach((layer, idx) => {

@@ -1,0 +1,189 @@
+.text-reveal {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.text-reveal__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-reveal__intro {
+  display: flex;
+  align-items: center;
+  height: clamp(8rem, 20vh, 14rem);
+  overflow: hidden;
+  background: #f4f2ee;
+}
+
+.text-reveal__intro-track {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.text-reveal__intro-copy {
+  padding-right: 0.35em;
+  color: #b9b7b2;
+  font-family: var(--font-playfair-display), Georgia, serif;
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-style: italic;
+  line-height: 0.9;
+}
+
+.text-reveal__separator {
+  padding: 0 0.14em;
+  color: var(--accent);
+  font-style: normal;
+}
+
+.text-reveal__stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 32rem;
+  overflow: hidden;
+  background: #f4f2ee;
+}
+
+.text-reveal__panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--surface-primary);
+  clip-path: inset(100% 0 0 0);
+}
+
+.text-reveal__image {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(54vw, 54rem);
+  background-image:
+    linear-gradient(90deg, var(--surface-primary) 0%, rgba(7, 7, 9, 0.45) 100%),
+    url('/images/events/built_it_tour_image1.jpeg');
+  background-position: center;
+  background-size: cover;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.text-reveal__rows {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.25rem, 1.2vh, 1rem);
+  width: 100%;
+}
+
+.text-reveal__row {
+  overflow: hidden;
+  width: 100%;
+}
+
+.text-reveal__row-track,
+.text-reveal__row-drift,
+.text-reveal__row-copy {
+  display: flex;
+  width: max-content;
+}
+
+.text-reveal__row-copy {
+  flex: none;
+  align-items: center;
+  padding-right: 0.12em;
+  white-space: nowrap;
+  font-family: var(--font-syne), var(--font-satoshi), sans-serif;
+  font-size: clamp(3rem, 9vw, 9rem);
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.text-reveal__word {
+  margin-right: 0.24em;
+  color: #f5f1e8;
+}
+
+.text-reveal__word:nth-child(even) {
+  color: #d8d2c7;
+}
+
+.text-reveal__word--accent {
+  color: var(--accent);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .text-reveal__row:hover .text-reveal__word {
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+  }
+
+  .text-reveal__row:hover .text-reveal__word--accent {
+    -webkit-text-stroke-color: var(--accent);
+  }
+}
+
+@media (max-width: 767px) {
+  .text-reveal {
+    overflow: hidden;
+  }
+
+  .text-reveal__intro {
+    height: 16vh;
+    min-height: 7rem;
+  }
+
+  .text-reveal__stage {
+    min-height: 28rem;
+  }
+
+  .text-reveal__row-copy {
+    font-size: clamp(2.5rem, 12vw, 5rem);
+    letter-spacing: 0.015em;
+  }
+
+  .text-reveal__row:nth-child(3) {
+    display: none;
+  }
+
+  .text-reveal__image {
+    width: 75vw;
+    opacity: 0.13;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-reveal__intro-track,
+  .text-reveal__row-track,
+  .text-reveal__row-drift {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .text-reveal__panel {
+    clip-path: none;
+  }
+
+  .text-reveal__row:nth-child(n + 2) {
+    display: none;
+  }
+
+  .text-reveal__row-copy {
+    animation: none;
+  }
+}
