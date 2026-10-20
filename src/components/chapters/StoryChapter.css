@@ -166,6 +166,30 @@
   letter-spacing: -0.03em;
   color: #FFFFFF;
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.story-chapter__hwi-title-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.32em;
+  transform-style: preserve-3d;
+}
+
+.story-chapter__hwi-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(10px, 51px, -60px) rotateY(60deg) rotateX(-40deg);
+  transform-origin: 50% 50% -150px;
+  will-change: opacity, transform;
 }
 
 .story-chapter__hwi-desc {
@@ -175,6 +199,92 @@
   max-width: 620px;
   line-height: 1.6;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  transform: translateY(22px);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-chapter__hwi-word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .story-chapter__hwi-desc {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .story-chapter__ticker-banner {
+    opacity: 1 !important;
+    transform: rotate(-3deg) !important;
+  }
+}
+
+/* ==========================================================================
+   HACK.IT.WITH.US SCROLL-TRIGGERED TICKER RIBBON (MATCHING REFERENCE VIDEO)
+   Angled marquee ribbon with outline/solid alternating text and star sparkles
+   ========================================================================== */
+
+.story-chapter__ticker-banner {
+  position: relative;
+  width: 140vw;
+  left: 50%;
+  margin-left: -70vw;
+  overflow: hidden;
+  padding: clamp(14px, 2vh, 22px) 0;
+  margin-top: clamp(14px, 2.5vh, 24px);
+  transform: rotate(-3deg);
+  border-top: 2px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+  background: rgba(8, 8, 12, 0.55);
+  opacity: 0;
+  will-change: transform, opacity;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.story-chapter__ticker-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  will-change: transform;
+}
+
+.story-chapter__ticker-group {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 3.5vw, 52px);
+  padding-right: clamp(28px, 3.5vw, 52px);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.story-chapter__ticker-text {
+  font-family: var(--font-heading, 'Outfit', 'Inter', -apple-system, sans-serif);
+  font-size: clamp(2.2rem, 4.8vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+.story-chapter__ticker-text--solid {
+  color: #FFFFFF;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.18);
+}
+
+.story-chapter__ticker-text--outline {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.4);
+  text-shadow: none;
+}
+
+.story-chapter__ticker-star-svg {
+  width: clamp(20px, 2.8vw, 36px);
+  height: clamp(20px, 2.8vw, 36px);
+  fill: var(--accent, #EF4444);
+  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.8));
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -190,5 +300,17 @@
   }
   .story-chapter__stats-row {
     gap: 20px;
+  }
+  .story-chapter__ticker-banner {
+    transform: rotate(-2deg);
+    margin-top: 10px;
+    padding: 10px 0;
+  }
+  .story-chapter__ticker-text {
+    font-size: clamp(1.5rem, 6vw, 2.2rem);
+  }
+  .story-chapter__ticker-group {
+    gap: 20px;
+    padding-right: 20px;
   }
 }

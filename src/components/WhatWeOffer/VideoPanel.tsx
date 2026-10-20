@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import './VideoPanel.css';
 
 export const DEFAULT_OFFER_VIDEO_SRC = '/91562-629172467_medium.mp4';
@@ -11,6 +12,7 @@ export interface VideoPanelProps {
   className?: string;
   autoPlay?: boolean;
   loop?: boolean;
+  href?: string;
   onTimeUpdate?: (currentTime: number, duration: number, progress: number) => void;
   onEnded?: () => void;
   onError?: () => void;
@@ -38,6 +40,7 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
       className = '',
       autoPlay = true,
       loop = true,
+      href,
       onTimeUpdate,
       onEnded,
       onError,
@@ -111,9 +114,12 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
       }
     };
 
-    return (
-      <div className={`video-panel ${className}`}>
+    const content = (
+      <div className={`video-panel ${href ? 'video-panel--interactive' : ''} ${className}`}>
         <div className="video-panel__frame">
+          {/* Subtle light sweep shimmer */}
+          <div className="video-panel__shimmer" aria-hidden="true" />
+
           {/* Header Bar */}
           <div className="video-panel__header">
             <div className="video-panel__dot-group">
@@ -121,7 +127,18 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
               <span className="video-panel__dot video-panel__dot--gray" />
               <span className="video-panel__dot video-panel__dot--gray" />
             </div>
-            <span className="video-panel__badge">HWI PREVIEW // CHAPTER 03</span>
+            <div className="video-panel__badge-group">
+              <span className="video-panel__badge">HWI PREVIEW // CHAPTER 03</span>
+              {href && (
+                <span className="video-panel__cta-badge">
+                  <span>ABOUT HWI</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7" />
+                    <polyline points="7 7 17 7 17 17" />
+                  </svg>
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Video Container */}
@@ -144,6 +161,18 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
             />
             {/* Subtle cinematic overlay gradient */}
             <div className="video-panel__overlay" />
+
+            {/* Hover Floating Pill Prompt */}
+            {href && (
+              <div className="video-panel__hover-pill" aria-hidden="true">
+                <span className="video-panel__hover-pill-dot" />
+                <span>EXPLORE ABOUT HWI</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </div>
+            )}
           </div>
 
           {/* Real-time Video Progress Bar */}
@@ -171,5 +200,15 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
         </div>
       </div>
     );
+
+    if (href) {
+      return (
+        <Link href={href} className="video-panel__link" title="Explore About HWI">
+          {content}
+        </Link>
+      );
+    }
+
+    return content;
   }
 );

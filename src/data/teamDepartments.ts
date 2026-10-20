@@ -53,6 +53,7 @@ export const DEPARTMENTS: Department[] = [
         department: "Chapter Leadership",
         initials: 'KS',
         rank: 'head',
+        image: '/images/team/president.png',
         bio: "Spearheads chapter vision, national partnerships, and overall community growth at BVUDET-NM.",
         socials: {
           github: 'https://github.com',
@@ -67,6 +68,7 @@ export const DEPARTMENTS: Department[] = [
         department: "Chapter Leadership",
         initials: 'VC',
         rank: 'co-head',
+        image: '/images/team/vice-president.png',
         bio: "Oversees internal chapter execution, student initiatives, and strategic ecosystem alliances.",
         socials: {
           github: 'https://github.com',
