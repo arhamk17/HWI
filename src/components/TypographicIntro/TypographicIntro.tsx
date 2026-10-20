@@ -61,7 +61,8 @@ export function TypographicIntro() {
       targets: word2,
       opacity: [0, 1],
       translateY: [25, 0],
-      duration: 220,
+      color: ['#FFFFFF', '#EF4444'],
+      duration: 260,
       easing: 'easeOutCubic',
     })
     .add({

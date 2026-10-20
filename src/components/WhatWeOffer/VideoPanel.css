@@ -1,21 +1,74 @@
+.video-panel__link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
 .video-panel {
   position: relative;
   width: 100%;
   max-width: 580px;
   margin: 0 auto;
   user-select: none;
+  perspective: 1200px;
+}
+
+.video-panel--interactive {
+  cursor: pointer;
 }
 
 .video-panel__frame {
   position: relative;
   background: #0f1117;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 
-    0 20px 50px -10px rgba(0, 0, 0, 0.18),
+  box-shadow:
+    0 20px 50px -10px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(239, 68, 68, 0.18);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  transition:
+    transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s ease;
+  will-change: transform, box-shadow;
+}
+
+/* Pop Animation on Hover */
+.video-panel--interactive:hover .video-panel__frame {
+  transform: scale(1.045) translateY(-8px);
+  border-color: rgba(239, 68, 68, 0.65);
+  box-shadow:
+    0 28px 65px -10px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(239, 68, 68, 0.32),
+    0 0 0 1.5px rgba(239, 68, 68, 0.65);
+}
+
+.video-panel--interactive:active .video-panel__frame {
+  transform: scale(1.02) translateY(-4px);
+  transition-duration: 0.15s;
+}
+
+/* Subtle Shimmer Sweep */
+.video-panel__shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 75%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.75s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.video-panel--interactive:hover .video-panel__shimmer {
+  transform: translateX(100%);
 }
 
 .video-panel--completed .video-panel__frame {
@@ -45,6 +98,7 @@
   height: 8px;
   border-radius: 50%;
   display: inline-block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .video-panel__dot--red {
@@ -52,8 +106,19 @@
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
+.video-panel--interactive:hover .video-panel__dot--red {
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.95), 0 0 22px rgba(239, 68, 68, 0.5);
+  transform: scale(1.15);
+}
+
 .video-panel__dot--gray {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.video-panel__badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .video-panel__badge {
@@ -62,6 +127,30 @@
   letter-spacing: 0.12em;
   color: var(--text-tertiary, #94a3b8);
   text-transform: uppercase;
+}
+
+.video-panel__cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ef4444;
+  text-transform: uppercase;
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-panel--interactive:hover .video-panel__cta-badge {
+  background: #ef4444;
+  color: #ffffff;
+  transform: translateX(2px);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
 }
 
 .video-panel__media-wrap {
@@ -77,6 +166,11 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.video-panel--interactive:hover .video-panel__video {
+  transform: scale(1.025);
 }
 
 .video-panel__overlay {
@@ -88,6 +182,47 @@
     transparent 70%,
     rgba(15, 17, 23, 0.5) 100%
   );
+}
+
+/* Hover Floating Pill Prompt */
+.video-panel__hover-pill {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translate(-50%, 8px) scale(0.92);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(15, 17, 23, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 18px rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 4;
+}
+
+.video-panel--interactive:hover .video-panel__hover-pill {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.video-panel__hover-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
 }
 
 /* Real-time Video Progress Bar */
@@ -132,4 +267,14 @@
   color: #f1f5f9;
   letter-spacing: 0.08em;
   font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-panel__frame,
+  .video-panel--interactive:hover .video-panel__frame,
+  .video-panel__video,
+  .video-panel__hover-pill {
+    transform: none !important;
+    transition: none !important;
+  }
 }

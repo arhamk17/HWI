@@ -9,7 +9,6 @@ import {
   Tenure2025Placeholder,
   Tenure2026Placeholder,
   TeacherCoordinatorPlaceholder,
-  PrincipalPlaceholder,
   FacultyMentorsPlaceholder,
 } from './TeamPlaceholders';
 import './TeamChapter.css';
@@ -65,18 +64,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     PlaceholderComponent: TeacherCoordinatorPlaceholder,
   },
   {
-    id: 'principal',
-    number: '04',
-    title: 'PRINCIPAL',
-    description: 'Institutional Patron • BVUDET-NM Leadership',
-    badge: 'INSTITUTIONAL HEAD',
-    tag: 'CAMPUS PATRON',
-    image: '', // Insert image path here when available
-    PlaceholderComponent: PrincipalPlaceholder,
-  },
-  {
     id: 'faculty-mentors',
-    number: '05',
+    number: '04',
     title: 'FACULTY & MENTORS',
     description: 'Faculty & Mentorship • Advisory Council',
     badge: 'ADVISORY BOARD',
@@ -105,16 +94,16 @@ export function TeamChapter() {
       const rawP = -rect.top / totalScrollable;
       const p = Math.max(0, Math.min(1, rawP));
 
-      // 5 cards -> 4 intervals
-      const cardProgress = p * 4;
-      const activeIdx = Math.min(4, Math.max(0, Math.round(cardProgress)));
+      // 4 cards -> 3 intervals
+      const cardProgress = p * (LEADERSHIP_CARDS.length - 1);
+      const activeIdx = Math.min(LEADERSHIP_CARDS.length - 1, Math.max(0, Math.round(cardProgress)));
 
       // Notify global background team store for synchronized background crossfades
       teamStore.update(activeIdx, p);
 
       // Update counter
       if (counterRef.current) {
-        counterRef.current.textContent = `0${activeIdx + 1} / 05`;
+        counterRef.current.textContent = `0${activeIdx + 1} / 0${LEADERSHIP_CARDS.length}`;
       }
 
       // Update indicator dots
@@ -185,7 +174,7 @@ export function TeamChapter() {
               <h2 className="type-display text-primary">MEET THE CORE</h2>
             </div>
             <span className="team-showcase__counter" ref={counterRef}>
-              01 / 05
+              01 / 04
             </span>
           </div>
         </div>

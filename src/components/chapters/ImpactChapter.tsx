@@ -7,6 +7,8 @@ import { HWI_STATS } from '@/data/stats';
 import { whatWeDoStore } from '@/lib/whatWeDoStore';
 import '../Statistics/AnimatedStatistics.css';
 
+const TILT_ANGLES = [-3.5, 3, -3, 3.5];
+
 export function ImpactChapter() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -16,43 +18,118 @@ export function ImpactChapter() {
     gsap.registerPlugin(ScrollTrigger);
     if (!sectionRef.current) return;
 
-    // Fast reveal animation using gsap
-    const t = gsap.fromTo(
-      sectionRef.current.querySelector('.impact-header'),
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.65,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', once: true },
-      }
-    ).scrollTrigger;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // High performance IntersectionObserver for the count-up
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimatedRef.current) {
+    if (prefersReducedMotion) {
+      if (!hasAnimatedRef.current) {
+        hasAnimatedRef.current = true;
+        startCountUp();
+      }
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray<HTMLElement>('.stat-card');
+      const eyebrow = sectionRef.current?.querySelector<HTMLElement>('.impact-eyebrow');
+      const titleLines = gsap.utils.toArray<HTMLElement>('.impact-title-line');
+
+      // Initial state matching Spylt entrance
+      if (eyebrow) {
+        gsap.set(eyebrow, { yPercent: 100, opacity: 0 });
+      }
+      if (titleLines.length) {
+        gsap.set(titleLines, {
+          yPercent: 120,
+          opacity: 0,
+          rotateZ: (i) => (i === 0 ? -3 : 2),
+        });
+      }
+      if (cards.length) {
+        cards.forEach((card, idx) => {
+          const baseTilt = TILT_ANGLES[idx % 4];
+          gsap.set(card, {
+            opacity: 0,
+            x: 60,
+            y: 40,
+            rotateZ: baseTilt * 2.2,
+            scale: 0.92,
+            transformOrigin: 'center center',
+          });
+        });
+      }
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 75%',
+          once: true,
+        },
+        onStart: () => {
+          if (!hasAnimatedRef.current) {
             hasAnimatedRef.current = true;
             startCountUp();
-            observer.disconnect();
           }
-        });
-      },
-      { threshold: 0.2 }
-    );
+        },
+      });
 
-    observer.observe(sectionRef.current);
+      // 1. Eyebrow slide & fade
+      if (eyebrow) {
+        tl.to(eyebrow, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power3.out',
+        });
+      }
+
+      // 2. Heading lines punch up with spring overshoot (Spylt style)
+      if (titleLines.length) {
+        tl.to(
+          titleLines,
+          {
+            yPercent: 0,
+            opacity: 1,
+            rotateZ: 0,
+            duration: 0.85,
+            stagger: 0.12,
+            ease: 'back.out(1.4)',
+          },
+          '-=0.4'
+        );
+      }
+
+      // 3. Staggered card entrance: glides in with dynamic tilt and springs into place
+      if (cards.length) {
+        cards.forEach((card, idx) => {
+          const baseTilt = TILT_ANGLES[idx % 4];
+          tl.to(
+            card,
+            {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              rotateZ: baseTilt,
+              scale: 1,
+              duration: 0.9,
+              ease: 'back.out(1.5)',
+              onComplete: () => {
+                // Clear inline style so the CSS tilt rule holds and hover works smoothly
+                card.style.transform = '';
+              },
+            },
+            idx === 0 ? '-=0.5' : `-=${0.9 - 0.14}`
+          );
+        });
+      }
+    }, sectionRef);
 
     return () => {
-      observer.disconnect();
-      if (t) t.kill();
+      ctx.revert();
     };
   }, []);
 
   const startCountUp = () => {
-    const duration = 1500; // 1.5s
+    const duration = 1600; // 1.6s
     const startTime = performance.now();
 
     const animate = (currentTime: number) => {
@@ -102,12 +179,19 @@ export function ImpactChapter() {
       style={{ alignItems: 'flex-start', paddingTop: 'var(--space-section)' }}
     >
       <div className="container">
-        <div className="impact-header" style={{ marginBottom: 'var(--space-64)' }}>
-          <p className="type-eyebrow text-accent" style={{ marginBottom: 'var(--space-16)', textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
-            COMMUNITY METRICS
-          </p>
-          <h2 className="type-display" style={{ textShadow: '0 4px 24px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6)' }}>
-            NUMBERS<br />THAT MATTER
+        <div className="impact-header">
+          <div className="impact-eyebrow-mask">
+            <p className="type-eyebrow text-accent impact-eyebrow" style={{ marginBottom: 'var(--space-16)', textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
+              COMMUNITY METRICS
+            </p>
+          </div>
+          <h2 className="type-display impact-title" style={{ textShadow: '0 4px 24px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6)' }}>
+            <span className="impact-title-line-mask" style={{ paddingBottom: '4px' }}>
+              <span className="impact-title-line">NUMBERS</span>
+            </span>
+            <span className="impact-title-line-mask" style={{ paddingBottom: '4px' }}>
+              <span className="impact-title-line">THAT MATTER</span>
+            </span>
           </h2>
         </div>
 
@@ -115,7 +199,7 @@ export function ImpactChapter() {
           {HWI_STATS.map((stat, i) => (
             <div
               key={stat.id}
-              className="stat-card"
+              className={`stat-card stat-card--tilt-${i}`}
               onMouseEnter={() => handleStatHover(stat.id)}
               onMouseLeave={handleStatLeave}
               data-cursor="text"

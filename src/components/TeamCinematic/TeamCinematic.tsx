@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import anime from 'animejs';
 import { ArrowRight, ArrowLeft, ArrowUpRight, LayoutGrid, Layers, Users, Sparkles } from 'lucide-react';
 import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
+import { getLeadershipPalette } from '@/components/TeamsSection/TeamsSection';
 import './TeamCinematic.css';
 
 type PhaseType = 'head-intro' | 'showcase' | 'complete';
@@ -547,12 +548,33 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
     size: 'hero' | 'active' | 'compact',
     showMeetCta = false
   ) => {
+    const isLeadership = member.rank === 'head' || member.rank === 'co-head';
+    const palette = isLeadership ? getLeadershipPalette(member, dept.id) : null;
+
     return (
       <div
-        className={`team-portrait-card team-portrait-card--${size}`}
+        className={`team-portrait-card team-portrait-card--${size} ${isLeadership ? 'team-portrait-card--lead' : ''}`}
         tabIndex={0}
         aria-label={`${member.name}, ${member.role}`}
+        style={
+          isLeadership && palette
+            ? ({
+                ['--lead-primary' as string]: palette.primary,
+                ['--lead-secondary' as string]: palette.secondary,
+                ['--lead-gradient' as string]: palette.gradient,
+              } as React.CSSProperties)
+            : undefined
+        }
       >
+        {isLeadership && palette && (
+          <div className="leadership-aura-container" aria-hidden="true">
+            <div
+              className="leadership-aura-glow"
+              style={{ background: palette.gradient }}
+            />
+          </div>
+        )}
+
         <div className="team-portrait-card__inner">
           <div className="team-portrait-card__fallback">
             <span className="team-portrait-card__initials">{member.initials}</span>

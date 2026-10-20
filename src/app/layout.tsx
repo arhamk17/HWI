@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
+import { Outfit, Inter, JetBrains_Mono, Playfair_Display, Syne } from 'next/font/google';
 import { GlobalBackground } from '@/components/GlobalBackground/GlobalBackground';
 import { Navigation } from '@/components/Navigation/Navigation';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
@@ -27,6 +27,20 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  style: ['italic'],
+  variable: '--font-playfair-display',
+  display: 'swap',
+});
+
+const syne = Syne({
+  subsets: ['latin'],
+  weight: ['800'],
+  variable: '--font-syne',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: 'HackWithIndia BVUDET-NM Chapter',
   description: 'Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.',
@@ -38,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable} ${playfairDisplay.variable} ${syne.variable}`}>
       <body>
         <SmoothScrollProvider>
           <GlobalBackground />
