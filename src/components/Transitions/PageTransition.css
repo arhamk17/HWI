@@ -1,68 +1,327 @@
-.page-transition-veil {
+/* ==========================================================================
+   HACKWITHINDIA BVUDET-NM — FLUID-DISTORTION PAGE TRANSITIONS
+   Organic Flowing Liquid Shapes • SVG feDisplacementMap Typography Distortion
+   Viscous Ferrofluid Wave • HWI Red Illuminated Meniscus • Zero Layout Shift
+   ========================================================================== */
+
+/* Hidden SVG Filter Definition */
+.fluid-filter-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* ─── Fixed Viewport Overlay ────────────────────────────────────────────── */
+.fluid-transition-overlay {
   position: fixed;
   inset: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 99998;
+  overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(circle at center, rgba(239, 68, 68, 0.15) 0%, rgba(7, 7, 9, 0.96) 80%);
+  visibility: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.fluid-transition-overlay.stage-departure,
+.fluid-transition-overlay.stage-covered {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.fluid-transition-overlay.stage-arrival {
+  visibility: visible;
+  pointer-events: none;
+}
+
+/* ─── Organic SVG Liquid Waves ──────────────────────────────────────────── */
+.fluid-waves-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.fluid-wave {
+  transform: translate3d(0, 105%, 0);
+  will-change: transform;
+}
+
+/* Layer 1: Translucent Leading Fluid Crest with HWI Red Meniscus & Outer Glow */
+.fluid-wave--accent {
+  fill: rgba(239, 68, 68, 0.35);
+  stroke: #ef4444;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 -5px 24px rgba(239, 68, 68, 0.75));
+  z-index: 10;
+}
+
+/* Layer 2: Deep Charcoal Viscous Wave Body */
+.fluid-wave--body {
+  fill: #14101a;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1px;
+  z-index: 20;
+}
+
+/* Layer 3: Obsidian Core Liquid Mass (Fully Conceals Screen) */
+.fluid-wave--main {
+  fill: #070709;
+  z-index: 30;
+}
+
+/* ─── Stage A: DEPARTURE (Liquid Surges Upwards Across Viewport) ──────────── */
+.fluid-transition-overlay.stage-departure .fluid-wave--accent {
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0ms;
+}
+
+.fluid-transition-overlay.stage-departure .fluid-wave--body {
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.40s cubic-bezier(0.16, 1, 0.3, 1) 30ms;
+}
+
+.fluid-transition-overlay.stage-departure .fluid-wave--main {
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1) 60ms;
+}
+
+/* ─── Stage B: COVERED (Screen Fully Concealed by Obsidian Fluid) ────────── */
+.fluid-transition-overlay.stage-covered .fluid-wave--accent,
+.fluid-transition-overlay.stage-covered .fluid-wave--body,
+.fluid-transition-overlay.stage-covered .fluid-wave--main {
+  transform: translate3d(0, 0, 0);
+}
+
+/* ─── Stage C: ARRIVAL (Liquid Deforms and Recedes Upwards Offscreen) ─────── */
+.fluid-transition-overlay.stage-arrival .fluid-wave--accent {
+  transform: translate3d(0, -105%, 0);
+  transition: transform 0.44s cubic-bezier(0.7, 0, 0.84, 0) 60ms;
+}
+
+.fluid-transition-overlay.stage-arrival .fluid-wave--body {
+  transform: translate3d(0, -105%, 0);
+  transition: transform 0.42s cubic-bezier(0.7, 0, 0.84, 0) 30ms;
+}
+
+.fluid-transition-overlay.stage-arrival .fluid-wave--main {
+  transform: translate3d(0, -105%, 0);
+  transition: transform 0.40s cubic-bezier(0.7, 0, 0.84, 0) 0ms;
+}
+
+/* ─── Liquified Center Typography & HUD Module ──────────────────────────── */
+.fluid-hud-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 var(--space-24, 24px);
+  box-sizing: border-box;
   opacity: 0;
-  transform: translateZ(0);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity;
+  transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.page-transition-veil--active {
+.fluid-transition-overlay.stage-departure .fluid-hud-container {
+  opacity: 0.95;
+  transform: translate(-50%, -50%) scale(1);
+  transition-delay: 120ms;
+}
+
+.fluid-transition-overlay.stage-covered .fluid-hud-container {
   opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-.page-transition-veil__glyph {
+.fluid-transition-overlay.stage-arrival .fluid-hud-container {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Distorted Typography Wrapper */
+.fluid-hud-typography {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  transform: scale(0.92);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  will-change: filter, transform;
 }
 
-.page-transition-veil--active .page-transition-veil__glyph {
-  transform: scale(1);
-}
-
-.page-transition-veil__logo {
-  font-family: var(--font-satoshi), sans-serif;
+/* Oversized Background Watermark Typography */
+.fluid-hud-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  font-family: var(--font-satoshi), -apple-system, sans-serif;
   font-weight: 900;
-  font-size: 2.8rem;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  text-shadow: 0 0 24px rgba(239, 68, 68, 0.6);
+  font-size: clamp(2.8rem, 9.5vw, 7.5rem);
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  z-index: -1;
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
 }
 
-.page-transition-veil__bar {
-  width: 40px;
-  height: 2px;
+/* Foreground Technical Elements */
+.fluid-hud-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.fluid-hud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.2);
+}
+
+.fluid-hud-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   background: #ef4444;
-  box-shadow: 0 0 10px #ef4444;
-  animation: pulseBar 0.5s infinite alternate ease-in-out;
+  box-shadow: 0 0 8px #ef4444;
+  animation: fluidPulse 0.8s infinite alternate ease-in-out;
 }
 
-@keyframes pulseBar {
-  from { width: 30px; opacity: 0.6; }
-  to { width: 50px; opacity: 1; }
+@keyframes fluidPulse {
+  from { opacity: 0.5; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1.2); }
 }
 
+.fluid-hud-protocol {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #ef4444;
+  text-transform: uppercase;
+}
+
+.fluid-hud-destination {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: clamp(1.4rem, 3.8vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 0 24px rgba(239, 68, 68, 0.55), 0 0 45px rgba(239, 68, 68, 0.25);
+}
+
+.fluid-hud-bar {
+  width: 70px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.fluid-hud-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: fluidBarScan 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes fluidBarScan {
+  from { transform: translateX(-60%); }
+  to { transform: translateX(60%); }
+}
+
+.fluid-hud-subtext {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+
+/* ─── Page Content Movement & Staggered Reveal ──────────────────────────── */
 .page-transition-content {
   position: relative;
   width: 100%;
-  animation: pageContentEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: filter, opacity;
 }
 
-@keyframes pageContentEnter {
-  from {
-    opacity: 0.4;
+/* In departure: stays in existing layout without shifting, receives liquid ripple */
+.page-transition-content.stage-departure {
+  opacity: 0.85;
+  transition: opacity 0.35s ease;
+}
+
+.page-transition-content.stage-covered {
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+/* When incoming page arrives: reveals smoothly from behind receding liquid */
+.page-transition-content.stage-arrival,
+.page-transition-content.stage-idle {
+  animation: pageFluidReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageFluidReveal {
+  0% {
+    opacity: 0.5;
+    transform: translateY(14px);
   }
-  to {
+  100% {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Mobile Responsiveness ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fluid-hud-watermark {
+    font-size: clamp(2rem, 8.5vw, 3.8rem);
+  }
+  .fluid-wave--accent {
+    stroke-width: 1.8px;
+  }
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .fluid-transition-overlay {
+    display: none !important;
+  }
+  .page-transition-content {
+    animation: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ─── Print Stylesheet ───────────────────────────────────────────────────── */
+@media print {
+  .fluid-transition-overlay {
+    display: none !important;
   }
 }

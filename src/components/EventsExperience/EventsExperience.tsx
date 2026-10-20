@@ -22,7 +22,6 @@ import {
   Award,
   ShieldCheck,
 } from 'lucide-react';
-import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
 import { eventsParticleStore, EventsSection } from '@/lib/eventsParticleStore';
 import { scrollBus } from '@/lib/scrollBus';
@@ -49,11 +48,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-1',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'VALEDICTORY / 1ST PLACE',
-    title: 'CHAMPIONS PODIUM // 1ST PLACE AWARDS',
+    tag: 'Valedictory · 1st Place',
+    title: 'Champions Podium: 1st Place Awards',
     caption: 'Winning buildathon team presented with certificates and the 1st place cheque by RocketRide industry delegates and faculty.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
     src: '/images/events/rocketride_winner_1st.jpg',
@@ -61,11 +60,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-hwm2-1',
     eventId: 'hackwithmumbai-2',
-    eventTitle: 'HACKWITHMUMBAI 2.0',
+    eventTitle: 'HackWithMumbai 2.0',
     category: 'HACKWITHMUMBAI',
     year: '2026',
-    tag: 'MAIN ARENA / 30H FINALE',
-    title: '30-HOUR NONSTOP CELEBRATION',
+    tag: 'Main Arena · 30h Finale',
+    title: '30-Hour Nonstop Celebration',
     caption: 'Stage group photo with 70+ builders, faculty mentors, department HoDs and chapter organizers following 30 hours of continuous building.',
     cameraInfo: 'CAM-01 • 24mm F/1.8 • ISO 400 • 1/250s',
     src: '/images/events/hack_with_mumbai_2_image16.jpeg',
@@ -73,11 +72,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-2',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'AUDITORIUM / 183 BUILDERS',
-    title: 'AUDITORIUM ASSEMBLY // 47 TEAMS',
+    tag: 'Auditorium · 183 Builders',
+    title: 'Auditorium Assembly: 47 Teams',
     caption: '47 teams comprising 183 students from host and visiting engineering institutions gathered during opening orientation.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
     src: '/images/events/rocketride_auditorium.jpg',
@@ -85,11 +84,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-z2w-1',
     eventId: 'zero2web3-buildathon',
-    eventTitle: 'ZERO2WEB3 BUILD-A-THON',
+    eventTitle: 'Zero2Web3 Build-a-thon',
     category: 'ZERO2WEB3',
     year: '2026',
-    tag: 'CC LAB / GROUND FLOOR',
-    title: 'CC LAB // ACTIVE SOLIDITY SPRINT',
+    tag: 'CC Lab · Ground Floor',
+    title: 'CC Lab: Active Solidity Sprint',
     caption: 'Full house of student developers coding Solidity smart contracts in CC Lab Ground Floor during the mini challenge sprint.',
     cameraInfo: 'CAM-01 • 24mm F/2.8 • ISO 500 • 1/160s',
     src: '/images/events/web3_report_image5.jpeg',
@@ -97,11 +96,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-3',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'CC LAB / MENTORSHIP',
-    title: 'LAB MENTORSHIP // 6-HOUR SPRINT',
+    tag: 'CC Lab · Mentorship',
+    title: 'Lab Mentorship: 6-Hour Sprint',
     caption: 'Ryan Christensen reviewing codebases and providing hands-on architectural mentorship during the offline build sprint.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
     src: '/images/events/rocketride_mentorship_lab.jpg',
@@ -109,11 +108,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-lit-1',
     eventId: 'learn-it-tour',
-    eventTitle: 'LEARN IT TOUR',
+    eventTitle: 'Learn IT Tour',
     category: 'COMMUNITY',
     year: '2025',
-    tag: 'AUDITORIUM / INAUGURATION',
-    title: 'COMMUNITY TECH TOUR // 220 BUILDERS',
+    tag: 'Auditorium · Inauguration',
+    title: 'Community Tech Tour: 220 Builders',
     caption: 'Over 220 students gathered in the central auditorium for the Learn IT Tour keynote organized with Devnovate.',
     cameraInfo: 'CAM-01 • 28mm F/2.8 • ISO 400 • 1/200s',
     src: '/images/events/learn_it_tour_image12.jpeg',
@@ -121,11 +120,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-4',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'VALEDICTORY / PODIUM',
-    title: 'RUNNER-UP AWARDS // VALEDICTORY',
+    tag: 'Valedictory · Podium',
+    title: 'Runner-Up Awards: Valedictory',
     caption: 'Runner-up teams recognized for high-impact prototype solutions during the valedictory award presentation.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
     src: '/images/events/rocketride_winner_2nd.jpg',
@@ -133,11 +132,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-hwm2-2',
     eventId: 'hackwithmumbai-2',
-    eventTitle: 'HACKWITHMUMBAI 2.0',
+    eventTitle: 'HackWithMumbai 2.0',
     category: 'HACKWITHMUMBAI',
     year: '2026',
-    tag: 'REGISTRATION / GATE',
-    title: 'REGISTRATION DESK // CAMPUS GATES',
+    tag: 'Registration · Campus Gate',
+    title: 'Registration Desk: Campus Gates',
     caption: 'Participants queuing up for entry scanning, ID badges, and official hackathon goodies kit.',
     cameraInfo: 'CAM-02 • 28mm F/2.8 • ISO 320 • 1/320s',
     src: '/images/events/hack_with_mumbai_2_image4.jpeg',
@@ -160,70 +159,74 @@ interface VerifiedAwardItem {
 
 const VERIFIED_AWARDS: VerifiedAwardItem[] = [
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '1ST PLACE OVERALL',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '1st Place Overall',
     team: 'PulseMesh',
     project: 'Decentralized mesh networking for disaster relief communication',
     prize: '₹25,000 + Cloud Grants',
-    accreditation: 'VERIFIED OVERALL CHAMPION',
+    accreditation: 'Verified Overall Champion',
   },
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '2ND PLACE',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '2nd Place',
     team: 'CivicSense',
     project: 'Computer-vision enabled municipal road defect tracker',
     prize: '₹15,000 Prize',
-    accreditation: 'RUNNER-UP ACCREDITATION',
+    accreditation: 'Runner-Up Accreditation',
   },
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '3RD PLACE',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '3rd Place',
     team: 'ZeroAudit',
     project: 'Static security scanner for Ethereum smart contracts',
     prize: '₹10,000 Prize',
-    accreditation: '3RD PLACE PODIUM',
+    accreditation: '3rd Place Podium',
   },
   {
-    edition: 'EDITION 04 // 2026',
-    eventTitle: 'HACKWITHMUMBAI 2.0 NATIONAL HACKATHON',
-    date: '7–8 FEBRUARY 2026',
-    place: 'NATIONAL PRIZE POOL',
+    edition: 'Edition 04 · 2026',
+    eventTitle: 'HackWithMumbai 2.0 National Hackathon',
+    date: '7–8 February 2026',
+    place: 'National Prize Pool',
     team: '80 Finalist Teams (280 Builders)',
     project: '5 Indian states and 40+ colleges competing across EdTech, HealthTech, CyberTech, AgriTech, and FinTech',
     prize: '₹64,000+ Prize Pool',
-    accreditation: 'SP JAIN GLOBAL SPONSORED',
+    accreditation: 'SP Jain Global Sponsored',
   },
   {
-    edition: 'EDITION 05 // 2026',
-    eventTitle: 'ZERO2WEB3 BUILD-A-THON',
-    date: '5 MARCH 2026',
-    place: 'CC LAB PODIUM',
+    edition: 'Edition 05 · 2026',
+    eventTitle: 'Zero2Web3 Build-a-thon',
+    date: '5 March 2026',
+    place: 'CC Lab Podium',
     team: 'Outstanding DApp Teams',
     project: 'Gas-optimized Solidity architectures and decentralized token contracts evaluated in CC Lab',
     prize: 'Winner Trophies & Physical Certificates',
-    accreditation: 'CHAPTER MERIT ACCREDITED',
+    accreditation: 'Chapter Merit Accredited',
   },
   {
-    edition: 'EDITION 06 // 2026',
-    eventTitle: 'ROCKETRIDE BUILDATHON MUMBAI EDITION',
-    date: '29 AUGUST 2026',
-    place: 'CHAMPIONS PODIUM',
+    edition: 'Edition 06 · 2026',
+    eventTitle: 'RocketRide Buildathon Mumbai Edition',
+    date: '29 August 2026',
+    place: 'Champions Podium',
     team: '1st Place Prototype Laureates',
     project: 'High-velocity 6-hour MVP evaluated on architectural ingenuity by San Francisco Chief Architect Rod Christensen',
     prize: '1st Place Cheque & Delegate Certifications',
-    accreditation: 'SAN FRANCISCO DELEGATION RECOGNIZED',
+    accreditation: 'San Francisco Delegation Recognized',
   },
 ];
 
 export function EventsExperience() {
-  // Requirement: All panels begin collapsed by default (no panel expanded on initial load)
+  // Skiper UI HoverExpand_001 State:
+  // activeCardId: tracks which of the 7 cards is currently expanded in the horizontal row
+  // selectedId: tracks which event has its full editorial detail dossier open below (null = closed)
+  const [activeCardId, setActiveCardId] = useState<string>(EVENTS_DATA[0].id);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [animatingId, setAnimatingId] = useState<string | null>(null);
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('ALL');
 
   // DOM Refs for animation coordination
@@ -258,33 +261,64 @@ export function EventsExperience() {
     return EVENTS_DATA.findIndex((e) => e.id === selectedEvent.id);
   }, [selectedEvent]);
 
-  // Click active panel toggles back to null (compact row), click another switches to it
+  // HoverExpand_001 Interaction Handlers:
+  // Hover over card expands it smoothly without opening the full detail panel below
+  const handleCardHover = useCallback((id: string) => {
+    setActiveCardId(id);
+  }, []);
+
+  // On pointer exit, retain current selection rather than collapsing unexpectedly
+  const handleTrackLeave = useCallback(() => {
+    if (selectedId) {
+      setActiveCardId(selectedId);
+    }
+  }, [selectedId]);
+
+  // Click selects the card and opens/focuses the full event detail dossier below
   const handleSelectEvent = useCallback((id: string) => {
-    setSelectedId((prev) => (prev === id ? null : id));
+    setActiveCardId(id);
+    setSelectedId((prev) => {
+      if (prev === id) {
+        setAnimatingId(null);
+        return null;
+      }
+      setAnimatingId(id);
+      return id;
+    });
   }, []);
 
   const handlePrevEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
-      if (currentIndex <= 0) {
-        setSelectedId(EVENTS_DATA[EVENTS_DATA.length - 1].id);
-      } else {
-        setSelectedId(EVENTS_DATA[currentIndex - 1].id);
+      const prevIdx =
+        currentIndex <= 0
+          ? EVENTS_DATA.length - 1
+          : currentIndex - 1;
+      const targetId = EVENTS_DATA[prevIdx].id;
+      setActiveCardId(targetId);
+      if (selectedId) {
+        setSelectedId(targetId);
+        setAnimatingId(targetId);
       }
     },
-    [currentIndex]
+    [currentIndex, selectedId]
   );
 
   const handleNextEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
-      if (currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1) {
-        setSelectedId(EVENTS_DATA[0].id);
-      } else {
-        setSelectedId(EVENTS_DATA[currentIndex + 1].id);
+      const nextIdx =
+        currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1
+          ? 0
+          : currentIndex + 1;
+      const targetId = EVENTS_DATA[nextIdx].id;
+      setActiveCardId(targetId);
+      if (selectedId) {
+        setSelectedId(targetId);
+        setAnimatingId(targetId);
       }
     },
-    [currentIndex]
+    [currentIndex, selectedId]
   );
 
   // Global keyboard shortcuts: Esc to collapse, ArrowLeft/Right to cycle editions
@@ -314,6 +348,157 @@ export function EventsExperience() {
         });
       }
     }
+  }, [selectedId]);
+
+  const panelTimelineRef = useRef<anime.AnimeTimelineInstance | null>(null);
+
+  // Coordinated Detail Panel Opening Sequence:
+  // Phase A: Lift from 24px and scale 0.96 upward to final position
+  // Phase B: Left-to-right horizontal reveal via clip-path
+  // Phase C: 5-step content entrance stagger
+  useEffect(() => {
+    if (panelTimelineRef.current) {
+      panelTimelineRef.current.pause();
+      panelTimelineRef.current = null;
+    }
+
+    if (!selectedId || !galleryTrackRef.current) return;
+
+    // Reset inline styles on any previous/sibling panels to ensure clean state
+    galleryTrackRef.current.querySelectorAll<HTMLElement>('.hwi-panel').forEach((p) => {
+      p.style.transform = '';
+      p.style.clipPath = '';
+      p.querySelectorAll<HTMLElement>('.expanded-top-strip, .expanded-theme-line, .expanded-headline, .expanded-narrative, .expanded-meta-strip, .expanded-main-right, .expanded-bottom-actions').forEach((el) => {
+        el.style.opacity = '';
+        el.style.transform = '';
+      });
+    });
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const activePanel = galleryTrackRef.current.querySelector<HTMLElement>('.hwi-panel--active');
+    if (!activePanel) return;
+
+    const topStrip = activePanel.querySelector<HTMLElement>('.expanded-top-strip');
+    const themeLine = activePanel.querySelector<HTMLElement>('.expanded-theme-line');
+    const headline = activePanel.querySelector<HTMLElement>('.expanded-headline');
+    const narrative = activePanel.querySelector<HTMLElement>('.expanded-narrative');
+    const metaStrip = activePanel.querySelector<HTMLElement>('.expanded-meta-strip');
+    const monumentalTitle = activePanel.querySelector<HTMLElement>('.expanded-main-right');
+    const bottomActions = activePanel.querySelector<HTMLElement>('.expanded-bottom-actions');
+    const contentItems = [topStrip, themeLine, headline, narrative, metaStrip, monumentalTitle, bottomActions].filter(Boolean) as HTMLElement[];
+
+    if (prefersReducedMotion) {
+      activePanel.style.transform = '';
+      activePanel.style.clipPath = '';
+      contentItems.forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      setAnimatingId(null);
+      return;
+    }
+
+    // Clean transform on activePanel
+    activePanel.style.transform = '';
+    activePanel.style.clipPath = '';
+    contentItems.forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+    });
+
+    const revealObj = { progress: 0 };
+    const tl = anime.timeline({
+      easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+      complete: () => {
+        if (activePanel) {
+          activePanel.style.transform = '';
+          activePanel.style.clipPath = '';
+        }
+        contentItems.forEach((el) => {
+          el.style.opacity = '';
+          el.style.transform = '';
+        });
+        setAnimatingId(null);
+      },
+    });
+
+    panelTimelineRef.current = tl;
+
+    // Subtle opacity settle for content items
+    tl.add({
+      targets: revealObj,
+      progress: [0, 100],
+      duration: 300,
+      easing: 'easeOutQuad',
+    }, 0);
+
+    // Phase C: Restrained Staggered Content Entrance (starts once panel is ~80% revealed)
+    // 1. Edition/category badges and theme label
+    const step1 = [topStrip, themeLine].filter(Boolean) as HTMLElement[];
+    if (step1.length) {
+      tl.add({
+        targets: step1,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: 340,
+        easing: 'easeOutQuad',
+      }, 450);
+    }
+
+    // 2. Main event display heading
+    if (headline) {
+      tl.add({
+        targets: headline,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: 340,
+        easing: 'easeOutQuad',
+      }, 530);
+    }
+
+    // 3. Description narrative
+    if (narrative) {
+      tl.add({
+        targets: narrative,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: 340,
+        easing: 'easeOutQuad',
+      }, 610);
+    }
+
+    // 4. Date, location, time, and attendance metadata (+ vertical title)
+    const step4 = [metaStrip, monumentalTitle].filter(Boolean) as HTMLElement[];
+    if (step4.length) {
+      tl.add({
+        targets: step4,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: 340,
+        easing: 'easeOutQuad',
+      }, 690);
+    }
+
+    // 5. Call-to-action and secondary hints
+    if (bottomActions) {
+      tl.add({
+        targets: bottomActions,
+        opacity: [0, 1],
+        translateY: [12, 0],
+        duration: 350,
+        easing: 'easeOutQuad',
+      }, 770);
+    }
+
+    return () => {
+      if (panelTimelineRef.current) {
+        panelTimelineRef.current.pause();
+        panelTimelineRef.current = null;
+      }
+    };
   }, [selectedId]);
 
   // Staggered reveal of editorial dossier items when event changes
@@ -673,14 +858,27 @@ export function EventsExperience() {
               A chronological journey through our milestone hackathons, masterclasses, and builder assemblies.
             </p>
 
-            {/* Metric Accents & KokonutBadges */}
+            {/* Refined Clean Inline Hero Stats Bar */}
             <div className="chronicles-hero__meta" ref={heroMetaRef}>
-              <div className="meta-badges-cluster">
-                <KokonutBadge variant="accent" dot>
-                  07 MILESTONE EDITIONS
-                </KokonutBadge>
-                <KokonutBadge variant="outline">800+ BUILDERS ASSEMBLED</KokonutBadge>
-                <KokonutBadge variant="outline">₹1,00,000+ COMMITTED PRIZES</KokonutBadge>
+              <div className="hero-stats-row" role="region" aria-label="Milestone Statistics">
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num hero-stat-num--accent">07</span>
+                  <span className="hero-stat-label">Milestone Editions</span>
+                </div>
+
+                <span className="hero-stat-divider" aria-hidden="true" />
+
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num">800+</span>
+                  <span className="hero-stat-label">Builders Assembled</span>
+                </div>
+
+                <span className="hero-stat-divider" aria-hidden="true" />
+
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num">₹1,00,000+</span>
+                  <span className="hero-stat-label">Committed Prizes</span>
+                </div>
               </div>
 
               <div className="meta-scroll-prompt">
@@ -715,26 +913,31 @@ export function EventsExperience() {
           {/* Gallery Subheader bar with indicator, edition pills, and navigation */}
           <div className="hwi-gallery-bar" ref={galleryBarRef}>
             <div className="gallery-indicator">
-              <span className="gallery-indicator-kicker">EDITION ARCHIVE //</span>
-              <span className="gallery-indicator-value">
-                {selectedEvent
-                  ? `EDITION ${String(currentIndex + 1).padStart(2, '0')} // ${(selectedEvent.shortTitle || selectedEvent.title).toUpperCase()}`
-                  : 'ALL 07 EDITIONS'}
+              <span className="gallery-indicator-title">Edition Archive</span>
+              <span className="gallery-indicator-divider" aria-hidden="true" />
+              <span className="gallery-indicator-subtitle">
+                {(() => {
+                  const activeEv = EVENTS_DATA.find((e) => e.id === activeCardId) || EVENTS_DATA[0];
+                  const activeIdx = EVENTS_DATA.findIndex((e) => e.id === activeCardId);
+                  return `Edition ${String(activeIdx + 1).padStart(2, '0')} — ${activeEv.shortTitle || activeEv.title}`;
+                })()}
               </span>
             </div>
 
             {/* Quick Edition Selector Pills */}
             <div className="gallery-edition-pills" role="tablist" aria-label="Select Edition">
               {EVENTS_DATA.map((ev, i) => {
-                const isItemActive = selectedId === ev.id;
+                const isExpanded = activeCardId === ev.id;
+                const isSelected = selectedId === ev.id;
                 return (
                   <button
                     key={ev.id}
                     type="button"
                     role="tab"
-                    aria-selected={isItemActive}
-                    className={`gallery-pill-btn ${isItemActive ? 'is-active' : ''}`}
+                    aria-selected={isExpanded}
+                    className={`gallery-pill-btn ${isExpanded ? 'is-active' : ''} ${isSelected ? 'is-selected' : ''}`}
                     onClick={() => handleSelectEvent(ev.id)}
+                    onMouseEnter={() => handleCardHover(ev.id)}
                     title={`Edition ${String(i + 1).padStart(2, '0')}: ${ev.title}`}
                   >
                     <span>{String(i + 1).padStart(2, '0')}</span>
@@ -790,31 +993,35 @@ export function EventsExperience() {
 
             {/* Horizontal Flex Track: Compact row in default state, 100% full-width on click */}
             <div
-              className={`hwi-gallery-track ${selectedId ? 'is-expanded' : ''}`}
+              className="hwi-gallery-track"
               ref={galleryTrackRef}
+              onPointerLeave={handleTrackLeave}
             >
               {EVENTS_DATA.map((event, idx) => {
-                const isActive = selectedId === event.id;
-                const isIdle = selectedId !== null && !isActive;
+                const isExpanded = activeCardId === event.id;
+                const isSelected = selectedId === event.id;
 
                 return (
                   <div
                     key={event.id}
                     className={`hwi-panel ${
-                      isActive ? 'hwi-panel--active' : isIdle ? 'hwi-panel--idle' : 'hwi-panel--idle'
-                    }`}
+                      isExpanded ? 'hwi-panel--active' : 'hwi-panel--idle'
+                    } ${isSelected ? 'hwi-panel--selected' : ''}`}
                     style={
                       {
                         '--panel-accent': event.accentColor || '#EF4444',
                       } as React.CSSProperties
                     }
                     onClick={() => handleSelectEvent(event.id)}
+                    onMouseEnter={() => handleCardHover(event.id)}
+                    onPointerEnter={() => handleCardHover(event.id)}
+                    onFocus={() => handleCardHover(event.id)}
                     role="button"
                     tabIndex={0}
-                    aria-expanded={isActive}
+                    aria-expanded={isExpanded}
                     aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
                     data-cursor="link"
-                    data-cursor-label={isActive ? 'CLOSE' : 'OPEN'}
+                    data-cursor-label={isSelected ? 'CLOSE' : 'EXPAND'}
                   >
                     {/* Visual Background: Event Photo or Vector Art */}
                     {event.cardImage ? (
@@ -856,14 +1063,14 @@ export function EventsExperience() {
                     {/* ── EXPANDED STATE CONTENT (Smooth CSS enter & exit, inert when idle) ── */}
                     <div
                       className="hwi-panel__expanded-content"
-                      aria-hidden={!isActive}
-                      inert={!isActive}
+                      aria-hidden={!isExpanded}
+                      inert={!isExpanded}
                     >
                         {/* Top Strip: Edition badge, category, and collapse chip */}
                         <div className="expanded-top-strip">
                           <div className="expanded-tag-cluster">
                             <span className="expanded-edition-pill">
-                              EDITION {String(idx + 1).padStart(2, '0')} // {event.year}
+                              Edition {String(idx + 1).padStart(2, '0')} · {event.year}
                             </span>
                             <span className="expanded-category-pill">{event.category}</span>
                             <span
@@ -896,7 +1103,7 @@ export function EventsExperience() {
                           <div className="expanded-main-left">
                             <div className="expanded-theme-line">
                               <span className="theme-line-rule" />
-                              <span className="theme-line-text">THEME // {event.theme.toUpperCase()}</span>
+                              <span className="theme-line-text">Theme: {event.theme}</span>
                             </div>
 
                             <h2 className="expanded-headline">{event.title}</h2>
@@ -977,7 +1184,7 @@ export function EventsExperience() {
                               setSelectedId(null);
                             }}
                           >
-                            <span>Click anywhere on panel or press Esc to restore overview</span>
+                            <span>{isSelected ? '● Dossier active below (Esc to close)' : 'Click card to view complete chronicle below'}</span>
                           </button>
                         </div>
                       </div>
@@ -1019,7 +1226,7 @@ export function EventsExperience() {
                   <div className="editorial-masthead__tags">
                     <span className="editorial-beacon" />
                     <span className="editorial-edition-tag">
-                      EDITION {String(currentIndex + 1).padStart(2, '0')} // {selectedEvent.year}
+                      Edition {String(currentIndex + 1).padStart(2, '0')} · {selectedEvent.year}
                     </span>
                     <span className="editorial-sep">•</span>
                     <span className="editorial-category-tag">{selectedEvent.category}</span>
@@ -1045,7 +1252,7 @@ export function EventsExperience() {
                 <div className="editorial-masthead__content">
                   <div className="editorial-theme-kicker">
                     <span className="theme-kicker-dash" />
-                    <span className="theme-kicker-text">THEME // {selectedEvent.theme.toUpperCase()}</span>
+                    <span className="theme-kicker-text">Theme: {selectedEvent.theme}</span>
                   </div>
 
                   <h2 className="editorial-display-title">
@@ -1064,7 +1271,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Calendar size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">01 // SCHEDULED DATE</span>
+                    <span className="meta-rail-label">01 · Scheduled Date</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.date}</div>
                   <div className="meta-rail-col__detail">{selectedEvent.year} Chapter Milestone</div>
@@ -1073,7 +1280,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <MapPin size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">02 // HOST VENUE</span>
+                    <span className="meta-rail-label">02 · Host Venue</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.venue}</div>
                   <div className="meta-rail-col__detail">BVUDET Navi Mumbai</div>
@@ -1082,7 +1289,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Clock size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">03 // FORMAT & SPRINT</span>
+                    <span className="meta-rail-label">03 · Format & Sprint</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.duration}</div>
                   <div className="meta-rail-col__detail">Intensive Execution Window</div>
@@ -1091,7 +1298,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Users size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">04 // BUILDER COHORT</span>
+                    <span className="meta-rail-label">04 · Builder Cohort</span>
                   </div>
                   <div className="meta-rail-col__val">
                     {typeof selectedEvent.participants === 'string' &&
@@ -1137,7 +1344,7 @@ export function EventsExperience() {
                   <div className="chronicle-provenance">
                     <div className="provenance-indicator" />
                     <span className="provenance-text">
-                      DOCUMENTED ARCHIVE // HACKWITHINDIA STUDENT CHAPTER • BVUDET NAVI MUMBAI
+                      Documented Archive · HackWithIndia Student Chapter • BVUDET Navi Mumbai
                     </span>
                   </div>
                 </div>
@@ -1311,11 +1518,11 @@ export function EventsExperience() {
             {/* Photo Category Filter Tabs */}
             <div className="docu-filter-tabs">
               {[
-                { label: 'ALL DISPATCHES', key: 'ALL' },
-                { label: 'ROCKETRIDE BUILDATHON', key: 'ROCKETRIDE' },
-                { label: 'HACKWITHMUMBAI 2.0', key: 'HACKWITHMUMBAI' },
-                { label: 'ZERO2WEB3', key: 'ZERO2WEB3' },
-                { label: 'COMMUNITY TOURS', key: 'COMMUNITY' },
+                { label: 'All Dispatches', key: 'ALL' },
+                { label: 'RocketRide Buildathon', key: 'ROCKETRIDE' },
+                { label: 'HackWithMumbai 2.0', key: 'HACKWITHMUMBAI' },
+                { label: 'Zero2Web3', key: 'ZERO2WEB3' },
+                { label: 'Community Tours', key: 'COMMUNITY' },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -1776,7 +1983,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
       list.unshift({
         id: `${event.id}-hero`,
         src: hero,
-        title: `${event.shortTitle || event.title} // CENTRAL ASSEMBLY`,
+        title: `${event.shortTitle || event.title}: Central Assembly`,
         caption: event.shortDescription || event.desc,
         tag: 'KEYNOTE & ASSEMBLY',
         cameraInfo: 'PHOTO ARCHIVE • BVUDET-NM',
@@ -1812,7 +2019,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
         <div className="editorial-blueprint-grid">
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-01 // AIR-GAPPED LAN</span>
+              <span className="blueprint-code">Spec 01 · Air-Gapped LAN</span>
               <span className="blueprint-tag">LOCAL PHYSICAL NET</span>
             </div>
             <h4 className="blueprint-title">Isolated CC Labs 4–6 Physical Topology</h4>
@@ -1830,7 +2037,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-02 // SCORING ENGINE</span>
+              <span className="blueprint-code">Spec 02 · Scoring Engine</span>
               <span className="blueprint-tag">DYNAMIC DECAY</span>
             </div>
             <h4 className="blueprint-title">Dynamic Point Decay & First Blood</h4>
@@ -1848,7 +2055,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-03 // ENFORCEMENT</span>
+              <span className="blueprint-code">Spec 03 · Enforcement</span>
               <span className="blueprint-tag">ANTI-AI PROTOCOL</span>
             </div>
             <h4 className="blueprint-title">Hardware-Enforced Anti-AI Integrity</h4>
@@ -1866,7 +2073,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-04 // DOMAINS</span>
+              <span className="blueprint-code">Spec 04 · Domains</span>
               <span className="blueprint-tag">7 VULN CLASSES</span>
             </div>
             <h4 className="blueprint-title">Multi-Domain Security Matrix</h4>
@@ -1969,7 +2176,7 @@ function PanelArtwork({
           </g>
           <rect x="230" y="270" width="140" height="90" rx="8" fill="rgba(18, 16, 22, 0.85)" stroke={accent} strokeWidth="1.5" />
           <text x="300" y="320" fill={accent} fontSize="14" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
-            IC // SYNAPSE
+            IC · SYNAPSE
           </text>
         </svg>
       );

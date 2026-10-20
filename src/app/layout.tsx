@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
 import { GlobalBackground } from '@/components/GlobalBackground/GlobalBackground';
 import { Navigation } from '@/components/Navigation/Navigation';
+import { RulerScrollbar } from '@/components/RulerScrollbar/RulerScrollbar';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { CustomCursor } from '@/components/Cursor/CustomCursor';
 import { InteractiveEffects } from '@/components/InteractiveEffects/InteractiveEffects';
@@ -45,6 +46,7 @@ export default function RootLayout({
           <CustomCursor />
           <InteractiveEffects />
           <EasterEgg />
+          <RulerScrollbar />
           <Navigation />
           <PageTransitionProvider>
             {children}

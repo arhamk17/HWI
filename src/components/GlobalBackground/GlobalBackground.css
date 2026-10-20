@@ -56,8 +56,6 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  opacity: 0.35;
-  filter: brightness(0.68) contrast(1.08) saturate(0.82);
 }
 
 .gbg__video-overlay {
@@ -65,11 +63,11 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    ellipse 75% 65% at 50% 45%,
-    rgba(7, 7, 9, 0.45) 0%,
-    rgba(7, 7, 9, 0.72) 55%,
-    rgba(7, 7, 9, 0.96) 100%
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 7, 9, 0.25) 0%,
+    rgba(7, 7, 9, 0.45) 60%,
+    rgba(7, 7, 9, 0.95) 100%
   );
   z-index: 1;
 }

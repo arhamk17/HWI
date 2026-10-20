@@ -334,7 +334,7 @@ export function GlobalBackground() {
 
       // Chapter 02 Runway & Monotonic Checkpoints (Monotonically strictly increasing)
       const aboutRunway = Math.max(vh * 1.0, aboutHeight - vh);
-      const convStartY = aboutTop * 0.35;
+      const convStartY = aboutTop;
       const convEndY = aboutTop + aboutRunway * 0.36;
       const holdEndY = aboutTop + aboutRunway * 0.72;
       const dispEndY = offerTop;

@@ -109,7 +109,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'lit-img-1',
-        title: 'MAIN AUDITORIUM // INAUGURATION',
+        title: 'Main Auditorium: Inauguration',
         caption: 'Over 220 students gathered in the central auditorium for the Learn IT Tour keynote',
         tag: 'AUDITORIUM / 10:00 AM',
         cameraInfo: 'CAM-01 • 28mm F/2.8 • ISO 400 • 1/200s',
@@ -120,7 +120,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'lit-img-2',
-        title: 'KEYNOTE SESSION // TECH ECOSYSTEM',
+        title: 'Keynote Session: Tech Ecosystem',
         caption: 'Speaker session discussing open source contributions and modern engineering leadership',
         tag: 'KEYNOTE / STAGE',
         cameraInfo: 'CAM-02 • 50mm F/1.8 • ISO 500 • 1/250s',
@@ -131,7 +131,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'lit-img-3',
-        title: 'FELICITATION // SPEAKER MENTORSHIP',
+        title: 'Felicitation: Speaker Mentorship',
         caption: 'Faculty coordinators felicitating industry mentors following interactive student Q&A',
         tag: 'FELICITATION / DECK',
         cameraInfo: 'CAM-03 • 35mm F/2.0 • ISO 640 • 1/160s',
@@ -183,7 +183,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'hwm1-img-1',
-        title: 'OPENING CEREMONY // INAUGURAL COHORT',
+        title: 'Opening Ceremony: Inaugural Cohort',
         caption: 'Full stage group photo with organizers, dignitaries, and builders under HackWithMumbai banner',
         tag: 'STAGE / AUDITORIUM',
         cameraInfo: 'CAM-01 • 24mm F/2.8 • ISO 400 • 1/200s',
@@ -194,7 +194,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'hwm1-img-2',
-        title: 'ORGANIZING TEAM // FACULTY LAUNCH',
+        title: 'Organizing Team: Faculty Launch',
         caption: 'Chapter student leadership and faculty mentors launching the inaugural HackWithMumbai',
         tag: 'COMMENCEMENT / HALL 1',
         cameraInfo: 'CAM-02 • 28mm F/2.8 • ISO 500 • 1/200s',
@@ -205,7 +205,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'hwm1-img-3',
-        title: 'PODIUM CEREMONY // WINNERS SHOWCASE',
+        title: 'Podium Ceremony: Winners Showcase',
         caption: 'Winning teams presenting their accredited projects and certificates to the faculty jury',
         tag: 'PODIUM / DEMO SPRINT',
         cameraInfo: 'CAM-03 • 70mm F/2.0 • ISO 800 • 1/250s',
@@ -266,7 +266,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'bit-img-1',
-        title: 'MICROSOFT AUDITORIUM // KEYNOTE',
+        title: 'Microsoft Auditorium: Keynote',
         caption: 'Opening knowledge session inside the Microsoft Office Mumbai conference deck',
         tag: 'MICROSOFT / MAIN DECK',
         cameraInfo: 'CAM-01 • 35mm F/1.8 • ISO 320 • 1/200s',
@@ -277,7 +277,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'bit-img-2',
-        title: 'INTERACTIVE Q&A // FASHION-TECH',
+        title: 'Interactive Q&A: Fashion-Tech',
         caption: 'Students discussing AR-3D app architecture and draw-based interface design',
         tag: 'Q&A / LAB',
         cameraInfo: 'CAM-02 • 50mm F/1.8 • ISO 400 • 1/250s',
@@ -288,7 +288,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'bit-img-3',
-        title: 'STUDENT COHORT // MICROSOFT HEADQUARTERS',
+        title: 'Student Cohort: Microsoft Headquarters',
         caption: 'Participant networking and group photo at Microsoft Office Mumbai',
         tag: 'COHORT / MICROSOFT',
         cameraInfo: 'CAM-03 • 24mm F/2.8 • ISO 500 • 1/160s',
@@ -346,7 +346,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'hwm2-img-1',
-        title: 'MAIN ARENA // 30-HOUR CELEBRATION',
+        title: 'Main Arena: 30-Hour Celebration',
         caption: 'Full stage group photo with 70+ builders, faculty mentors, HoDs and chapter organizers',
         tag: 'MAIN STAGE / ARENA',
         cameraInfo: 'CAM-01 • 24mm F/1.8 • ISO 400 • 1/250s',
@@ -357,7 +357,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'hwm2-img-2',
-        title: 'REGISTRATION DESK // CAMPUS GATES',
+        title: 'Registration Desk: Campus Gates',
         caption: 'Participants queuing up for entry scanning, ID badges, and official hackathon goodies kit',
         tag: 'REGISTRATION / GATE',
         cameraInfo: 'CAM-02 • 28mm F/2.8 • ISO 320 • 1/320s',
@@ -368,7 +368,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'hwm2-img-3',
-        title: 'WAR ROOM // OVERNIGHT SPRINT',
+        title: 'War Room: Overnight Sprint',
         caption: 'Teams collaborating during the midnight sprint with live mentorship from industry leads',
         tag: 'LAB DECK / 03:00 AM',
         cameraInfo: 'CAM-03 • 50mm F/1.4 • ISO 800 • 1/160s',
@@ -420,7 +420,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'z2w-img-1',
-        title: 'CC LAB // ACTIVE SPRINT',
+        title: 'CC Lab: Active Sprint',
         caption: 'Full house of student developers coding Solidity smart contracts in CC Lab Ground Floor',
         tag: 'CC LAB / GROUND FLOOR',
         cameraInfo: 'CAM-01 • 24mm F/2.8 • ISO 500 • 1/160s',
@@ -431,7 +431,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'z2w-img-2',
-        title: 'PAIR AUDIT // SMART CONTRACTS',
+        title: 'Pair Audit: Smart Contracts',
         caption: 'Students collaborating to debug gas consumption and test reentrancy vulnerabilities',
         tag: 'PAIR DEBUG / STATION 8',
         cameraInfo: 'CAM-02 • 50mm F/1.8 • ISO 800 • 1/200s',
@@ -442,7 +442,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'z2w-img-3',
-        title: 'PODIUM CEREMONY // TROPHIES & CERTIFICATES',
+        title: 'Podium Ceremony: Trophies & Certificates',
         caption: 'Felicitation of outstanding mini-challenge teams with trophies and physical certificates',
         tag: 'AWARD / CEREMONY',
         cameraInfo: 'CAM-03 • 35mm F/2.0 • ISO 640 • 1/200s',
@@ -464,7 +464,7 @@ export const EVENTS_DATA: EventItem[] = [
     title: 'ROCKETRIDE BUILDATHON – MUMBAI EDITION',
     shortTitle: 'ROCKETRIDE BUILDATHON',
     year: '2026',
-    edition: 'EDITION 06 // BUILDATHON',
+    edition: 'Edition 06 · Buildathon',
     date: '29 AUGUST 2026',
     category: 'HACKATHONS',
     theme: 'AI Trends, Rapid Product Prototyping & Technology Solutions',
@@ -525,7 +525,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'rr-img-1',
-        title: 'STAGE KEYNOTE // ROD CHRISTENSEN',
+        title: 'Stage Keynote: Rod Christensen',
         caption: 'Rod Christensen, Co-Founder & Chief Architect of RocketRide, presenting industry insights on AI trends and engineering architecture',
         tag: 'AUDITORIUM / KEYNOTE',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
@@ -536,7 +536,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'rr-img-2',
-        title: 'AUDITORIUM ASSEMBLY // 47 TEAMS',
+        title: 'Auditorium Assembly: 47 Teams',
         caption: '47 teams comprising 183 students from host and visiting engineering institutions gathered during opening orientation',
         tag: 'AUDITORIUM / 183 BUILDERS',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
@@ -547,7 +547,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'rr-img-3',
-        title: 'LAB MENTORSHIP // 6-HOUR SPRINT',
+        title: 'Lab Mentorship: 6-Hour Sprint',
         caption: 'Ryan Christensen reviewing codebases and providing hands-on architectural mentorship during the offline build sprint',
         tag: 'CC LAB / MENTORSHIP',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
@@ -558,7 +558,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'rr-img-4',
-        title: 'DELEGATE FELICITATION // SAN FRANCISCO',
+        title: 'Delegate Felicitation: San Francisco',
         caption: 'Rod and Ryan from RocketRide, San Francisco felicitated with shawls by faculty coordinators and department dignitaries',
         tag: 'FELICITATION / STAGE',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 3',
@@ -569,7 +569,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'rr-img-5',
-        title: 'CHAMPIONS PODIUM // 1ST PLACE AWARDS',
+        title: 'Champions Podium: 1st Place Awards',
         caption: 'Winning buildathon team presented with certificates and the 1st place cheque by RocketRide industry delegates and faculty',
         tag: 'VALEDICTORY / WINNER',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
@@ -580,7 +580,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'rr-img-6',
-        title: 'RUNNER-UP AWARDS // VALEDICTORY',
+        title: 'Runner-Up Awards: Valedictory',
         caption: 'Runner-up teams recognized for high-impact prototype solutions during the valedictory award presentation',
         tag: 'VALEDICTORY / PODIUM',
         cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
@@ -598,7 +598,7 @@ export const EVENTS_DATA: EventItem[] = [
     title: 'ZERO INTERNET CTF',
     shortTitle: 'ZERO INTERNET CTF',
     year: '2026',
-    edition: 'EDITION 07 // AIR-GAPPED CTF',
+    edition: 'Edition 07 · Air-Gapped CTF',
     date: '12 OCTOBER 2026',
     category: 'OTHER',
     theme: 'Air-Gapped Systems, Local Exploits, Cryptography & Digital Forensics',
@@ -645,7 +645,7 @@ export const EVENTS_DATA: EventItem[] = [
     images: [
       {
         id: 'ctf-img-1',
-        title: 'AIR-GAPPED LAB ARCHITECTURE // ISOLATED LAN',
+        title: 'Air-Gapped Lab Architecture: Isolated LAN',
         caption: 'Dedicated local LAN server running isolated CTFd challenge infrastructure across CC Labs 4–6 with no external uplink',
         tag: 'INFRASTRUCTURE / CC LABS 4–6',
         cameraInfo: 'SYSTEM ARCHITECTURE • PROPOSAL SPECIFICATION',
@@ -655,7 +655,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'ctf-img-2',
-        title: 'DYNAMIC SCOREBOARD // FIRST-BLOOD TELEMETRY',
+        title: 'Dynamic Scoreboard: First-Blood Telemetry',
         caption: 'Dynamic point decay matrix featuring +50 First Blood bonus, +100 category sweeps, and a 40-minute freeze window',
         tag: 'SCORING ENGINE / LAN SERVER',
         cameraInfo: 'CTFD PLATFORM • 6-HOUR WINDOW',
@@ -665,7 +665,7 @@ export const EVENTS_DATA: EventItem[] = [
       },
       {
         id: 'ctf-img-3',
-        title: 'MULTI-DOMAIN CHALLENGE BOARD // 7 CATEGORIES',
+        title: 'Multi-Domain Challenge Board: 7 Categories',
         caption: 'Challenges spanning Web Exploitation (SQLi/XSS), Cryptography (RSA/ciphers), Reverse Engineering, Forensics & Steganography',
         tag: 'CHALLENGE MATRIX / 50–80 TEAMS',
         cameraInfo: 'SECURITY CURRICULUM • PROPOSAL SECTION 4',

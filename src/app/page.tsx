@@ -1,5 +1,6 @@
 import { TypographicIntro } from '@/components/TypographicIntro/TypographicIntro';
 import { HeroChapter } from '@/components/chapters/HeroChapter';
+import { CharacterConvergence } from '@/components/CharacterConvergence/CharacterConvergence';
 import { StoryChapter } from '@/components/chapters/StoryChapter';
 import { WhatWeOffer } from '@/components/WhatWeOffer/WhatWeOffer';
 import { WhatWeDo } from '@/components/WhatWeDo/WhatWeDo';
@@ -16,6 +17,9 @@ export default function Home() {
 
       {/* Chapter 01 — HERO */}
       <HeroChapter />
+
+      {/* Chapter 01.5 — SKIPER31 CHARACTER CONVERGENCE */}
+      <CharacterConvergence />
 
       {/* Chapter 02 — ABOUT / STORY (Interactive Globe) */}
       <StoryChapter />

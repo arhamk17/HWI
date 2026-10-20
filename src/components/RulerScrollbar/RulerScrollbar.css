@@ -1,0 +1,154 @@
+/* ==========================================================================
+   HACKWITHINDIA BVUDET-NM — DUAL RULER SCROLL ISLANDS (LEFT & RIGHT)
+   Two Completely Independent Floating Islands • Crisp Vertical Ticks
+   Illuminated HWI Red Capsule Indicator • Restrained Glow • 60/120fps
+   Zero Full-Width Connecting Bars • Reduced Motion & Touch Safe
+   ========================================================================== */
+
+.ruler-island {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: clamp(240px, 48vh, 420px);
+  background-color: rgba(7, 7, 9, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  z-index: 9000;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Independent edge placements */
+.ruler-island--left {
+  left: 16px;
+}
+
+.ruler-island--right {
+  right: 16px;
+}
+
+/* Hover and active dragging states */
+.ruler-island:hover {
+  background-color: rgba(14, 11, 16, 0.95);
+  border-color: rgba(239, 68, 68, 0.32);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6), 0 0 16px rgba(239, 68, 68, 0.15);
+}
+
+.ruler-island.is-dragging {
+  background-color: rgba(14, 11, 16, 0.98);
+  border-color: rgba(239, 68, 68, 0.5);
+  cursor: grabbing;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 22px rgba(239, 68, 68, 0.28);
+}
+
+/* ─── Ruler Ticks SVG Layer ──────────────────────────────────────────────── */
+.ruler-island__ticks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.ruler-island:hover .ruler-island__ticks {
+  opacity: 1;
+}
+
+/* ─── Moving Red Rounded Indicator Capsule (Thumb) ────────────────────────── */
+.ruler-island__thumb {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 28px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #DC2626, #EF4444, #F87171, #EF4444, #DC2626);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.7), 0 0 18px rgba(239, 68, 68, 0.3);
+  cursor: grab;
+  transform: translate3d(-50%, 3px, 0);
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+  outline: none;
+  z-index: 2;
+}
+
+.ruler-island__thumb:hover,
+.ruler-island__thumb:focus-visible {
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.9), 0 0 26px rgba(239, 68, 68, 0.45);
+  filter: brightness(1.15);
+}
+
+.ruler-island.is-dragging .ruler-island__thumb {
+  cursor: grabbing;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 1), 0 0 32px rgba(239, 68, 68, 0.6);
+  filter: brightness(1.25);
+}
+
+/* Micro-Pip in center of vertical thumb capsule */
+.ruler-island__thumb-pip {
+  width: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.95);
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.85);
+}
+
+/* ─── Mobile Responsiveness ──────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .ruler-island {
+    width: 12px;
+    height: clamp(200px, 40vh, 320px);
+  }
+  .ruler-island--left {
+    left: 10px;
+  }
+  .ruler-island--right {
+    right: 10px;
+  }
+  .ruler-island__thumb {
+    width: 6px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* On touch-first tablets and mobile viewports, hide islands completely
+     to prevent covering touch gestures or mobile UI buttons */
+  .ruler-island {
+    display: none !important;
+  }
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ruler-island__thumb {
+    box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+    transition: none;
+  }
+  .ruler-island {
+    transition: none;
+  }
+}
+
+/* ─── Print Stylesheet ───────────────────────────────────────────────────── */
+@media print {
+  .ruler-island {
+    display: none !important;
+  }
+}

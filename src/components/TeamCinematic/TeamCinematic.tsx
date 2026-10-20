@@ -8,6 +8,8 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  ShieldCheck,
+  ExternalLink,
 } from 'lucide-react';
 import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
 import { scrollBus } from '@/lib/scrollBus';
@@ -96,6 +98,65 @@ function MailIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+// ─── Decorative Technical Cyan Barcode ───────────────────────────────────────
+function CyanIdBarcode() {
+  return (
+    <svg
+      className="team-id-card__barcode-svg"
+      viewBox="0 0 240 28"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <rect x="0" y="0" width="3" height="28" fill="#06B6D4" />
+      <rect x="5" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.6" />
+      <rect x="9" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="15" y="0" width="2" height="28" fill="#06B6D4" opacity="0.8" />
+      <rect x="19" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="23" y="0" width="5" height="28" fill="#06B6D4" />
+      <rect x="31" y="0" width="2" height="28" fill="#06B6D4" opacity="0.7" />
+      <rect x="35" y="0" width="3" height="28" fill="#06B6D4" />
+      <rect x="40" y="0" width="1" height="28" fill="#06B6D4" />
+      <rect x="44" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="51" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="56" y="0" width="3" height="28" fill="#06B6D4" opacity="0.6" />
+      <rect x="62" y="0" width="5" height="28" fill="#06B6D4" />
+      <rect x="70" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="74" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="78" y="0" width="4" height="28" fill="#06B6D4" opacity="0.9" />
+      <rect x="85" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="89" y="0" width="3" height="28" fill="#06B6D4" />
+      <rect x="94" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.5" />
+      <rect x="98" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="105" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="110" y="0" width="5" height="28" fill="#06B6D4" opacity="0.8" />
+      <rect x="118" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="123" y="0" width="3" height="28" fill="#06B6D4" />
+      <rect x="128" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="132" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="138" y="0" width="2" height="28" fill="#06B6D4" opacity="0.7" />
+      <rect x="142" y="0" width="3" height="28" fill="#06B6D4" />
+      <rect x="147" y="0" width="5" height="28" fill="#06B6D4" />
+      <rect x="155" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="159" y="0" width="3" height="28" fill="#06B6D4" opacity="0.9" />
+      <rect x="165" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="170" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="176" y="0" width="2" height="28" fill="#06B6D4" opacity="0.6" />
+      <rect x="180" y="0" width="5" height="28" fill="#06B6D4" />
+      <rect x="188" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="192" y="0" width="3" height="28" fill="#06B6D4" opacity="0.8" />
+      <rect x="198" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="202" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="208" y="0" width="1.5" height="28" fill="#06B6D4" />
+      <rect x="212" y="0" width="3" height="28" fill="#06B6D4" opacity="0.7" />
+      <rect x="217" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="221" y="0" width="4" height="28" fill="#06B6D4" />
+      <rect x="227" y="0" width="2" height="28" fill="#06B6D4" />
+      <rect x="231" y="0" width="1.5" height="28" fill="#06B6D4" opacity="0.8" />
+      <rect x="235" y="0" width="5" height="28" fill="#06B6D4" />
+    </svg>
+  );
+}
+
 // ─── Ambient Particles ───────────────────────────────────────────────────────
 function AmbientParticles() {
   return (
@@ -117,116 +178,233 @@ function AmbientParticles() {
   );
 }
 
-// ─── Team Member Detail Modal ────────────────────────────────────────────────
+// ─── Team Member Interactive ID Card Modal ──────────────────────────────────
 interface MemberModalProps {
   member: DepartmentMember | null;
   deptName: string;
+  deptId: string;
   onClose: () => void;
 }
 
-function MemberDetailModal({ member, deptName, onClose }: MemberModalProps) {
+function MemberDetailModal({ member, deptName, deptId, onClose }: MemberModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     if (member) {
       window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
   }, [member, onClose]);
 
   if (!member) return null;
 
+  const serialId = `HWI-2026-${(deptId || 'COR').slice(0, 3).toUpperCase()}-${member.id
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .slice(0, 6)
+    .toUpperCase()}`;
+
+  const rankLabel =
+    member.rank === 'head'
+      ? deptId === 'core-leadership'
+        ? 'Chapter Leadership'
+        : 'Department Head'
+      : member.rank === 'co-head'
+      ? 'Department Co-Head'
+      : 'Executive Member';
+
   return (
     <div
-      className="team-member-modal-backdrop"
+      className="team-id-modal-backdrop"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={`${member.name} details`}
+      aria-label={`${member.name} Chapter ID Card`}
     >
-      <div className="team-member-modal" onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          className="team-member-modal__close"
-          onClick={onClose}
-          aria-label="Close modal"
-        >
-          <X size={18} />
-        </button>
+      <div
+        className="team-id-card-dossier"
+        onClick={(e) => e.stopPropagation()}
+        tabIndex={-1}
+      >
+        {/* Top Glowing Cyan Accent Strip */}
+        <div className="team-id-card-dossier__cyan-strip" />
 
-        <div className="team-member-modal__header">
-          <div className="team-member-modal__avatar">
-            <span className="team-member-modal__initials">{member.initials}</span>
-          </div>
-          <div className="team-member-modal__title-wrap">
-            <div className="team-member-modal__badge-row">
-              <span className="team-member-modal__role">{member.role}</span>
-              <span className="team-member-modal__dept">{deptName}</span>
+        {/* Reticles / Corner Tech Crosshairs */}
+        <span className="team-id-card-reticle top-left" aria-hidden="true">+</span>
+        <span className="team-id-card-reticle top-right" aria-hidden="true">+</span>
+        <span className="team-id-card-reticle bottom-left" aria-hidden="true">+</span>
+        <span className="team-id-card-reticle bottom-right" aria-hidden="true">+</span>
+
+        {/* Card Header Bar */}
+        <div className="team-id-card-dossier__header">
+          <div className="team-id-card-dossier__brand">
+            <span className="team-id-card-dossier__emblem">HWI</span>
+            <div className="team-id-card-dossier__brand-text">
+              <span className="team-id-card-dossier__org">HACKWITHINDIA BVUDET-NM</span>
+              <span className="team-id-card-dossier__suborg">OFFICIAL MEMBER ID DOSSIER</span>
             </div>
-            <h3 className="team-member-modal__name">{member.name}</h3>
-            {member.academicYear && member.branch && (
-              <span className="team-member-modal__academic">
-                {member.academicYear} • {member.branch}
-              </span>
-            )}
+          </div>
+
+          <div className="team-id-card-dossier__actions">
+            <div className="team-id-card-dossier__status-pill">
+              <span className="team-id-card-dossier__pulse-dot" />
+              <span>ACTIVE</span>
+            </div>
+            <button
+              type="button"
+              className="team-id-card-dossier__close"
+              onClick={onClose}
+              aria-label="Close ID dossier"
+            >
+              <X size={16} />
+            </button>
           </div>
         </div>
 
-        {member.bio && (
-          <p className="team-member-modal__bio">{member.bio}</p>
-        )}
+        {/* Identity Main Section: Portrait + Name & Credentials */}
+        <div className="team-id-card-dossier__identity">
+          <div className="team-id-card-dossier__photo-frame">
+            <div className="team-id-card-dossier__photo-inner">
+              <div className="team-id-card-dossier__photo-fallback">
+                <span className="team-id-card-dossier__initials">{member.initials}</span>
+                <span className="team-id-card-dossier__watermark">HWI // 26</span>
+              </div>
+              {member.image && (
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="team-id-card-dossier__photo-img"
+                  loading="lazy"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLElement).style.display = 'none';
+                  }}
+                />
+              )}
+            </div>
+            <div className="team-id-card-dossier__photo-badge">
+              <ShieldCheck size={11} />
+              <span>VERIFIED</span>
+            </div>
+          </div>
 
-        {(member.socials || member.email) && (
-          <div className="team-member-modal__socials">
-            {member.socials?.github && (
-              <a
-                href={member.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="team-member-modal__social-link"
-                aria-label={`${member.name}'s GitHub`}
-              >
-                <GithubIcon size={16} />
-                <span>GitHub</span>
-              </a>
+          <div className="team-id-card-dossier__info-block">
+            <div className="team-id-card-dossier__meta-tags">
+              <span className="team-id-card-dossier__dept-tag">{deptName}</span>
+              <span className="team-id-card-dossier__rank-tag">{rankLabel}</span>
+            </div>
+
+            <h3 className="team-id-card-dossier__name">{member.name}</h3>
+            <p className="team-id-card-dossier__role">{member.role}</p>
+
+            {member.academicYear && member.branch && (
+              <div className="team-id-card-dossier__academic">
+                <span className="team-id-card-dossier__academic-label">ACADEMIC //</span>
+                <span>{member.academicYear} • {member.branch}</span>
+              </div>
             )}
-            {member.socials?.linkedin && (
-              <a
-                href={member.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="team-member-modal__social-link"
-                aria-label={`${member.name}'s LinkedIn`}
-              >
-                <LinkedinIcon size={16} />
-                <span>LinkedIn</span>
-              </a>
-            )}
-            {member.socials?.instagram && (
-              <a
-                href={member.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="team-member-modal__social-link"
-                aria-label={`${member.name}'s Instagram`}
-              >
-                <InstagramIcon size={16} />
-                <span>Instagram</span>
-              </a>
-            )}
-            {member.email && (
-              <a
-                href={`mailto:${member.email}`}
-                className="team-member-modal__social-link"
-                aria-label={`Email ${member.name}`}
-              >
-                <MailIcon size={16} />
-                <span>Email</span>
-              </a>
-            )}
+
+            <div className="team-id-card-dossier__serial-row">
+              <span className="team-id-card-dossier__serial-label">ID SERIAL</span>
+              <code className="team-id-card-dossier__serial-code">{serialId}</code>
+            </div>
+          </div>
+        </div>
+
+        {/* Bio / Statement */}
+        {member.bio && (
+          <div className="team-id-card-dossier__bio-section">
+            <span className="team-id-card-dossier__section-label">OPERATIONAL STATEMENT</span>
+            <p className="team-id-card-dossier__bio-text">{member.bio}</p>
           </div>
         )}
+
+        {/* Technical Metadata Spec Grid */}
+        <div className="team-id-card-dossier__specs-grid">
+          <div className="team-id-spec-item">
+            <span className="team-id-spec-item__key">TENURE</span>
+            <span className="team-id-spec-item__val">2026–2027</span>
+          </div>
+          <div className="team-id-spec-item">
+            <span className="team-id-spec-item__key">CHAPTER</span>
+            <span className="team-id-spec-item__val">BVUDET-NM</span>
+          </div>
+          <div className="team-id-spec-item">
+            <span className="team-id-spec-item__key">DESIGNATION</span>
+            <span className="team-id-spec-item__val">{member.rank.toUpperCase()}</span>
+          </div>
+        </div>
+
+        {/* Verified Social & Contact Network */}
+        {(member.socials || member.email) && (
+          <div className="team-id-card-dossier__contacts-section">
+            <span className="team-id-card-dossier__section-label">AUTHENTICATED CONTACT NODES</span>
+            <div className="team-id-card-dossier__links">
+              {member.socials?.github && (
+                <a
+                  href={member.socials.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="team-id-contact-btn"
+                  aria-label={`${member.name}'s GitHub profile`}
+                >
+                  <GithubIcon size={14} />
+                  <span>GitHub</span>
+                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
+                </a>
+              )}
+              {member.socials?.linkedin && (
+                <a
+                  href={member.socials.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="team-id-contact-btn"
+                  aria-label={`${member.name}'s LinkedIn profile`}
+                >
+                  <LinkedinIcon size={14} />
+                  <span>LinkedIn</span>
+                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
+                </a>
+              )}
+              {member.socials?.instagram && (
+                <a
+                  href={member.socials.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="team-id-contact-btn"
+                  aria-label={`${member.name}'s Instagram profile`}
+                >
+                  <InstagramIcon size={14} />
+                  <span>Instagram</span>
+                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
+                </a>
+              )}
+              {member.email && (
+                <a
+                  href={`mailto:${member.email}`}
+                  className="team-id-contact-btn"
+                  aria-label={`Send email to ${member.name}`}
+                >
+                  <MailIcon size={14} />
+                  <span>Direct Mail</span>
+                  <ExternalLink size={11} className="team-id-contact-btn__arrow" />
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Bottom ID Barcode & Watermark */}
+        <div className="team-id-card-dossier__footer">
+          <CyanIdBarcode />
+          <div className="team-id-card-dossier__footer-text">
+            <span>HACKWITHINDIA • BVUDET NAVI MUMBAI</span>
+            <span>VERIFIED IDENTITY PROTOCOL // DISPATCH 2026–27</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -238,6 +416,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
   const [selectedMember, setSelectedMember] = useState<{
     member: DepartmentMember;
     deptName: string;
+    deptId: string;
   } | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -303,14 +482,10 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       // Continuous interpolation of each slide: strictly isolated to eliminate any collision/overlap
       slidesRef.current.forEach((slide, idx) => {
         if (!slide) return;
-        // diff = idx - teamFloat
-        // When scrolling down: active slide passes (diff becomes negative, exiting upwards)
-        // Next slide approaches from below (diff is positive, entering upwards)
         const diff = idx - teamFloat;
         const absDiff = Math.abs(diff);
 
         // Strict isolation threshold: slides with absDiff > 0.50 are completely hidden
-        // Mathematical guarantee: exactly ONE slide is visible at any given scroll coordinate
         if (absDiff > 0.50) {
           slide.style.display = 'none';
           slide.style.opacity = '0';
@@ -339,13 +514,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         }
 
         // Transition zone (0.15 < absDiff <= 0.50)
-        // t progresses from 0 (leaving dwell) to 1 (at midpoint 0.50)
         const t = (absDiff - 0.15) / 0.35;
-        // Clean quadratic ease-out fade: fast initial fade prevents any visible collision
         const opacity = Math.max(0, 1 - t * t);
-        // Vertical translation: 0 to 90px in direction of motion
-        // If diff < 0: slide was passed, exits upwards (-90px)
-        // If diff > 0: slide is upcoming, enters from below (+90px)
         const translateY = (diff < 0 ? -1 : 1) * (t * 90);
         const scale = 1 - t * 0.04;
 
@@ -400,38 +570,50 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
             <p className="team-scroll-header__tagline">{currentDept.tagline}</p>
           </div>
 
-          {/* Secondary Quick Jump Navigation Pills */}
-          <nav className="team-scroll-switcher" aria-label="Department Roster Navigation">
-            {DEPARTMENTS.map((d, idx) => (
-              <button
-                key={d.id}
-                type="button"
-                className={`team-switcher-pill ${idx === activeIdx ? 'team-switcher-pill--active' : ''}`}
-                onClick={() => scrollToDept(idx)}
-                aria-label={`Scroll to ${d.name}`}
-                aria-current={idx === activeIdx ? 'true' : undefined}
-              >
-                <span className="team-switcher-pill__num">0{idx + 1}</span>
-                <span className="team-switcher-pill__name">{d.name.split(' ')[0]}</span>
-              </button>
-            ))}
-          </nav>
-
-          {/* Counter & Mini Progress Indicator */}
-          <div className="team-scroll-header__counter" aria-label={`Team ${activeIdx + 1} of ${numDepts}`}>
-            <span className="team-counter-current">0{activeIdx + 1}</span>
-            <span className="team-counter-slash">/</span>
-            <span className="team-counter-total">0{numDepts}</span>
-          </div>
-
-          {/* Top Edge Progress Line */}
-          <div className="team-scroll-progress-line">
-            <div className="team-scroll-progress-line__fill" ref={progressBarRef} />
+          <div className="team-scroll-header__right">
+            <div className="team-scroll-counter">
+              <span className="team-scroll-counter__current">
+                {String(activeIdx + 1).padStart(2, '0')}
+              </span>
+              <span className="team-scroll-counter__sep">/</span>
+              <span className="team-scroll-counter__total">
+                {String(numDepts).padStart(2, '0')}
+              </span>
+            </div>
+            <div className="team-scroll-progress-wrap" aria-hidden="true">
+              <div className="team-scroll-progress-bar" ref={progressBarRef} />
+            </div>
           </div>
         </header>
 
-        {/* ─── Stage Area: Continuously Transitioning Department Slides ─────── */}
-        <main className="team-scroll-stage">
+        {/* ─── Department Quick-Navigation Switcher (Compact Interactive Pills) ── */}
+        <nav
+          className="team-scroll-switcher"
+          aria-label="Department navigation switcher"
+        >
+          {DEPARTMENTS.map((dept, idx) => {
+            const isActive = idx === activeIdx;
+            return (
+              <button
+                key={dept.id}
+                type="button"
+                className={`team-switcher-tab ${isActive ? 'is-active' : ''}`}
+                onClick={() => scrollToDept(idx)}
+                aria-current={isActive ? 'true' : undefined}
+                aria-label={`Jump to ${dept.name}`}
+              >
+                <span className="team-switcher-tab__num">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <span className="team-switcher-tab__name">{dept.name}</span>
+                {isActive && <span className="team-switcher-tab__indicator" />}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* ─── Slide Showcase Container ────────────────────────────────────── */}
+        <main className="team-scroll-showcase" aria-label="Team showcase slideshow">
           {DEPARTMENTS.map((dept, idx) => {
             const head = dept.members[0];
             const otherMembers = dept.members.slice(1);
@@ -446,9 +628,35 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 data-dept-id={dept.id}
               >
                 <div className="team-slide-inner">
-                  {/* Left Column: Department Head Portrait Card */}
+                  {/* Left Column: Interactive Department Head ID Card */}
                   <div className="team-slide-portrait-col">
-                    <div className="team-portrait-frame">
+                    <button
+                      type="button"
+                      className="team-portrait-card team-id-card--head"
+                      onClick={() =>
+                        setSelectedMember({
+                          member: head,
+                          deptName: dept.name,
+                          deptId: dept.id,
+                        })
+                      }
+                      title={`Inspect ${head.name}'s ID credentials`}
+                      aria-label={`Inspect ${head.name}'s ID credentials`}
+                    >
+                      {/* Cyan top strip */}
+                      <div className="team-id-card__top-cyan-strip" />
+
+                      {/* Technical ID Header bar on the card */}
+                      <div className="team-id-card__top-meta">
+                        <span className="team-id-card__top-code">
+                          HWI // {dept.id.slice(0, 4).toUpperCase()}-01
+                        </span>
+                        <span className="team-id-card__top-status">
+                          <span className="team-id-card__dot" />
+                          ACTIVE
+                        </span>
+                      </div>
+
                       <div className="team-portrait-frame__inner">
                         <div className="team-portrait-fallback">
                           <span className="team-portrait-initials">{head.initials}</span>
@@ -468,11 +676,21 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         <div className="team-portrait-overlay" />
                       </div>
 
-                      {/* Rank tag label */}
-                      <div className="team-portrait-rank-badge">
-                        <span>{dept.id === 'core-leadership' ? 'CHAPTER LEADERSHIP' : 'DEPARTMENT HEAD'}</span>
+                      {/* Bottom ID bar on the card with rank badge & click-to-inspect prompt */}
+                      <div className="team-id-card__bottom-bar">
+                        <div className="team-portrait-rank-badge">
+                          <span>
+                            {dept.id === 'core-leadership'
+                              ? 'CHAPTER LEADERSHIP'
+                              : 'DEPARTMENT HEAD'}
+                          </span>
+                        </div>
+                        <span className="team-id-card__hover-cta">
+                          <span>INSPECT ID</span>
+                          <ArrowUpRight size={13} />
+                        </span>
                       </div>
-                    </div>
+                    </button>
                   </div>
 
                   {/* Right Column: Head Bio, Roles & Interactive Member Roster */}
@@ -483,6 +701,23 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         <Users size={12} />
                         {dept.members.length} {dept.members.length === 1 ? 'MEMBER' : 'MEMBERS'}
                       </span>
+                      {/* Interactive Inspect Button for Head (accessible on all screen sizes) */}
+                      <button
+                        type="button"
+                        className="team-head-inspect-btn"
+                        onClick={() =>
+                          setSelectedMember({
+                            member: head,
+                            deptName: dept.name,
+                            deptId: dept.id,
+                          })
+                        }
+                        aria-label={`View ID Card for ${head.name}`}
+                      >
+                        <span className="team-head-inspect-btn__dot" />
+                        <span>VIEW ID CARD</span>
+                        <ArrowUpRight size={12} />
+                      </button>
                     </div>
 
                     <h2 className="team-slide-name">{head.name}</h2>
@@ -536,25 +771,42 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                       </div>
                     )}
 
-                    {/* Department Members Roster (Co-Heads & Executives) */}
+                    {/* Department Members Roster (Co-Heads & Executives) with Interactive ID Cards */}
                     {otherMembers.length > 0 && (
                       <div className="team-slide-roster-section">
                         <div className="team-slide-roster-heading">
                           <span>TEAM MEMBERS IN {dept.name}</span>
-                          <span className="team-roster-hint">(Click to inspect credentials)</span>
+                          <span className="team-roster-hint">
+                            (Select to inspect ID credentials)
+                          </span>
                         </div>
                         <div className="team-slide-roster-chips">
-                          {otherMembers.map((m) => (
+                          {otherMembers.map((m, mIdx) => (
                             <button
                               key={m.id}
                               type="button"
                               className="team-member-chip"
-                              onClick={() => setSelectedMember({ member: m, deptName: dept.name })}
-                              title={`View ${m.name}`}
+                              onClick={() =>
+                                setSelectedMember({
+                                  member: m,
+                                  deptName: dept.name,
+                                  deptId: dept.id,
+                                })
+                              }
+                              title={`Inspect ${m.name}'s ID credentials`}
+                              aria-label={`Inspect ${m.name}'s ID credentials`}
                             >
-                              <span className="team-member-chip__initials">{m.initials}</span>
+                              <span className="team-member-chip__accent-strip" />
+                              <span className="team-member-chip__initials">
+                                {m.initials}
+                              </span>
                               <div className="team-member-chip__info">
-                                <span className="team-member-chip__name">{m.name}</span>
+                                <div className="team-member-chip__top-line">
+                                  <span className="team-member-chip__name">{m.name}</span>
+                                  <span className="team-member-chip__rank-badge">
+                                    {m.rank === 'co-head' ? 'CO-HEAD' : 'EXEC'}
+                                  </span>
+                                </div>
                                 <span className="team-member-chip__role">{m.role}</span>
                               </div>
                               <ArrowUpRight size={12} className="team-member-chip__arrow" />
@@ -570,7 +822,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
           })}
         </main>
 
-        {/* ─── Bottom Scroll Guidance Bar (Replaces "Next Team" Button) ─────── */}
+        {/* ─── Bottom Scroll Guidance Bar ──────────────────────────────────── */}
         <footer className="team-scroll-footer">
           <div className="team-scroll-cue-wrap">
             <div className="team-scroll-mouse" aria-hidden="true">
@@ -583,7 +835,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
             </span>
           </div>
 
-          {/* Secondary manual jump buttons (subtle & non-blocking) */}
+          {/* Secondary manual jump buttons */}
           <div className="team-scroll-nav-secondary">
             {activeIdx > 0 && (
               <button
@@ -611,10 +863,11 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         </footer>
       </div>
 
-      {/* ─── Member Detail Modal ─────────────────────────────────────────── */}
+      {/* ─── Interactive Member ID Card Modal Dossier ─────────────────────── */}
       <MemberDetailModal
         member={selectedMember?.member || null}
         deptName={selectedMember?.deptName || ''}
+        deptId={selectedMember?.deptId || ''}
         onClose={() => setSelectedMember(null)}
       />
     </div>
