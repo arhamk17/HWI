@@ -34,7 +34,8 @@
   gap: 10px;
   margin-bottom: 20px;
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(12px);
+  will-change: opacity, transform;
 }
 
 .hwi-pulse-beacon {
@@ -76,7 +77,8 @@
 .chronicles-hero__title .hero-word {
   display: inline-block;
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(20px);
+  will-change: opacity, transform;
 }
 
 .chronicles-hero__title .highlight-red {
@@ -91,7 +93,8 @@
   max-width: 760px;
   margin: 0 0 20px;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(14px);
+  will-change: opacity, transform;
 }
 
 /* Meta Badges & Scroll Callout */
@@ -104,7 +107,8 @@
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(10px);
+  will-change: opacity, transform;
 }
 
 .meta-badges-cluster {
@@ -169,6 +173,9 @@
   border-radius: 12px;
   gap: 16px;
   flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: opacity, transform;
 }
 
 .gallery-indicator {
@@ -331,7 +338,7 @@
   padding: 4px 2px;
   box-sizing: border-box;
   position: relative;
-  transition: gap 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: gap 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hwi-gallery-track.is-expanded {
@@ -353,13 +360,13 @@
   flex-direction: column;
   box-sizing: border-box;
   will-change: flex, width, max-width, opacity;
-  transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              max-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              min-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.35s ease,
-              border-color 0.3s ease,
-              box-shadow 0.4s ease;
+  transition: flex 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+              max-width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+              min-width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hwi-panel:focus-visible {
@@ -372,8 +379,15 @@
   flex: 1 1 0px;
   min-width: 0;
   width: auto;
-  opacity: 0.92;
+  opacity: 0.95;
+  transform: translateY(0);
   visibility: visible;
+  pointer-events: auto;
+  transition: flex 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
 }
 
 .hwi-gallery-track:not(.is-expanded) .hwi-panel--idle:hover {
@@ -383,7 +397,7 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
 }
 
-/* Inactive state when ONE panel is expanded -> MUST COMPLETELY DISAPPEAR FROM VISIBLE LAYOUT */
+/* Inactive state when ONE panel is expanded -> Fluid collapse to 0 width */
 .hwi-gallery-track.is-expanded .hwi-panel--idle {
   flex: 0 0 0px !important;
   width: 0 !important;
@@ -391,16 +405,16 @@
   max-width: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
-  border: 0 !important;
+  border-width: 0 !important;
   opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
   overflow: hidden !important;
   transform: none !important;
-  transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.25s ease,
-              visibility 0.65s;
+  transition: flex 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.42s;
 }
 
 /* Active (expanded) state -> OCCUPIES 100% OF AVAILABLE CONTAINER WIDTH */
@@ -411,10 +425,15 @@
   max-width: 100% !important;
   opacity: 1 !important;
   visibility: visible !important;
+  pointer-events: auto;
   border-color: var(--panel-accent, #EF4444);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85),
               0 0 35px rgba(239, 68, 68, 0.2);
   cursor: pointer;
+  transition: flex 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease,
+              box-shadow 0.4s ease;
 }
 
 /* Background Layers */
@@ -485,18 +504,28 @@
   flex-direction: column;
   align-items: flex-start;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+              transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
 }
 
 .hwi-panel--active .hwi-panel__tedx-header {
   opacity: 0 !important;
-  transform: translateY(-12px);
+  transform: translateY(-8px) !important;
   pointer-events: none;
+  transition: opacity 0.15s ease 0s, transform 0.15s ease 0s !important;
 }
 
-.hwi-panel--idle .hwi-panel__tedx-header {
+.hwi-gallery-track:not(.is-expanded) .hwi-panel--idle .hwi-panel__tedx-header {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hwi-gallery-track.is-expanded .hwi-panel--idle .hwi-panel__tedx-header {
+  opacity: 0 !important;
+  transform: translateY(-6px) !important;
+  transition: opacity 0.12s ease 0s !important;
 }
 
 .hwi-panel__tedx-tag {
@@ -543,18 +572,27 @@
   text-overflow: ellipsis;
   pointer-events: none;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+              transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
 }
 
 .hwi-panel--active .hwi-panel__tedx-vertical {
   opacity: 0 !important;
-  transform: rotate(180deg) translateX(30px);
+  transform: rotate(180deg) translateX(24px) !important;
   pointer-events: none;
+  transition: opacity 0.15s ease 0s, transform 0.15s ease 0s !important;
 }
 
-.hwi-panel--idle .hwi-panel__tedx-vertical {
+.hwi-gallery-track:not(.is-expanded) .hwi-panel--idle .hwi-panel__tedx-vertical {
   opacity: 1;
   transform: rotate(180deg) translateX(0);
+}
+
+.hwi-gallery-track.is-expanded .hwi-panel--idle .hwi-panel__tedx-vertical {
+  opacity: 0 !important;
+  transform: rotate(180deg) translateX(16px) !important;
+  transition: opacity 0.12s ease 0s !important;
 }
 
 .hwi-panel__tedx-vertical span {
@@ -575,18 +613,28 @@
   flex-direction: column;
   gap: 2px;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+              transform 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
 }
 
 .hwi-panel--active .hwi-panel__tedx-footer {
   opacity: 0 !important;
-  transform: translateY(12px);
+  transform: translateY(8px) !important;
   pointer-events: none;
+  transition: opacity 0.15s ease 0s, transform 0.15s ease 0s !important;
 }
 
-.hwi-panel--idle .hwi-panel__tedx-footer {
+.hwi-gallery-track:not(.is-expanded) .hwi-panel--idle .hwi-panel__tedx-footer {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hwi-gallery-track.is-expanded .hwi-panel--idle .hwi-panel__tedx-footer {
+  opacity: 0 !important;
+  transform: translateY(6px) !important;
+  transition: opacity 0.12s ease 0s !important;
 }
 
 .tedx-footer-date {
@@ -615,10 +663,10 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(14px);
-  transition: opacity 0.32s ease 0.28s,
-              transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.28s,
-              visibility 0.32s ease 0.28s;
+  transform: translateY(12px);
+  transition: opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1) 0s,
+              transform 0.18s cubic-bezier(0.22, 1, 0.36, 1) 0s,
+              visibility 0.18s;
 }
 
 .hwi-panel--active .hwi-panel__expanded-content {
@@ -626,13 +674,57 @@
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+              transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0.16s,
+              visibility 0.34s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
 }
 
 .hwi-panel--idle .hwi-panel__expanded-content {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-  transition: opacity 0.15s ease 0s, visibility 0.15s ease 0s;
+  transform: translateY(8px) !important;
+  transition: opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1) 0s,
+              transform 0.18s cubic-bezier(0.22, 1, 0.36, 1) 0s,
+              visibility 0.18s !important;
+}
+
+/* Sequenced Child Elements inside Expanded Content */
+.expanded-top-strip,
+.expanded-main-hero,
+.expanded-bottom-actions {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.16s ease 0s, transform 0.16s ease 0s;
+}
+
+.hwi-panel--active .expanded-top-strip {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1) 0.18s,
+              transform 0.32s cubic-bezier(0.22, 1, 0.36, 1) 0.18s;
+}
+
+.hwi-panel--active .expanded-main-hero {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0.24s,
+              transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0.24s;
+}
+
+.hwi-panel--active .expanded-bottom-actions {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.3s,
+              transform 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.hwi-panel--idle .expanded-top-strip,
+.hwi-panel--idle .expanded-main-hero,
+.hwi-panel--idle .expanded-bottom-actions {
+  opacity: 0 !important;
+  transform: translateY(8px) !important;
+  transition: opacity 0.16s ease 0s, transform 0.16s ease 0s !important;
 }
 
 /* Top Strip in Expanded Panel */
@@ -2388,8 +2480,15 @@
     animation: none !important;
   }
 
+  .hwi-gallery-track,
   .hwi-panel,
   .hwi-panel__expanded-content,
+  .expanded-top-strip,
+  .expanded-main-hero,
+  .expanded-bottom-actions,
+  .hwi-panel__tedx-header,
+  .hwi-panel__tedx-vertical,
+  .hwi-panel__tedx-footer,
   .hwi-panel__bg-photo,
   .docu-photo-card,
   .chronicles-award-card,
@@ -2405,4 +2504,38 @@
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+
+/* =========================================================================
+   EVENTS ENTRANCE COMPLETE: SEAMLESS STEADY STATE
+   ========================================================================= */
+.chronicles-page.events-entered .chronicles-hero__kicker,
+.chronicles-page.events-entered .chronicles-hero__title .hero-word,
+.chronicles-page.events-entered .chronicles-hero__desc,
+.chronicles-page.events-entered .chronicles-hero__meta,
+.chronicles-page.events-entered .hwi-gallery-bar {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+.chronicles-page.events-entered .hwi-gallery-track:not(.is-expanded) .hwi-panel--idle {
+  opacity: 0.95;
+  transform: none;
+  will-change: auto;
+  transition: flex 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              min-width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
+}
+
+.chronicles-page.events-entered .hwi-gallery-track:not(.is-expanded) .hwi-panel--idle:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
 }

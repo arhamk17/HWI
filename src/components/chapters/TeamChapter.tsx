@@ -8,9 +8,6 @@ import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
 import {
   Tenure2025Placeholder,
   Tenure2026Placeholder,
-  TeacherCoordinatorPlaceholder,
-  PrincipalPlaceholder,
-  FacultyMentorsPlaceholder,
 } from './TeamPlaceholders';
 import './TeamChapter.css';
 
@@ -23,7 +20,7 @@ export interface LeadershipCardData {
   id: string;
   number: string;
   title: string;
-  year?: string;
+  year: string;
   description: string;
   badge: string;
   tag: string;
@@ -54,36 +51,6 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     image: '', // Insert image path here when available
     PlaceholderComponent: Tenure2026Placeholder,
   },
-  {
-    id: 'teacher-coordinator',
-    number: '03',
-    title: 'TEACHER COORDINATOR',
-    description: 'Faculty Coordination & Chapter Mentorship',
-    badge: 'ACADEMIC ADVISOR',
-    tag: 'CHAPTER MENTOR',
-    image: '', // Insert image path here when available
-    PlaceholderComponent: TeacherCoordinatorPlaceholder,
-  },
-  {
-    id: 'principal',
-    number: '04',
-    title: 'PRINCIPAL',
-    description: 'Institutional Patron • BVUDET-NM Leadership',
-    badge: 'INSTITUTIONAL HEAD',
-    tag: 'CAMPUS PATRON',
-    image: '', // Insert image path here when available
-    PlaceholderComponent: PrincipalPlaceholder,
-  },
-  {
-    id: 'faculty-mentors',
-    number: '05',
-    title: 'FACULTY & MENTORS',
-    description: 'Faculty & Mentorship • Advisory Council',
-    badge: 'ADVISORY BOARD',
-    tag: 'INDUSTRY ADVISORS',
-    image: '', // Insert image path here when available
-    PlaceholderComponent: FacultyMentorsPlaceholder,
-  },
 ];
 
 export function TeamChapter() {
@@ -105,16 +72,16 @@ export function TeamChapter() {
       const rawP = -rect.top / totalScrollable;
       const p = Math.max(0, Math.min(1, rawP));
 
-      // 5 cards -> 4 intervals
-      const cardProgress = p * 4;
-      const activeIdx = Math.min(4, Math.max(0, Math.round(cardProgress)));
+      // 2 cards -> 1 continuous interval from card 0 to card 1
+      const cardProgress = p;
+      const activeIdx = Math.min(1, Math.max(0, Math.round(cardProgress)));
 
       // Notify global background team store for synchronized background crossfades
       teamStore.update(activeIdx, p);
 
       // Update counter
       if (counterRef.current) {
-        counterRef.current.textContent = `0${activeIdx + 1} / 05`;
+        counterRef.current.textContent = `0${activeIdx + 1} / 02`;
       }
 
       // Update indicator dots
@@ -209,7 +176,7 @@ export function TeamChapter() {
                   {/* Image Hero Section of Card */}
                   <div className="team-card__image-wrap team-member-face">
                     {card.image ? (
-                      <img src={card.image} alt={card.title} className="team-card__image" />
+                      <img src={card.image} alt={card.title || card.description} className="team-card__image" />
                     ) : (
                       <Placeholder className="team-card__image" />
                     )}
@@ -218,8 +185,8 @@ export function TeamChapter() {
                     <div className="team-card__image-overlay" />
 
                     {/* Number and Badge Header Overlay */}
-                    <div className="team-card__badges-overlay">
-                      <span className="team-card__number">{card.number}</span>
+                    <div className={`team-card__badges-overlay ${!card.number ? 'team-card__badges-overlay--no-number' : ''}`}>
+                      {card.number && <span className="team-card__number">{card.number}</span>}
                       <KokonutBadge variant="accent" dot>
                         {card.badge}
                       </KokonutBadge>
@@ -229,9 +196,11 @@ export function TeamChapter() {
                   {/* Content Details Section of Card */}
                   <div className="team-card__content">
                     <div className="team-card__title-row">
-                      <h3 className="team-card__title">{card.title}</h3>
+                      {card.title && <h3 className="team-card__title">{card.title}</h3>}
                       {card.year && <span className="team-card__year">{card.year}</span>}
-                      <p className="team-card__desc">{card.description}</p>
+                      <p className={`team-card__desc ${!card.title ? 'team-card__desc--standalone' : ''}`}>
+                        {card.description}
+                      </p>
                     </div>
 
                     <div className="team-card__bottom">

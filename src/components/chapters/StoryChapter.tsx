@@ -1,42 +1,47 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { indiaStore } from '@/lib/indiaStore';
+import { scrollBus } from '@/lib/scrollBus';
 import './StoryChapter.css';
 
 export function StoryChapter() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [morphP, setMorphP] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const unsub = indiaStore.subscribe(() => {
-      setMorphP(indiaStore.morphProgress);
+    const unsub = scrollBus.subscribe(() => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const scrollRunway = rect.height - window.innerHeight;
+      if (scrollRunway <= 0) return;
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollRunway));
+      setScrollProgress(progress);
     });
-    return () => unsub();
+
+    return () => {
+      unsub();
+    };
   }, []);
 
-  // Opacity calculations for smooth narrative crossfade during scroll
-  // Phase 1 (Global vision): 100% visible at start, fades out between 0.18 and 0.42
-  const globalOpacity = morphP <= 0.18 ? 1.0 : Math.max(0, 1.0 - (morphP - 0.18) / 0.24);
-  // Phase 2 (HWI Chapter Formation): Fades in as globe morphs into HWI lettering
-  const hwiOpacity = morphP <= 0.35 ? 0.0 : Math.min(1.0, (morphP - 0.35) / 0.25);
+  // Narrative copy gently fades out between 0.10 and 0.24, leaving center stage exclusively to HWI
+  const narrativeOpacity = scrollProgress < 0.10 ? 1.0 : Math.max(0, 1.0 - (scrollProgress - 0.10) / 0.14);
 
   return (
     <section className="story-chapter" ref={sectionRef} id="about">
       <div className="story-chapter__sticky">
         <div className="story-chapter__viewport">
-          {/* Phase 1: Global Vision Narrative (Visible when globe is rotating in 3D) */}
+          {/* Chapter Narrative (Clean Editorial presentation) */}
           <div
             className="story-chapter__narrative-global"
             style={{
-              opacity: globalOpacity,
-              transform: `translateY(${(1 - globalOpacity) * -20}px)`,
-              pointerEvents: globalOpacity > 0.2 ? 'auto' : 'none',
+              opacity: narrativeOpacity,
+              transform: `translateY(${(1 - narrativeOpacity) * -16}px)`,
+              pointerEvents: narrativeOpacity > 0.2 ? 'auto' : 'none',
             }}
           >
             <div className="story-chapter__eyebrow">
               <span className="story-chapter__pulse-dot" />
-              <span>CHAPTER 02 // GLOBAL VISION</span>
+              <span>CHAPTER 02 // ABOUT THE CHAPTER</span>
             </div>
 
             <h2 className="story-chapter__title">
@@ -52,8 +57,9 @@ export function StoryChapter() {
             <div className="story-chapter__stats-row">
               {[
                 { num: '200+', label: 'Active Members' },
-                { num: '6+', label: 'Major Events' },
-                { num: '24h', label: 'Hackathons' },
+                { num: '8', label: 'Event Editions' },
+                { num: '41', label: 'Core Contributors' },
+                { num: '100%', label: 'Student Led' },
               ].map((stat) => (
                 <div key={stat.label} className="story-chapter__stat-item">
                   <span className="story-chapter__stat-num">{stat.num}</span>
@@ -61,27 +67,6 @@ export function StoryChapter() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Phase 2: HWI Particle Formation Header (Clean framing leaving center completely open) */}
-          <div
-            className="story-chapter__narrative-hwi"
-            style={{
-              opacity: hwiOpacity,
-              transform: `translateY(${(1 - hwiOpacity) * 20}px)`,
-              pointerEvents: hwiOpacity > 0.2 ? 'auto' : 'none',
-            }}
-          >
-            <div className="story-chapter__eyebrow">
-              <span className="story-chapter__pulse-dot" />
-              <span>CHAPTER 02 // HACKWITHINDIA</span>
-            </div>
-            <h2 className="story-chapter__hwi-title">
-              Empowering India&apos;s Builders &amp; Innovators
-            </h2>
-            <p className="story-chapter__hwi-desc">
-              Uniting student engineers and builders under one banner to push the frontiers of technology and open innovation.
-            </p>
           </div>
         </div>
       </div>

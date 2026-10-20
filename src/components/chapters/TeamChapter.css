@@ -3,7 +3,7 @@
 .team-showcase {
   position: relative;
   width: 100%;
-  height: 320vh; /* Controlled scroll length for 5 cards */
+  height: 200vh; /* Controlled scroll length for 2 cards */
   z-index: 10;
   contain: paint;
 }
@@ -143,6 +143,10 @@
   z-index: 3;
 }
 
+.team-card__badges-overlay--no-number {
+  justify-content: flex-end;
+}
+
 .team-card__number {
   font-family: var(--font-satoshi), sans-serif;
   font-weight: 900;
@@ -193,6 +197,17 @@
   color: var(--text-secondary);
   line-height: 1.5;
   margin-top: var(--space-8);
+  max-width: 520px;
+}
+
+.team-card__desc--standalone {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-top: 0;
   max-width: 520px;
 }
 
@@ -247,7 +262,7 @@
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .team-showcase {
-    height: 300vh;
+    height: 180vh;
   }
   
   .team-card {

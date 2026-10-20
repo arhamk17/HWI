@@ -8,12 +8,13 @@ import { globeStore } from '@/lib/globeStore';
 import { indiaStore } from '@/lib/indiaStore';
 import { whatWeDoStore } from '@/lib/whatWeDoStore';
 import { easterEggStore } from '@/lib/easterEggStore';
-import { eventsParticleStore } from '@/lib/eventsParticleStore';
+import { HWI_INDIA_LOCATIONS, HWI_NETWORK_LINKS } from '@/data/indiaLocations';
 import {
   ParticleSOA,
   createParticleSOA,
   initInitialStates,
-  populateHWIState,
+  populateHwiTextState,
+  populateIndiaState,
   populateWhiteSectionState,
   populateBonsaiTreeState,
   populateTeamState,
@@ -25,9 +26,9 @@ import './GlobalBackground.css';
 // Rich particle density with adaptive scaling
 // =============================================
 const QUALITY_CONFIG = {
-  high: { particleCount: 2000, glow: true },
-  medium: { particleCount: 1300, glow: false },
-  low: { particleCount: 700, glow: false },
+  high: { particleCount: 3664, glow: true },
+  medium: { particleCount: 2600, glow: false },
+  low: { particleCount: 1400, glow: false },
 };
 
 function detectQuality(): keyof typeof QUALITY_CONFIG {
@@ -44,7 +45,6 @@ export function GlobalBackground() {
   const baseLayerRef = useRef<HTMLDivElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const hwiLayerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const teamContainerRef = useRef<HTMLDivElement>(null);
   const teamLayersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -56,7 +56,7 @@ export function GlobalBackground() {
     pathnameRef.current = pathname;
   }, [pathname]);
 
-  // Ensure instant seamless autoplay of Sukuna background video on mount
+  // Ensure instant seamless autoplay of background video on mount
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play().catch(() => {});
@@ -96,7 +96,8 @@ export function GlobalBackground() {
         ctx.scale(dpr, dpr);
         recalcSectionOffsets();
         if (targetsReady) {
-          populateHWIState(soa);
+          populateHwiTextState(soa, width, height);
+          populateIndiaState(soa);
           populateWhiteSectionState(soa, width, height);
           populateBonsaiTreeState(soa, width, height);
           populateTeamState(soa, width, height);
@@ -115,7 +116,8 @@ export function GlobalBackground() {
     // Progressive target state generation deferred to idle time
     let targetsReady = false;
     const initDeferredTargets = () => {
-      populateHWIState(soa);
+      populateHwiTextState(soa, width, height);
+      populateIndiaState(soa);
       populateWhiteSectionState(soa, width, height);
       populateBonsaiTreeState(soa, width, height);
       populateTeamState(soa, width, height);
@@ -215,12 +217,6 @@ export function GlobalBackground() {
     let isEasterEggActive = false;
     const unsubscribeEasterEgg = easterEggStore.subscribe((active) => {
       isEasterEggActive = active;
-    });
-
-    // Particle Chronicles subscription for /events page
-    let eventsState = eventsParticleStore.getState();
-    const unsubscribeEvents = eventsParticleStore.subscribe((state) => {
-      eventsState = state;
     });
 
     // Simulation states
@@ -332,13 +328,18 @@ export function GlobalBackground() {
       // ------------------------------------------------------
       let targetOfferBright = 0;
       let teamAlpha = 0;
-      let sceneProgress = 0; // 0 = Hero, 1 = Celestial Globe / HWI, 2 = White section, 3 = Black section Bonsai Tree, 4 = Team
-      let hwiMorph = 0; // 0 = 3D Globe, 1 = HWI lettering fully formed
-      let sectionParticleAlpha = 1.0; // Scoped particle visibility: 0 in Hero
+      let sceneProgress = 0; // 0 = Hero, 1 = Chapter 02 (HWI), 2 = White section, 3 = Black section Bonsai Tree, 4 = Team
+
+      const { aboutTop, aboutHeight, offerTop, offerHeight, impactTop, impactHeight, teamTop, teamHeight } = cachedOffsets;
+
+      // Chapter 02 Runway & Monotonic Checkpoints (Monotonically strictly increasing)
+      const aboutRunway = Math.max(vh * 1.0, aboutHeight - vh);
+      const convStartY = aboutTop * 0.35;
+      const convEndY = aboutTop + aboutRunway * 0.36;
+      const holdEndY = aboutTop + aboutRunway * 0.72;
+      const dispEndY = offerTop;
 
       if (currentPath === '/') {
-        const { aboutTop, aboutHeight, offerTop, offerHeight, impactTop, impactHeight, teamTop, teamHeight } = cachedOffsets;
-
         // Brightness window over What We Offer section
         const offerEnter = offerTop - vh * 0.4;
         const offerStayEnd = Math.max(offerTop, impactTop - vh * 0.4);
@@ -356,62 +357,21 @@ export function GlobalBackground() {
           targetOfferBright = 0;
         }
 
-        // Chapter 02 (StoryChapter) runway for smooth Globe -> HWI direct transformation
-        const aboutScrollRunway = Math.max(vh * 0.8, aboutHeight - vh);
-        const aboutExit = aboutTop + aboutScrollRunway;
-
         // Continuous Scene Progress across document:
-        if (scrollY < vh * 0.75) {
-          // Hero -> Zero particles in Hero
-          sceneProgress = Math.max(0, scrollY / (vh * 0.75)); // 0.0 -> 1.0
-          hwiMorph = 0.0;
-        } else if (scrollY < aboutTop) {
-          // Approaching About section: 100% Celestial Globe in gentle rotation
+        if (scrollY < offerTop) {
           sceneProgress = 1.0;
-          hwiMorph = 0.0;
-        } else if (scrollY <= aboutExit) {
-          // Inside Chapter 02: ONE continuous particle buffer morphs directly from Globe to HWI!
-          sceneProgress = 1.0;
-          hwiMorph = Math.max(0, Math.min(1.0, (scrollY - aboutTop) / aboutScrollRunway));
-        } else if (scrollY < offerTop + vh * 0.1) {
-          // Transition into White Section: HWI particles disperse into White section ambient field
-          const span = Math.max(1, (offerTop + vh * 0.1) - aboutExit);
-          const rel = Math.max(0, Math.min(1.0, (scrollY - aboutExit) / span));
-          sceneProgress = 1.0 + rel * 1.0; // 1.0 -> 2.0
-          hwiMorph = 1.0;
         } else if (scrollY < impactTop - vh * 0.3) {
-          // What We Offer (White Section): Ambient kinetic field
           sceneProgress = 2.0;
-          hwiMorph = 0.0;
         } else if (scrollY < impactTop + vh * 0.1) {
-          // Transition into Black Section: Morph directly into the Blossom / Bonsai Tree
           const span = Math.max(1, (impactTop + vh * 0.1) - (impactTop - vh * 0.3));
           const rel = Math.max(0, Math.min(1.0, (scrollY - (impactTop - vh * 0.3)) / span));
-          sceneProgress = 2.0 + rel * 1.0; // 2.0 -> 3.0
-          hwiMorph = 0.0;
+          sceneProgress = 2.0 + rel;
         } else if (scrollY < teamTop - vh * 0.2) {
-          // Impact Section (BLACK SECTION): 100% STABLE FULLY FORMED BONSAI TREE!
           sceneProgress = 3.0;
-          hwiMorph = 0.0;
         } else {
-          // Transition into Team Section
           const teamSpan = Math.max(1, teamHeight);
           const teamRel = Math.max(0, Math.min(1.0, (scrollY - (teamTop - vh * 0.2)) / teamSpan));
-          sceneProgress = 3.0 + teamRel * 1.0; // 3.0 -> 4.0
-          hwiMorph = 0.0;
-        }
-
-        // Section Scoping for Particle Alpha:
-        // Disable distracting particles in Hero section to preserve clean video background & typography
-        if (scrollY < aboutTop * 0.85) {
-          // Hero section: completely remove floating particles
-          sectionParticleAlpha = 0.0;
-        } else if (scrollY < aboutTop) {
-          // Approaching About section: smoothly introduce the 3D celestial globe
-          sectionParticleAlpha = Math.min(1.0, (scrollY - aboutTop * 0.85) / (aboutTop * 0.15));
-        } else {
-          // Full particle presence across all other sections
-          sectionParticleAlpha = 1.0;
+          sceneProgress = 3.0 + teamRel;
         }
 
         // Team atmosphere opacity window
@@ -424,51 +384,21 @@ export function GlobalBackground() {
       } else if (currentPath === '/team') {
         sceneProgress = 3.5;
         teamAlpha = 1.0;
-        hwiMorph = 0.0;
-        sectionParticleAlpha = 1.0;
       } else if (currentPath === '/events') {
-        sceneProgress = 3.0; // Show the elegant bonsai in background for events as well!
+        sceneProgress = 3.0;
         teamAlpha = 0;
-        hwiMorph = 0.0;
-        sectionParticleAlpha = 1.0;
       } else if (currentPath === '/about') {
         sceneProgress = 0.5;
         teamAlpha = 0;
-        hwiMorph = 0.0;
-        sectionParticleAlpha = 0.0;
       } else {
         sceneProgress = 0.5;
         teamAlpha = 0;
-        hwiMorph = 0.0;
-        sectionParticleAlpha = 1.0;
       }
-
-      // Synchronize morph progress with subscribers (active ONLY on home page '/')
-      indiaStore.setMorphProgress(currentPath === '/' ? hwiMorph : 0);
 
       currentOfferBright += (targetOfferBright - currentOfferBright) * 0.08;
 
       if (teamContainerRef.current) {
         teamContainerRef.current.style.opacity = teamAlpha.toFixed(3);
-      }
-
-      // ------------------------------------------------------
-      // C. PERMANENT HWI WATERMARK (ALWAYS VISIBLE AT ALL TIMES)
-      // Never 0 opacity. Reacts subtly to brightness and scroll.
-      // ------------------------------------------------------
-      if (hwiLayerRef.current) {
-        let hwiOpacity = 0.12 - currentOfferBright * 0.045;
-        // When particles assemble into HWI lettering, seamlessly fade the static SVG watermark
-        // so the particles themselves compose and define the HWI lettering without duplicate layers
-        if (currentPath === '/' && sceneProgress <= 1.3 && hwiMorph > 0.25) {
-          const fadeP = Math.min(1.0, (hwiMorph - 0.25) / 0.55);
-          hwiOpacity *= (1.0 - fadeP * 0.88);
-        }
-        const hwiParallax = (scrollY * 0.02) % 60 - 30;
-        const hwiBreath = 1.0 + Math.sin(time * 0.35) * 0.01;
-
-        hwiLayerRef.current.style.opacity = Math.max(0.015, hwiOpacity).toFixed(3);
-        hwiLayerRef.current.style.transform = `translate3d(0, ${hwiParallax.toFixed(1)}px, 0) scale(${hwiBreath.toFixed(3)})`;
       }
 
       // ------------------------------------------------------
@@ -485,31 +415,13 @@ export function GlobalBackground() {
       const docStyle = document.documentElement.style;
       const textLum = Math.round(255 - currentOfferBright * 238);
       const textSecLum = Math.round(203 - currentOfferBright * 128);
-      const textTerLum = Math.round(148 - currentOfferBright * 60);
 
       docStyle.setProperty('--surface-primary', `rgb(${Math.round(bgR)},${Math.round(bgG)},${Math.round(bgB)})`);
       docStyle.setProperty('--text-primary', `rgb(${textLum},${textLum},${textLum})`);
       docStyle.setProperty('--text-secondary', `rgb(${textSecLum},${textSecLum},${textSecLum})`);
-      docStyle.setProperty('--text-tertiary', `rgb(${textTerLum},${textTerLum},${textTerLum})`);
       docStyle.setProperty('--border-default', currentOfferBright > 0.3 ? `rgba(0, 0, 0, ${0.08 + currentOfferBright * 0.08})` : `rgba(239, 68, 68, 0.15)`);
       docStyle.setProperty('--navbar-text', currentOfferBright > 0.4 ? '#111111' : '#FFFFFF');
       docStyle.setProperty('--navbar-bg', currentOfferBright > 0.4 ? 'rgba(245, 245, 247, 0.85)' : 'rgba(7, 7, 9, 0.85)');
-      docStyle.setProperty('--navbar-pill-bg', currentOfferBright > 0.4 ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)');
-      docStyle.setProperty('--navbar-pill-border', currentOfferBright > 0.4 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.08)');
-
-      // Adaptive HWI watermark SVG colors
-      if (currentOfferBright > 0.05) {
-        const dotA = (0.7 * (1 - currentOfferBright) + 0.4 * currentOfferBright).toFixed(2);
-        const strokeA = (0.25 * (1 - currentOfferBright) + 0.22 * currentOfferBright).toFixed(2);
-        const colVal = currentOfferBright > 0.4 ? '15, 23, 42' : '255, 255, 255';
-        docStyle.setProperty('--hwi-dot-fill', `rgba(${colVal}, ${dotA})`);
-        docStyle.setProperty('--hwi-stroke', `rgba(${colVal}, ${strokeA})`);
-        docStyle.setProperty('--hwi-shadow', currentOfferBright > 0.4 ? 'rgba(0,0,0,0.06)' : 'rgba(239, 68, 68, 0.12)');
-      } else {
-        docStyle.setProperty('--hwi-dot-fill', 'rgba(255, 255, 255, 0.7)');
-        docStyle.setProperty('--hwi-stroke', 'rgba(255, 255, 255, 0.25)');
-        docStyle.setProperty('--hwi-shadow', 'rgba(239, 68, 68, 0.12)');
-      }
 
       const isWhiteBg = currentOfferBright > 0.45;
 
@@ -517,44 +429,41 @@ export function GlobalBackground() {
       // E. RENDER PROCEDURAL PARTICLES
       // ------------------------------------------------------
       ctx.clearRect(0, 0, width, height);
-
-      // Scoped particle rendering: completely skip in Hero and About Phase 1 narrative
-      if (sectionParticleAlpha <= 0.001) {
-        rafId = requestAnimationFrame(render);
-        return;
-      }
-
       ctx.globalCompositeOperation = 'source-over';
 
-      // 3D Celestial Globe / Ambient Constellation
-      const p = currentPath === '/' ? hwiMorph : 0;
-      const rotDamp = 1 - Math.min(1, p * 1.6);
+      // 3D Celestial Globe parameters
+      const isMobile = width < 768;
+
+      // Smooth rotation damping: 1.0 at Hero, smoothly decelerates to 0 as HWI converges
+      let rotDamp = 1.0;
+      if (currentPath === '/') {
+        if (scrollY <= convStartY) {
+          rotDamp = 1.0;
+        } else if (scrollY <= convEndY) {
+          const t = (scrollY - convStartY) / (convEndY - convStartY);
+          const ease = t < 0.5 ? 16 * Math.pow(t, 5) : 1 - Math.pow(-2 * t + 2, 5) / 2;
+          rotDamp = Math.max(0, 1 - ease);
+        } else {
+          rotDamp = 0.0;
+        }
+      }
+
       const rotSpeed = prefersReducedMotion ? 0 : 0.0025 * rotDamp;
       globeStore.targetRotY += rotSpeed;
       globeStore.stepInertia();
 
-      const sphereRadius = Math.min(width, height) * 0.28;
+      const sphereRadius = isMobile
+        ? Math.min(width * 0.35, 138)
+        : Math.min(width * 0.20, height * 0.23);
       const rotY = globeStore.rotY * rotDamp;
       const rotX = globeStore.rotX * rotDamp;
       const cosY = Math.cos(rotY);
       const sinY = Math.sin(rotY);
       const cosX = Math.cos(rotX);
       const sinX = Math.sin(rotX);
-      const sphereCY = centerY + 10;
-
-      // HWI background lettering screen dimensions (matches .gbg__hwi-svg)
-      let svgW = Math.min(width * 0.88, 1150);
-      let svgH = svgW * (340 / 900);
-      if (svgH > height * 0.56) {
-        svgH = height * 0.56;
-        svgW = svgH * (900 / 340);
-      }
-      const hwiParallax = (scrollY * 0.02) % 60 - 30;
-      const hwiHalfW = svgW * 0.5;
-      const hwiHalfH = svgH * 0.5;
+      const sphereCY = centerY - (isMobile ? Math.min(height * 0.16, 130) : 110);
 
       // Bonsai Tree parameters (Black section)
-      // Sits slightly right of center to frame foreground content perfectly
       const treeCX = centerX + Math.min(width, height) * 0.14;
       const treeCY = centerY + 15;
       const treeSway = prefersReducedMotion ? 0 : Math.sin(time * 0.95) * 2.8;
@@ -576,107 +485,147 @@ export function GlobalBackground() {
         const y2 = y1 * cosX - z1 * sinX;
         const z2 = y1 * sinX + z1 * cosX;
 
+        const isShell = soa.s1density[i] > 0.8;
+
         const sx = centerX + x2 * sphereRadius;
         const sy = sphereCY - y2 * sphereRadius;
         const sz = z2;
 
-        const hx = centerX + soa.sHwiX[i] * hwiHalfW;
-        const hy = centerY + hwiParallax + soa.sHwiY[i] * hwiHalfH;
+        const targetX = soa.sHwiX[i];
+        const targetY = soa.sHwiY[i];
 
         // ----------------------------------------------------
-        // SCENE 0 -> 1: Hero Cosmic Dust -> 3D Celestial Globe -> Direct HWI Morph
+        // SCENE 0 & 1: Hero (Globe) -> HWI Convergence -> Hold -> Dispersal
         // ----------------------------------------------------
-        if (sceneProgress <= 1.0) {
-          const t = Math.max(0, Math.min(1, sceneProgress));
+        if (currentPath === '/' && scrollY < dispEndY) {
+          if (scrollY <= convStartY) {
+            // Hero: Refined 3D Rotating Celestial Particle Globe
+            x = sx;
+            y = sy;
+            soa.isRect[i] = 0;
 
-          if (t < 1.0) {
-            // Hero Dust -> 3D Celestial Globe (active only when sectionParticleAlpha > 0)
-            const p0x = soa.s0x[i];
-            const p0y = soa.s0y[i] + drift;
+            if (isShell) {
+              const isFront = z2 >= 0;
+              const normZ = (z2 + 1.0) * 0.5; // 0.0 (far back) -> 1.0 (nearest front)
+              const r2D = Math.sqrt(x2 * x2 + y2 * y2);
+              const isRim = r2D > 0.82 && Math.abs(z2) < 0.35;
 
-            x = p0x + (sx - p0x) * t;
-            y = p0y + (sy - p0y) * t;
+              if (isFront) {
+                // Front hemisphere facing camera: luminous crimson & starlight
+                const depthAlpha = 0.28 + z2 * 0.52; // 0.28 at equator -> 0.80 at pole
+                opacity = isRim ? Math.min(0.88, depthAlpha + 0.15) : depthAlpha;
+                size = 1.3 + normZ * 1.3; // 1.95px -> 2.6px
 
-            const sphereAlpha = (sz + 1.2) / 2.2 * soa.s1density[i];
-            const heroAlpha = 0.45;
-            opacity = heroAlpha + (sphereAlpha - heroAlpha) * t;
-
-            cr = Math.round(210 + t * 29);
-            cg = Math.round(215 - t * 147);
-            cb = Math.round(225 - t * 157);
-          } else {
-            // At sceneProgress = 1.0 (Chapter 02):
-            if (p === 0) {
-              x = sx;
-              y = sy;
-              opacity = (sz + 1.2) / 2.2 * soa.s1density[i];
-              cr = 239;
-              cg = 68;
-              cb = 68;
+                if (i % 11 === 0) {
+                  // Pure starlight diamond
+                  cr = 255; cg = 255; cb = 255;
+                } else if (i % 5 === 0) {
+                  // Bright crimson highlight
+                  cr = 255; cg = 75; cb = 85;
+                } else {
+                  // Deep radiant ruby
+                  cr = 225; cg = 38; cb = 48;
+                }
+              } else {
+                // Back hemisphere (seen through celestial volume): soft, gentle depth cueing
+                const backDepth = z2 + 1.0; // 0.0 at far back pole -> 1.0 at equator
+                opacity = isRim ? 0.25 : 0.05 + backDepth * 0.16;
+                size = 0.8 + normZ * 0.8; // 0.8px -> 1.2px
+                cr = 160; cg = 24; cb = 30;
+              }
             } else {
-              const easedP = p * p * (3 - 2 * p); // smooth easeInOut cubic
-
-              // Globe flattening and compression
-              const zFlatten = Math.max(0, 1 - Math.min(1, p / 0.35) * 0.95);
-              const yFlatten = 1 - Math.min(1, p / 0.35) * 0.12;
-
-              // Curving arc during transit
-              const arcFactor = Math.sin(p * Math.PI);
-              const arcX = arcFactor * (soa.stagger[i] - 0.25) * 45;
-              const arcY = arcFactor * (soa.sHwiDensity[i] - 0.5) * 35;
-
-              const curGlobeX = centerX + x2 * sphereRadius;
-              const curGlobeY = sphereCY - y2 * sphereRadius * yFlatten;
-
-              // Direct interpolation from Globe to HWI lettering
-              x = curGlobeX * (1 - easedP) + hx * easedP + arcX;
-              y = curGlobeY * (1 - easedP) + hy * easedP + arcY;
-
-              const isHwiContour = soa.sHwiIsBorder[i] === 1;
-              const hwiAlpha = isHwiContour
-                ? 0.92 + Math.sin(time * 2.2 + i) * 0.08
-                : 0.38 * soa.sHwiDensity[i];
-              const hwiSize = isHwiContour ? 2.4 : 1.6;
-              const hwiR = isHwiContour ? (i % 3 === 0 ? 255 : 239) : 235;
-              const hwiG = isHwiContour ? (i % 3 === 0 ? 255 : 68) : 225;
-              const hwiB = isHwiContour ? (i % 3 === 0 ? 255 : 68) : 230;
-
-              const sphereAlpha = (sz * zFlatten + 1.2) / 2.2 * soa.s1density[i];
-              opacity = sphereAlpha * (1 - easedP) + hwiAlpha * easedP;
-              size = soa.size[i] * (1 - easedP) + hwiSize * easedP;
-              cr = Math.round(239 * (1 - easedP) + hwiR * easedP);
-              cg = Math.round(68 * (1 - easedP) + hwiG * easedP);
-              cb = Math.round(68 * (1 - easedP) + hwiB * easedP);
+              // Outer ambient corona & cosmic dust
+              opacity = 0.04 + (Math.sin(i * 3.7 + time * 0.8) * 0.5 + 0.5) * 0.12;
+              size = 0.9 + (i % 3) * 0.3;
+              if (i % 7 === 0) {
+                cr = 255; cg = 255; cb = 255;
+              } else {
+                cr = 200; cg = 32; cb = 42;
+              }
             }
+          } else if (scrollY <= convEndY) {
+            // Stage 1: Fluid, continuous quintic convergence into HWI wordmark
+            const t = (scrollY - convStartY) / (convEndY - convStartY);
+            const ease = t < 0.5 ? 16 * Math.pow(t, 5) : 1 - Math.pow(-2 * t + 2, 5) / 2;
+
+            x = sx * (1 - ease) + targetX * ease;
+            y = sy * (1 - ease) + targetY * ease;
+
+            const globeAlpha = isShell ? Math.max(0.18, ((sz + 1.2) / 2.2) * 0.85) : 0.12;
+            opacity = globeAlpha * (1 - ease) + 1.0 * ease;
+
+            const targetSize = isMobile ? 3.5 : 4.2;
+            const currentGlobeSize = isShell ? (1.3 + (sz + 1.0) * 0.65) : 1.1;
+            size = currentGlobeSize * (1 - ease) + targetSize * ease;
+
+            const baseR = isShell ? (i % 11 === 0 ? 255 : (sz >= 0 ? 225 : 160)) : 200;
+            const baseG = isShell ? (i % 11 === 0 ? 255 : (sz >= 0 ? 38 : 24)) : 32;
+            const baseB = isShell ? (i % 11 === 0 ? 255 : (sz >= 0 ? 48 : 30)) : 42;
+            cr = Math.round(baseR * (1 - ease) + soa.sHwiR[i] * ease);
+            cg = Math.round(baseG * (1 - ease) + soa.sHwiG[i] * ease);
+            cb = Math.round(baseB * (1 - ease) + soa.sHwiB[i] * ease);
+
+            soa.isRect[i] = ease > 0.5 ? 1 : 0;
+          } else if (scrollY <= holdEndY) {
+            // Stage 2: THE HOLD — Stable, dense, readable HWI wordmark
+            const breathe = prefersReducedMotion ? 0 : Math.sin(time * 1.5 + i * 0.08) * 0.4;
+            x = targetX + breathe;
+            y = targetY + breathe;
+
+            opacity = 1.0;
+            size = isMobile ? 3.5 : 4.2;
+            cr = soa.sHwiR[i];
+            cg = soa.sHwiG[i];
+            cb = soa.sHwiB[i];
+            soa.isRect[i] = 1;
+          } else {
+            // Stage 3: Smooth quintic dispersal directly into What We Offer ambient field
+            const t = (scrollY - holdEndY) / (dispEndY - holdEndY);
+            const ease = t < 0.5 ? 16 * Math.pow(t, 5) : 1 - Math.pow(-2 * t + 2, 5) / 2;
+
+            let wx = centerX, wy = centerY;
+            if (targetsReady) {
+              wx = soa.s2x[i];
+              wy = soa.s2y[i] + drift;
+            }
+
+            x = targetX * (1 - ease) + wx * ease;
+            y = targetY * (1 - ease) + wy * ease;
+
+            const whiteFieldAlpha = isWhiteBg ? 0.32 : 0.55;
+            opacity = 1.0 * (1 - ease) + whiteFieldAlpha * ease;
+
+            const hwiSize = isMobile ? 3.5 : 4.2;
+            const targetSize = isWhiteBg ? 1.8 : 2.2;
+            size = hwiSize * (1 - ease) + targetSize * ease;
+
+            const targetR = isWhiteBg ? 180 : 239;
+            const targetG = isWhiteBg ? 40 : 68;
+            const targetB = isWhiteBg ? 40 : 68;
+            cr = Math.round(soa.sHwiR[i] * (1 - ease) + targetR * ease);
+            cg = Math.round(soa.sHwiG[i] * (1 - ease) + targetG * ease);
+            cb = Math.round(soa.sHwiB[i] * (1 - ease) + targetB * ease);
+
+            soa.isRect[i] = ease > 0.4 ? 0 : 1;
           }
         }
         // ----------------------------------------------------
-        // SCENE 1 -> 2: HWI Lettering -> White Section Ambient Field
+        // SCENE 2: What We Offer (White Section Ambient Kinetic Field)
         // ----------------------------------------------------
-        else if (sceneProgress < 2.0) {
-          const t = sceneProgress - 1.0; // 0.0 -> 1.0
+        else if (sceneProgress < 2.0 || (currentPath === '/' && scrollY < impactTop - vh * 0.3)) {
           let wx = centerX, wy = centerY;
           if (targetsReady) {
             wx = soa.s2x[i];
             wy = soa.s2y[i] + drift;
           }
-
-          // Disperse smoothly from HWI lettering into white section kinetic field
-          x = hx + (wx - hx) * t;
-          y = hy + (wy - hy) * t;
-
-          const isHwiContour = soa.sHwiIsBorder[i] === 1;
-          const hwiStartAlpha = isHwiContour ? 0.92 : 0.38 * soa.sHwiDensity[i];
-          const whiteFieldAlpha = isWhiteBg ? 0.32 : 0.55;
-          opacity = hwiStartAlpha * (1 - t) + whiteFieldAlpha * t;
-
-          const targetSize = isWhiteBg ? 1.8 : 2.2;
-          const hwiStartSize = isHwiContour ? 2.4 : 1.6;
-          size = hwiStartSize * (1 - t) + targetSize * t;
-
+          x = wx;
+          y = wy;
+          opacity = isWhiteBg ? 0.32 : 0.55;
+          size = isWhiteBg ? 1.8 : 2.2;
           cr = isWhiteBg ? 180 : 239;
           cg = isWhiteBg ? 40 : 68;
           cb = isWhiteBg ? 40 : 68;
+          soa.isRect[i] = 0;
         }
         // ----------------------------------------------------
         // SCENE 2 -> 3: White Section -> STABLE BONSAI TREE (Black Section)
@@ -831,53 +780,6 @@ export function GlobalBackground() {
         }
 
         // ====================================================
-        // H.2 PARTICLE CHRONICLES: /events SCROLL-DRIVEN JOURNEY
-        // ====================================================
-        if (currentPath === '/events') {
-          const { section, heroConvergence, pulseIntensity } = eventsState;
-
-          // 1. Hero Ignition: Controlled subtle convergence during Anime.js entrance
-          if (heroConvergence > 0.001) {
-            const pullFactor = heroConvergence * 0.35;
-            const targetX = centerX + (soa.stagger[i] - 0.25) * (width * 0.38);
-            const targetY = centerY * 0.72 + Math.sin(time * 2.5 + i) * 35;
-            x += (targetX - x) * pullFactor;
-            y += (targetY - y) * pullFactor;
-            opacity = Math.min(1.0, opacity + 0.22 * heroConvergence);
-          }
-
-          // 2. Section Transitions & Stream
-          if (section === 'panels') {
-            // Lateral drift framing the 7 vertical edition panels
-            const lateral = Math.sin(y * 0.006 + time * 0.8) * 18;
-            x += lateral;
-          } else if (section === 'photos' || section === 'awards') {
-            // Continuous, low-intensity red particle stream as visual connector
-            if (i % 6 === 0) {
-              const streamSpeed = 42;
-              const streamY = (y + time * streamSpeed + (i * 29)) % (height + 60) - 30;
-              const streamSway = Math.sin(streamY * 0.005 + time * 0.5 + (i % 3)) * (width * 0.14);
-              x = centerX + streamSway + (soa.stagger[i] - 0.25) * 140;
-              y = streamY;
-              cr = 225;
-              cg = 38;
-              cb = 38;
-              opacity = Math.min(0.38, opacity);
-            }
-          }
-
-          // 3. Awards Section Pulse: One brief subtle pulse on entering active awards
-          if (pulseIntensity > 0.001) {
-            const dx = x - centerX;
-            const dy = y - centerY;
-            const dist = Math.hypot(dx, dy) || 1;
-            x += (dx / dist) * (20 * pulseIntensity);
-            y += (dy / dist) * (16 * pulseIntensity);
-            opacity = Math.min(1.0, opacity + 0.25 * pulseIntensity);
-          }
-        }
-
-        // ====================================================
         // I. PARTICLE MOUSE PROXIMITY RESPONSE (Feature 12)
         // Subtle influence field (radius 85px) - gentle displacement
         // ====================================================
@@ -895,11 +797,10 @@ export function GlobalBackground() {
           }
         }
 
-        opacity *= sectionParticleAlpha;
         if (opacity <= 0.02) continue;
         if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
 
-        const finalOpacity = isWhiteBg ? Math.min(0.85, opacity * 0.8) : Math.min(1.0, opacity);
+        const finalOpacity = isWhiteBg ? Math.min(0.85, opacity * 0.8) : Math.max(0.12, opacity);
 
         ctx.fillStyle = `rgba(${cr},${cg},${cb},${finalOpacity.toFixed(2)})`;
 
@@ -911,8 +812,6 @@ export function GlobalBackground() {
           ctx.fill();
         }
       }
-
-
 
       // ------------------------------------------------------
       // F. SUBTLE FALLING LEAF PARTICLES (Black section atmospheric motion)
@@ -1020,7 +919,6 @@ export function GlobalBackground() {
       unsubscribeTeam();
       unsubscribeWhatWeDo();
       unsubscribeEasterEgg();
-      unsubscribeEvents();
     };
   }, []);
 
@@ -1042,50 +940,6 @@ export function GlobalBackground() {
           className="gbg__video"
         />
         <div className="gbg__video-overlay" />
-      </div>
-
-      {/* Layer 2.5: PERMANENT HWI WATERMARK (ALWAYS VISIBLE across entire site) */}
-      <div className="gbg__hwi-layer" ref={hwiLayerRef}>
-        <svg
-          viewBox="0 0 900 340"
-          className="gbg__hwi-svg"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <pattern id="hwi-dots" width="6" height="6" patternUnits="userSpaceOnUse">
-              <circle cx="3" cy="3" r="1.35" fill="var(--hwi-dot-fill, rgba(255,255,255,0.7))" />
-            </pattern>
-            <mask id="hwi-text-mask">
-              <text
-                x="50%"
-                y="70%"
-                textAnchor="middle"
-                fontSize="280"
-                fontWeight="900"
-                fontFamily="var(--font-satoshi), sans-serif"
-                fill="white"
-                letterSpacing="-0.04em"
-              >
-                HWI
-              </text>
-            </mask>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#hwi-dots)" mask="url(#hwi-text-mask)" />
-          <text
-            x="50%"
-            y="70%"
-            textAnchor="middle"
-            fontSize="280"
-            fontWeight="900"
-            fontFamily="var(--font-satoshi), sans-serif"
-            fill="none"
-            stroke="var(--hwi-stroke, rgba(255,255,255,0.25))"
-            strokeWidth="1.5"
-            letterSpacing="-0.04em"
-          >
-            HWI
-          </text>
-        </svg>
       </div>
 
       {/* Layer 3: Team-Specific Ambient Backgrounds (5 Distinct visual atmospheres) */}

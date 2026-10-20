@@ -227,6 +227,8 @@ export function EventsExperience() {
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('ALL');
 
   // DOM Refs for animation coordination
+  const pageRootRef = useRef<HTMLDivElement>(null);
+  const galleryBarRef = useRef<HTMLDivElement>(null);
   const heroKickerRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
@@ -334,7 +336,8 @@ export function EventsExperience() {
   }, [selectedEvent?.id]);
 
   // -----------------------------------------------------------------------
-  // 1. HERO: IGNITION ENTRANCE (Anime.js + Controlled Particle Convergence)
+  // -----------------------------------------------------------------------
+  // 1. COHESIVE EVENTS ENTRANCE (Hero Ignition + Editions Panel Track)
   // -----------------------------------------------------------------------
   useEffect(() => {
     if (heroAnimatedRef.current) return;
@@ -345,76 +348,140 @@ export function EventsExperience() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
+      if (pageRootRef.current) {
+        pageRootRef.current.classList.add('events-entered');
+      }
       eventsParticleStore.setHeroConvergence(0);
+      panelsRevealedRef.current = true;
       return;
     }
 
-    // Initialize subtle controlled convergence during hero entrance
-    eventsParticleStore.setHeroConvergence(1.0);
+    // Determine start delay: if client route transition veil is currently active, wait 360ms until it clears
+    const isVeiled = typeof document !== 'undefined' && !!document.querySelector('.page-transition-veil--active');
+    const startDelay = isVeiled ? 360 : 120;
 
-    const tl = anime.timeline({
-      easing: 'cubicBezier(0.16, 1, 0.3, 1)',
-      complete: () => {
-        // Once entrance finishes, gracefully ease hero convergence to 0
-        anime({
-          targets: { val: 1.0 },
-          val: 0,
-          duration: 900,
-          easing: 'easeOutQuad',
-          update: (anim) => {
-            const v = Number(anim.animations[0].currentValue);
-            eventsParticleStore.setHeroConvergence(v);
-          },
-        });
-      },
+    // Pre-hide all targets immediately to prevent any flicker or uncoordinated jump
+    const words = heroTitleRef.current ? heroTitleRef.current.querySelectorAll('.hero-word') : [];
+    const panels = galleryTrackRef.current ? galleryTrackRef.current.querySelectorAll('.hwi-panel') : [];
+
+    anime.set([heroKickerRef.current, heroDescRef.current, heroMetaRef.current, galleryBarRef.current].filter(Boolean), {
+      opacity: 0,
+      translateY: 14,
     });
+    if (words.length) {
+      anime.set(words, { opacity: 0, translateY: 18 });
+    }
+    if (panels.length) {
+      anime.set(panels, { opacity: 0, translateY: 24 });
+    }
 
-    if (heroKickerRef.current) {
-      tl.add({
-        targets: heroKickerRef.current,
-        opacity: [0, 1],
-        translateY: [16, 0],
-        duration: 650,
+    // Initialize subtle controlled convergence during hero entrance
+    eventsParticleStore.setHeroConvergence(0.6);
+
+    const timer = setTimeout(() => {
+      const tl = anime.timeline({
+        easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+        complete: () => {
+          if (pageRootRef.current) {
+            pageRootRef.current.classList.add('events-entered');
+          }
+          panelsRevealedRef.current = true;
+          // Clean up inline styles so CSS transitions have unhindered control
+          panels.forEach((p) => {
+            const el = p as HTMLElement;
+            el.style.opacity = '';
+            el.style.transform = '';
+          });
+          // Ease convergence softly to ambient state
+          anime({
+            targets: { val: 0.6 },
+            val: 0,
+            duration: 750,
+            easing: 'easeOutQuad',
+            update: (anim) => {
+              const v = Number(anim.animations[0].currentValue);
+              eventsParticleStore.setHeroConvergence(v);
+            },
+          });
+        },
       });
-    }
 
-    if (heroTitleRef.current) {
-      const words = heroTitleRef.current.querySelectorAll('.hero-word');
-      tl.add(
-        {
-          targets: words,
+      if (heroKickerRef.current) {
+        tl.add({
+          targets: heroKickerRef.current,
           opacity: [0, 1],
-          translateY: [32, 0],
-          duration: 850,
-          delay: anime.stagger(90),
-        },
-        '-=350'
-      );
-    }
+          translateY: [14, 0],
+          duration: 420,
+        });
+      }
 
-    if (heroDescRef.current) {
-      tl.add(
-        {
-          targets: heroDescRef.current,
-          opacity: [0, 1],
-          translateY: [20, 0],
-          duration: 700,
-        },
-        '-=450'
-      );
-    }
+      if (words.length) {
+        tl.add(
+          {
+            targets: words,
+            opacity: [0, 1],
+            translateY: [18, 0],
+            duration: 520,
+            delay: anime.stagger(55),
+          },
+          '-=260'
+        );
+      }
 
-    if (heroMetaRef.current) {
-      tl.add(
-        {
-          targets: heroMetaRef.current,
-          opacity: [0, 1],
-          translateY: [16, 0],
-          duration: 600,
-        },
-        '-=400'
-      );
-    }
+      if (heroDescRef.current) {
+        tl.add(
+          {
+            targets: heroDescRef.current,
+            opacity: [0, 1],
+            translateY: [14, 0],
+            duration: 460,
+          },
+          '-=300'
+        );
+      }
+
+      if (heroMetaRef.current) {
+        tl.add(
+          {
+            targets: heroMetaRef.current,
+            opacity: [0, 1],
+            translateY: [10, 0],
+            duration: 420,
+          },
+          '-=280'
+        );
+      }
+
+      if (galleryBarRef.current) {
+        tl.add(
+          {
+            targets: galleryBarRef.current,
+            opacity: [0, 1],
+            translateY: [12, 0],
+            duration: 440,
+          },
+          '-=240'
+        );
+      }
+
+      if (panels.length) {
+        tl.add(
+          {
+            targets: panels,
+            opacity: [0, 0.92],
+            translateY: [24, 0],
+            duration: 540,
+            delay: anime.stagger(45),
+          },
+          '-=260'
+        );
+      }
+    }, startDelay);
+
+    return () => {
+      clearTimeout(timer);
+      heroAnimatedRef.current = false;
+    };
   }, []);
 
   // -----------------------------------------------------------------------
@@ -487,7 +554,13 @@ export function EventsExperience() {
                 translateY: [32, 0],
                 duration: 700,
                 delay: anime.stagger(60),
-                easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+                easing: 'cubicBezier(0.22, 1, 0.36, 1)',
+                complete: () => {
+                  galleryTrackRef.current?.querySelectorAll<HTMLElement>('.hwi-panel').forEach((panel) => {
+                    panel.style.opacity = '';
+                    panel.style.transform = '';
+                  });
+                },
               });
             }
           }
@@ -570,7 +643,7 @@ export function EventsExperience() {
   }, [activePhotoCategory]);
 
   return (
-    <div className="hwi-events-page chronicles-page">
+    <div className="hwi-events-page chronicles-page" ref={pageRootRef}>
       {/* ================================================================= */}
       {/* 1. HERO: IGNITION                                                 */}
       {/* Refined Anime.js entrance + particle convergence coordination     */}
@@ -640,7 +713,7 @@ export function EventsExperience() {
       >
         <div className="container">
           {/* Gallery Subheader bar with indicator, edition pills, and navigation */}
-          <div className="hwi-gallery-bar">
+          <div className="hwi-gallery-bar" ref={galleryBarRef}>
             <div className="gallery-indicator">
               <span className="gallery-indicator-kicker">EDITION ARCHIVE //</span>
               <span className="gallery-indicator-value">
@@ -780,9 +853,12 @@ export function EventsExperience() {
                       <span className="tedx-footer-date">{event.date}</span>
                     </div>
 
-                    {/* ── EXPANDED STATE CONTENT (Revealed in the 100% full-width panel) ── */}
-                    {isActive && (
-                      <div className="hwi-panel__expanded-content" aria-hidden={false}>
+                    {/* ── EXPANDED STATE CONTENT (Smooth CSS enter & exit, inert when idle) ── */}
+                    <div
+                      className="hwi-panel__expanded-content"
+                      aria-hidden={!isActive}
+                      inert={!isActive}
+                    >
                         {/* Top Strip: Edition badge, category, and collapse chip */}
                         <div className="expanded-top-strip">
                           <div className="expanded-tag-cluster">
@@ -905,7 +981,6 @@ export function EventsExperience() {
                           </button>
                         </div>
                       </div>
-                    )}
                   </div>
                 );
               })}

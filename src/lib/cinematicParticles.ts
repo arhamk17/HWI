@@ -4,6 +4,12 @@
 // Engineered for flat Float32Array buffers with zero runtime allocations.
 // ==========================================================================
 
+import {
+  HWI_MATRIX_X,
+  HWI_MATRIX_Y,
+  HWI_MATRIX_COUNT,
+} from './hwiTextPoints';
+
 export interface ParticleSOA {
   count: number;
   // Current dynamic state
@@ -26,6 +32,15 @@ export interface ParticleSOA {
   // Target State 1: Fibonacci Celestial Sphere (About / Story)
   s1x: Float32Array; s1y: Float32Array; s1z: Float32Array; s1density: Float32Array;
 
+  // Target State HWI: Bold Floating Solid Letters "HWI" (Chapter 02 Reveal)
+  sHwiX: Float32Array;
+  sHwiY: Float32Array;
+  sHwiZ: Float32Array;
+  sHwiR: Uint8Array;
+  sHwiG: Uint8Array;
+  sHwiB: Uint8Array;
+  sHwiLetter: Uint8Array;
+
   // Target State 2: White Section Ambient Kinetic Field
   s2x: Float32Array; s2y: Float32Array; s2z: Float32Array;
 
@@ -40,13 +55,6 @@ export interface ParticleSOA {
   sIndiaZ: Float32Array;
   sIndiaIsBorder: Uint8Array;
   sIndiaDensity: Float32Array;
-
-  // Target State HWI: Contours & Fill of the HWI Background Lettering
-  sHwiX: Float32Array;
-  sHwiY: Float32Array;
-  sHwiZ: Float32Array;
-  sHwiIsBorder: Uint8Array;
-  sHwiDensity: Float32Array;
 
   // Target State 4: Team Ambient Field
   s4x: Float32Array; s4y: Float32Array; s4z: Float32Array;
@@ -70,10 +78,11 @@ export function createParticleSOA(N: number): ParticleSOA {
 
     s0x: new Float32Array(N), s0y: new Float32Array(N), s0z: new Float32Array(N),
     s1x: new Float32Array(N), s1y: new Float32Array(N), s1z: new Float32Array(N), s1density: new Float32Array(N),
+    sHwiX: new Float32Array(N), sHwiY: new Float32Array(N), sHwiZ: new Float32Array(N),
+    sHwiR: new Uint8Array(N), sHwiG: new Uint8Array(N), sHwiB: new Uint8Array(N),
+    sHwiLetter: new Uint8Array(N),
     sIndiaX: new Float32Array(N), sIndiaY: new Float32Array(N), sIndiaZ: new Float32Array(N),
     sIndiaIsBorder: new Uint8Array(N), sIndiaDensity: new Float32Array(N),
-    sHwiX: new Float32Array(N), sHwiY: new Float32Array(N), sHwiZ: new Float32Array(N),
-    sHwiIsBorder: new Uint8Array(N), sHwiDensity: new Float32Array(N),
     s2x: new Float32Array(N), s2y: new Float32Array(N), s2z: new Float32Array(N),
     s3x: new Float32Array(N), s3y: new Float32Array(N), s3z: new Float32Array(N), s3part: new Uint8Array(N), s3density: new Float32Array(N), s3size: new Float32Array(N),
     s4x: new Float32Array(N), s4y: new Float32Array(N), s4z: new Float32Array(N),
@@ -104,15 +113,30 @@ export function initInitialStates(soa: ParticleSOA, width: number, height: numbe
     soa.s0y[i] = centerY + Math.sin(aTheta) * aDist * 0.6;
     soa.s0z[i] = (Math.random() - 0.5) * 200;
 
-    // State 1: Fibonacci Celestial Sphere (About / Story)
-    const sy = 1 - (i / (N - 1)) * 2;
-    const sRadius = Math.sqrt(Math.max(0, 1 - sy * sy));
-    const sTheta = goldenAngle * i;
-    soa.s1x[i] = Math.cos(sTheta) * sRadius;
-    soa.s1y[i] = sy;
-    soa.s1z[i] = Math.sin(sTheta) * sRadius;
-    const harmonic = Math.sin(sTheta * 3) * Math.cos(sy * 4);
-    soa.s1density[i] = harmonic > -0.2 ? 1.0 : 0.32;
+    // State 1: Fibonacci Celestial Sphere & Ambient Corona (Hero & Transition)
+    // 56% particles form the clean, refined spherical surface; remaining 44% form the outer celestial corona
+    const N_SPHERE = Math.floor(N * 0.56);
+    if (i < N_SPHERE) {
+      const sy = 1 - (i / (N_SPHERE - 1)) * 2;
+      const sRadius = Math.sqrt(Math.max(0, 1 - sy * sy));
+      const sTheta = goldenAngle * i;
+      soa.s1x[i] = Math.cos(sTheta) * sRadius;
+      soa.s1y[i] = sy;
+      soa.s1z[i] = Math.sin(sTheta) * sRadius;
+      soa.s1density[i] = 1.0; // Primary spherical shell
+    } else {
+      const haloIdx = i - N_SPHERE;
+      const haloTotal = Math.max(1, N - N_SPHERE);
+      const hy = 1 - (haloIdx / (haloTotal - 1)) * 2;
+      const hRadius = Math.sqrt(Math.max(0, 1 - hy * hy));
+      const hTheta = goldenAngle * haloIdx * 1.618;
+      // Distributed in subtle outer corona shell (1.10 to 1.38 unit radius)
+      const hDist = 1.10 + (Math.sin(haloIdx * 17.13) * 0.5 + 0.5) * 0.28;
+      soa.s1x[i] = Math.cos(hTheta) * hRadius * hDist;
+      soa.s1y[i] = hy * hDist;
+      soa.s1z[i] = Math.sin(hTheta) * hRadius * hDist;
+      soa.s1density[i] = 0.35; // Outer halo / corona
+    }
 
     // Initialize current positions to State 0
     soa.x[i] = soa.s0x[i];
@@ -120,8 +144,50 @@ export function initInitialStates(soa: ParticleSOA, width: number, height: numbe
     soa.z[i] = soa.s0z[i];
   }
 
-  // Precompute HWI positions immediately on frame 0 (takes < 2ms)
-  populateHWIState(soa);
+  // Precompute HWI targets immediately on frame 0
+  populateHwiTextState(soa, width, height);
+  // Precompute India positions
+  populateIndiaState(soa);
+}
+
+// ==========================================================================
+// 1.25 BOLD FLOATING "HWI" PARTICLE TARGETS (Chapter 02 Reveal)
+// Precomputed dense pixel coordinates scaled to responsive viewport.
+// Proportional distribution guarantees 100% uniform coverage across H, W, and I.
+// ==========================================================================
+export function populateHwiTextState(soa: ParticleSOA, width: number, height: number) {
+  const N = soa.count;
+  const count = HWI_MATRIX_COUNT;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const isMobile = width < 768;
+  const hwiScale = isMobile ? width * 0.36 : Math.min(width * 0.30, height * 0.44);
+
+  for (let i = 0; i < N; i++) {
+    const srcIdx = Math.floor((i / N) * count);
+    const nx = HWI_MATRIX_X[srcIdx];
+    const ny = HWI_MATRIX_Y[srcIdx];
+
+    soa.sHwiX[i] = centerX + nx * hwiScale;
+    soa.sHwiY[i] = centerY + ny * hwiScale;
+    soa.sHwiZ[i] = (Math.random() - 0.5) * 12;
+    soa.sHwiLetter[i] = nx < -0.4 ? 0 : nx < 0.4 ? 1 : 2;
+
+    // Vibrant pure HWI crimson with crisp white sparkle accents
+    if (i % 7 === 0) {
+      soa.sHwiR[i] = 255;
+      soa.sHwiG[i] = 255;
+      soa.sHwiB[i] = 255;
+    } else if (i % 11 === 0) {
+      soa.sHwiR[i] = 255;
+      soa.sHwiG[i] = 130;
+      soa.sHwiB[i] = 130;
+    } else {
+      soa.sHwiR[i] = 239;
+      soa.sHwiG[i] = 68;
+      soa.sHwiB[i] = 68;
+    }
+  }
 }
 
 // ==========================================================================
@@ -304,178 +370,6 @@ export function populateIndiaState(soa: ParticleSOA) {
 }
 
 // ==========================================================================
-// 1.5 TARGET STATE HWI: Contours & Dot-Matrix of HWI Background Lettering
-// Reuses the exact SVG lettering geometry (900x340 viewBox) as particle target
-// ==========================================================================
-export function populateHWIState(soa: ParticleSOA) {
-  const N = soa.count;
-  const W = 900;
-  const H = 340;
-
-  const contourPoints: [number, number][] = [];
-  const interiorPoints: [number, number][] = [];
-
-  // 1. Attempt client-side canvas rasterization of HWI typography
-  if (typeof document !== 'undefined') {
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = W;
-      canvas.height = H;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      if (ctx) {
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '900 280px "Satoshi", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Arial Black", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'alphabetic';
-        ctx.fillText('HWI', W * 0.5, H * 0.70);
-
-        const imgData = ctx.getImageData(0, 0, W, H);
-        const data = imgData.data;
-        const step = 4; // 4px grid scan
-
-        for (let y = 12; y < H - 12; y += step) {
-          for (let x = 12; x < W - 12; x += step) {
-            const idx = (y * W + x) * 4;
-            const val = data[idx];
-            if (val > 110) {
-              // Edge detection: if any 4-neighbor is dark, this is an outline contour point
-              const left = data[(y * W + (x - step)) * 4];
-              const right = data[(y * W + (x + step)) * 4];
-              const up = data[((y - step) * W + x) * 4];
-              const down = data[((y + step) * W + x) * 4];
-
-              const normX = (x - 450) / 450;
-              const normY = (y - 170) / 170;
-
-              if (left < 90 || right < 90 || up < 90 || down < 90) {
-                contourPoints.push([normX, normY]);
-              } else if (x % 8 === 0 && y % 8 === 0) {
-                // Interior dot matrix point (matches SVG 6-8px pattern)
-                interiorPoints.push([normX, normY]);
-              }
-            }
-          }
-        }
-      }
-    } catch {
-      // Fallback to parametric geometry if canvas reading is restricted
-    }
-  }
-
-  // 2. High-precision parametric fallback if canvas sampling didn't yield enough points
-  if (contourPoints.length < 80) {
-    contourPoints.length = 0;
-    interiorPoints.length = 0;
-
-    const sampleBox = (rx1: number, ry1: number, rx2: number, ry2: number, step = 0.024) => {
-      for (let y = ry1; y <= ry2; y += step) {
-        for (let x = rx1; x <= rx2; x += step) {
-          const isEdge = x - rx1 < step * 1.3 || rx2 - x < step * 1.3 || y - ry1 < step * 1.3 || ry2 - y < step * 1.3;
-          if (isEdge) {
-            contourPoints.push([x, y]);
-          } else {
-            interiorPoints.push([x, y]);
-          }
-        }
-      }
-    };
-
-    const sampleSegment = (x1: number, y1: number, x2: number, y2: number, thick: number, steps = 28) => {
-      for (let s = 0; s <= steps; s++) {
-        const t = s / steps;
-        const cx = x1 + (x2 - x1) * t;
-        const cy = y1 + (y2 - y1) * t;
-        for (let ox = -thick; ox <= thick; ox += 0.022) {
-          const isEdge = Math.abs(ox - thick) < 0.016 || Math.abs(ox + thick) < 0.016 || s === 0 || s === steps;
-          if (isEdge) {
-            contourPoints.push([cx + ox, cy]);
-          } else {
-            interiorPoints.push([cx + ox, cy]);
-          }
-        }
-      }
-    };
-
-    // Letter 'H': Left bar, right bar, crossbar
-    sampleBox(-0.80, -0.60, -0.64, 0.42);
-    sampleBox(-0.44, -0.60, -0.28, 0.42);
-    sampleBox(-0.64, -0.16, -0.44, 0.00);
-
-    // Letter 'W': 4 diagonal thick strokes
-    sampleSegment(-0.20, -0.60, -0.11, 0.42, 0.05);
-    sampleSegment(-0.11, 0.42, -0.01, -0.15, 0.045);
-    sampleSegment(-0.01, -0.15, 0.09, 0.42, 0.045);
-    sampleSegment(0.09, 0.42, 0.18, -0.60, 0.05);
-
-    // Letter 'I': Central stem, top serif, bottom serif
-    sampleBox(0.38, -0.60, 0.54, 0.42);
-    sampleBox(0.30, -0.60, 0.62, -0.48);
-    sampleBox(0.30, 0.30, 0.62, 0.42);
-  }
-
-  // Ensure arrays have at least 1 point
-  if (contourPoints.length === 0) contourPoints.push([0, 0]);
-  if (interiorPoints.length === 0) interiorPoints.push([0, 0]);
-
-  // 3. Populate temporary buffers
-  const borderCount = Math.floor(N * 0.60);
-  const interiorCount = N - borderCount;
-
-  const tempX = new Float32Array(N);
-  const tempY = new Float32Array(N);
-  const tempZ = new Float32Array(N);
-  const tempIsBorder = new Uint8Array(N);
-  const tempDensity = new Float32Array(N);
-
-  for (let i = 0; i < borderCount; i++) {
-    const pt = contourPoints[i % contourPoints.length];
-    tempX[i] = pt[0] + (Math.random() - 0.5) * 0.006;
-    tempY[i] = pt[1] + (Math.random() - 0.5) * 0.006;
-    tempZ[i] = (Math.random() - 0.5) * 6;
-    tempIsBorder[i] = 1;
-    tempDensity[i] = 1.0;
-  }
-
-  for (let i = 0; i < interiorCount; i++) {
-    const idx = borderCount + i;
-    const pt = interiorPoints[i % interiorPoints.length];
-    tempX[idx] = pt[0] + (Math.random() - 0.5) * 0.008;
-    tempY[idx] = pt[1] + (Math.random() - 0.5) * 0.008;
-    tempZ[idx] = (Math.random() - 0.5) * 12;
-    tempIsBorder[idx] = 0;
-    tempDensity[idx] = 0.55 + 0.45 * Math.random();
-  }
-
-  // 4. Smooth particle pairing:
-  // Sort Globe particles along X (soa.s1x) and HWI targets along X (tempX).
-  // This produces an organic West-to-East flow where the Western globe hemisphere flows into 'H',
-  // the Central meridian flows into 'W', and the Eastern hemisphere flows into 'I'.
-  const globeIndices = Array.from({ length: N }, (_, i) => i).sort((a, b) => {
-    const dx = soa.s1x[a] - soa.s1x[b];
-    if (Math.abs(dx) > 0.04) return dx;
-    return soa.s1y[a] - soa.s1y[b];
-  });
-  const hwiIndices = Array.from({ length: N }, (_, i) => i).sort((a, b) => {
-    const dx = tempX[a] - tempX[b];
-    if (Math.abs(dx) > 0.04) return dx;
-    return tempY[a] - tempY[b];
-  });
-
-  for (let k = 0; k < N; k++) {
-    const gIdx = globeIndices[k];
-    const hIdx = hwiIndices[k];
-
-    soa.sHwiX[gIdx] = tempX[hIdx];
-    soa.sHwiY[gIdx] = tempY[hIdx];
-    soa.sHwiZ[gIdx] = tempZ[hIdx];
-    soa.sHwiIsBorder[gIdx] = tempIsBorder[hIdx];
-    soa.sHwiDensity[gIdx] = tempDensity[hIdx];
-  }
-}
-
-// ==========================================================================
 // 2. WHITE SECTION AMBIENT KINETIC FIELD
 // Clean, low-noise ambient field framing the Two-Column layout
 // ==========================================================================
@@ -512,7 +406,7 @@ export function populateBonsaiTreeState(soa: ParticleSOA, width: number, height:
   const rootCount = Math.floor(N * 0.16);
   const trunkCount = Math.floor(N * 0.28);
   const branchCount = Math.floor(N * 0.20);
-  const canopyCount = N - rootCount - trunkCount - branchCount;
+
 
   // ------------------------------------------------------------------------
   // A. VISIBLE SURFACE ROOTS (Nebari)
