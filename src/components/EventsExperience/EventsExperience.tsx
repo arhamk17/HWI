@@ -221,12 +221,11 @@ const VERIFIED_AWARDS: VerifiedAwardItem[] = [
 ];
 
 export function EventsExperience() {
-  // Skiper UI HoverExpand_001 State:
-  // activeCardId: tracks which of the 7 cards is currently expanded in the horizontal row
-  // selectedId: tracks which event has its full editorial detail dossier open below (null = closed)
-  const [activeCardId, setActiveCardId] = useState<string>(EVENTS_DATA[0].id);
-  const [selectedId, setSelectedId] = useState<string | null>(EVENTS_DATA[0].id);
-  const [animatingId, setAnimatingId] = useState<string | null>(null);
+  // Edition Archive Hover-Only State:
+  // hoveredCardId: tracks which of the 7 cards is currently hovered / tapped (null by default)
+  // selectedId: tracks which event's full editorial dossier chronicle is open below (null = closed by default)
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('ALL');
 
   // DOM Refs for animation coordination
@@ -238,8 +237,6 @@ export function EventsExperience() {
   const heroMetaRef = useRef<HTMLDivElement>(null);
 
   const gallerySectionRef = useRef<HTMLElement>(null);
-  const detailPanelRef = useRef<HTMLDivElement>(null);
-  const detailPanelCardRef = useRef<HTMLDivElement>(null);
   const galleryTrackRef = useRef<HTMLDivElement>(null);
   const photosSectionRef = useRef<HTMLElement>(null);
   const photosGridRef = useRef<HTMLDivElement>(null);
@@ -252,7 +249,7 @@ export function EventsExperience() {
   const awardsRevealedRef = useRef<boolean>(false);
   const editorialStoryRef = useRef<HTMLElement>(null);
 
-  // Selected event object & index
+  // Selected event object & index for editorial chronicle dossier
   const selectedEvent = useMemo(() => {
     if (!selectedId) return null;
     return EVENTS_DATA.find((e) => e.id === selectedId) || null;
@@ -263,118 +260,78 @@ export function EventsExperience() {
     return EVENTS_DATA.findIndex((e) => e.id === selectedEvent.id);
   }, [selectedEvent]);
 
-  // HoverExpand_001 Interaction Handlers:
-  // Hover over card expands it smoothly without opening the full detail panel below
-  const handleCardHover = useCallback((id: string) => {
-    setActiveCardId(id);
+  // Smooth scroll gallery track left or right
+  const scrollGallery = useCallback((direction: 'left' | 'right') => {
+    if (!galleryTrackRef.current) return;
+    const scrollAmount = Math.max(280, galleryTrackRef.current.clientWidth * 0.45);
+    galleryTrackRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
   }, []);
 
-  // On pointer exit, retain current selection rather than collapsing unexpectedly
-  const handleTrackLeave = useCallback(() => {
-    if (selectedId) {
-      setActiveCardId(selectedId);
-    }
-  }, [selectedId]);
-
-  // Click selects the card and opens/focuses the full event detail dossier below
-  const handleSelectEvent = useCallback((id: string) => {
-    setActiveCardId(id);
-    setSelectedId((prev) => {
-      if (prev === id) {
-        setAnimatingId(null);
-        return null;
+  // Open the complete chronicle for a specific edition and scroll smoothly to it
+  const handleOpenChronicle = useCallback((e: React.MouseEvent, eventId: string) => {
+    e.stopPropagation();
+    setSelectedId(eventId);
+    setTimeout(() => {
+      const storyEl = document.getElementById('editorial-story');
+      if (storyEl) {
+        storyEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      setAnimatingId(id);
-      return id;
-    });
+    }, 60);
   }, []);
 
   const handlePrevEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
+      if (!selectedId) {
+        scrollGallery('left');
+        return;
+      }
       const prevIdx =
         currentIndex <= 0
           ? EVENTS_DATA.length - 1
           : currentIndex - 1;
       const targetId = EVENTS_DATA[prevIdx].id;
-      setActiveCardId(targetId);
-      if (selectedId) {
-        setSelectedId(targetId);
-        setAnimatingId(targetId);
-      }
+      setSelectedId(targetId);
     },
-    [currentIndex, selectedId]
+    [currentIndex, selectedId, scrollGallery]
   );
 
   const handleNextEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
+      if (!selectedId) {
+        scrollGallery('right');
+        return;
+      }
       const nextIdx =
         currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1
           ? 0
           : currentIndex + 1;
       const targetId = EVENTS_DATA[nextIdx].id;
-      setActiveCardId(targetId);
-      if (selectedId) {
-        setSelectedId(targetId);
-        setAnimatingId(targetId);
-      }
+      setSelectedId(targetId);
     },
-    [currentIndex, selectedId]
+    [currentIndex, selectedId, scrollGallery]
   );
 
-  // Global keyboard shortcuts: Esc to collapse, ArrowLeft/Right to cycle editions
+  // Global keyboard shortcuts: Esc to collapse chronicle, ArrowLeft/Right to scroll or cycle
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && selectedId) {
         setSelectedId(null);
-      } else if (e.key === 'ArrowRight' && selectedId) {
-        handleNextEvent();
-      } else if (e.key === 'ArrowLeft' && selectedId) {
-        handlePrevEvent();
+      } else if (e.key === 'ArrowRight') {
+        if (selectedId) handleNextEvent();
+        else scrollGallery('right');
+      } else if (e.key === 'ArrowLeft') {
+        if (selectedId) handlePrevEvent();
+        else scrollGallery('left');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedId, handleNextEvent, handlePrevEvent]);
-
-  // Scroll active panel into view smoothly when selected
-  useEffect(() => {
-    if (selectedId && galleryTrackRef.current) {
-      const activeEl = galleryTrackRef.current.querySelector<HTMLElement>('.hwi-panel--active');
-      if (activeEl) {
-        activeEl.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center',
-        });
-      }
-    }
-  }, [selectedId]);
-
-    // Staggered entrance of detail panel content when selected edition changes
-  useEffect(() => {
-    if (!selectedId || !detailPanelCardRef.current) return;
-    const cardEl = detailPanelCardRef.current;
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) return;
-
-    const items = cardEl.querySelectorAll<HTMLElement>(
-      '.detail-panel__tag-cluster, .expanded-theme-line, .detail-panel__headline, .detail-panel__narrative, .expanded-meta-strip, .expanded-bottom-actions'
-    );
-
-    anime({
-      targets: items,
-      opacity: [0, 1],
-      translateY: [10, 0],
-      duration: 320,
-      delay: anime.stagger(30),
-      easing: 'easeOutCubic',
-    });
-  }, [selectedId]);
+  }, [selectedId, handleNextEvent, handlePrevEvent, scrollGallery]);
 
   // Staggered reveal of editorial dossier items when event changes  // Staggered reveal of editorial dossier items when event changes
   useEffect(() => {
@@ -785,59 +742,30 @@ export function EventsExperience() {
         aria-label="Year and Event Edition Gallery"
       >
         <div className="container">
-          {/* Gallery Subheader bar with indicator, edition pills, and navigation */}
+          {/* Gallery Subheader bar with indicator and navigation */}
           <div className="hwi-gallery-bar" ref={galleryBarRef}>
             <div className="gallery-indicator">
               <span className="gallery-indicator-title">Edition Archive</span>
               <span className="gallery-indicator-divider" aria-hidden="true" />
               <span className="gallery-indicator-subtitle">
                 {(() => {
-                  const activeEv = EVENTS_DATA.find((e) => e.id === activeCardId) || EVENTS_DATA[0];
-                  const activeIdx = EVENTS_DATA.findIndex((e) => e.id === activeCardId);
-                  return `Edition ${String(activeIdx + 1).padStart(2, '0')} — ${activeEv.shortTitle || activeEv.title}`;
+                  if (hoveredCardId) {
+                    const hoveredEv = EVENTS_DATA.find((e) => e.id === hoveredCardId);
+                    const hoveredIdx = EVENTS_DATA.findIndex((e) => e.id === hoveredCardId);
+                    if (hoveredEv) {
+                      return `Edition ${String(hoveredIdx + 1).padStart(2, '0')} — ${hoveredEv.shortTitle || hoveredEv.title}`;
+                    }
+                  }
+                  return '7 Milestone Editions · 2025–2026';
                 })()}
               </span>
             </div>
 
-            {/* Quick Edition Selector Pills */}
-            <div className="gallery-edition-pills" role="tablist" aria-label="Select Edition">
-              {EVENTS_DATA.map((ev, i) => {
-                const isExpanded = activeCardId === ev.id;
-                const isSelected = selectedId === ev.id;
-                return (
-                  <button
-                    key={ev.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isExpanded}
-                    className={`gallery-pill-btn ${isExpanded ? 'is-active' : ''} ${isSelected ? 'is-selected' : ''}`}
-                    onClick={() => handleSelectEvent(ev.id)}
-                    onMouseEnter={() => handleCardHover(ev.id)}
-                    title={`Edition ${String(i + 1).padStart(2, '0')}: ${ev.title}`}
-                  >
-                    <span>{String(i + 1).padStart(2, '0')}</span>
-                  </button>
-                );
-              })}
-            </div>
-
             <div className="gallery-nav-controls">
-              {selectedId && (
-                <button
-                  type="button"
-                  className="gallery-restore-btn"
-                  onClick={() => setSelectedId(null)}
-                  title="Restore compact row (or press Esc)"
-                >
-                  <span>RESTORE OVERVIEW</span>
-                  <X size={14} />
-                </button>
-              )}
-
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--prev"
-                onClick={handlePrevEvent}
+                onClick={() => scrollGallery('left')}
                 aria-label="Previous edition"
               >
                 <ChevronLeft size={16} />
@@ -845,7 +773,7 @@ export function EventsExperience() {
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--next"
-                onClick={handleNextEvent}
+                onClick={() => scrollGallery('right')}
                 aria-label="Next edition"
               >
                 <ChevronRight size={16} />
@@ -853,201 +781,71 @@ export function EventsExperience() {
             </div>
           </div>
 
-          {/* Main Gallery Area: Split Layout with Dedicated Detail Panel & Card Gallery */}
+          {/* Main Gallery Area: Full-Width Hover-Only Card Collection */}
           <div className="hwi-gallery-wrapper">
-            <div
-              className={`hwi-events-split-layout ${
-                selectedEvent ? 'has-active-detail' : 'is-overview-only'
-              }`}
-            >
-              {/* ── REGION 1: DEDICATED EVENT DETAIL PANEL ── */}
-              {selectedEvent && (
-                <div className="hwi-detail-panel-region" ref={detailPanelRef}>
-                  <div
-                    ref={detailPanelCardRef}
-                    className="hwi-detail-panel-card"
-                    style={
-                      {
-                        '--panel-accent': selectedEvent.accentColor || '#8B5CF6',
-                      } as React.CSSProperties
-                    }
-                  >
-                    {/* Background Visual Photo */}
-                    {selectedEvent.cardImage && (
-                      <div
-                        className="hwi-detail-panel-card__bg"
-                        style={{ backgroundImage: `url(${selectedEvent.cardImage})` }}
-                      />
-                    )}
-                    <div className="hwi-detail-panel-card__scrim" />
+            <div className="hwi-gallery-region">
+              <button
+                type="button"
+                className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
+                onClick={() => scrollGallery('left')}
+                aria-label="Scroll left"
+                data-cursor="link"
+                data-cursor-label="PREV"
+              >
+                <ChevronLeft size={22} />
+              </button>
 
-                    <div className="hwi-detail-panel-card__content">
-                      {/* Top Strip: Badges & Restore Overview Button */}
-                      <div className="detail-panel__top-strip">
-                        <div className="detail-panel__tag-cluster">
-                          <span className="expanded-edition-pill">
-                            Edition {String(currentIndex + 1).padStart(2, '0')} · {selectedEvent.year}
-                          </span>
-                          <span className="expanded-category-pill">{selectedEvent.category}</span>
-                          <span
-                            className={`expanded-status-pill ${
-                              selectedEvent.status === 'upcoming' ? 'is-upcoming' : 'is-archived'
-                            }`}
-                          >
-                            {selectedEvent.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED DOSSIER'}
-                          </span>
-                        </div>
+              <div
+                className="hwi-gallery-track"
+                ref={galleryTrackRef}
+                onPointerLeave={() => setHoveredCardId(null)}
+              >
+                {EVENTS_DATA.map((event, idx) => {
+                  const isHovered = hoveredCardId === event.id;
 
-                        <button
-                          type="button"
-                          className="expanded-collapse-chip"
-                          onClick={() => setSelectedId(null)}
-                          aria-label="Restore overview mode"
-                          data-cursor="link"
-                          data-cursor-label="OVERVIEW"
-                        >
-                          <span>RESTORE OVERVIEW</span>
-                          <X size={14} />
-                        </button>
-                      </div>
-
-                      {/* Main Middle Row: Theme, Headline, Narrative, Metadata */}
-                      <div className="detail-panel__body">
-                        <div className="expanded-theme-line">
-                          <span className="theme-line-rule" />
-                          <span className="theme-line-text">Theme: {selectedEvent.theme}</span>
-                        </div>
-
-                        <h2 className="detail-panel__headline">{selectedEvent.title}</h2>
-
-                        <p className="detail-panel__narrative">
-                          {selectedEvent.shortDescription || selectedEvent.desc}
-                        </p>
-
-                        <div className="expanded-meta-strip">
-                          <div className="meta-strip-item">
-                            <Calendar size={14} />
-                            <span>{selectedEvent.date}</span>
-                          </div>
-                          <span className="meta-strip-sep">•</span>
-                          <div className="meta-strip-item">
-                            <MapPin size={14} />
-                            <span>{selectedEvent.venue}</span>
-                          </div>
-                          <span className="meta-strip-sep">•</span>
-                          <div className="meta-strip-item">
-                            <Clock size={14} />
-                            <span>{selectedEvent.duration}</span>
-                          </div>
-                          <span className="meta-strip-sep">•</span>
-                          <div className="meta-strip-item">
-                            <Users size={14} />
-                            <span>
-                              {typeof selectedEvent.participants === 'string' &&
-                              (selectedEvent.participants.includes('Builders') ||
-                                selectedEvent.participants.includes('Researchers'))
-                                ? selectedEvent.participants
-                                : `${selectedEvent.participants} Participants`}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Bottom Actions Row */}
-                      <div className="expanded-bottom-actions">
-                        {selectedEvent.status === 'upcoming' ? (
-                          <Link
-                            href={selectedEvent.ctaUrl || '/join'}
-                            className="expanded-cta-btn expanded-cta-btn--primary"
-                            data-cursor="link"
-                            data-cursor-label="APPLY"
-                          >
-                            <span>{selectedEvent.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
-                            <ArrowUpRight size={16} />
-                          </Link>
-                        ) : (
-                          <a
-                            href="#editorial-story"
-                            className="expanded-cta-btn expanded-cta-btn--primary"
-                            data-cursor="link"
-                            data-cursor-label="EXPLORE"
-                          >
-                            <span>EXPLORE COMPLETE EVENT CHRONICLE</span>
-                            <span className="action-arrow">↓</span>
-                          </a>
-                        )}
-
-                        <span className="detail-panel__hint">
-                          ● Active edition (click any card to switch)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ── REGION 2: DEDICATED EVENT CARD GALLERY ── */}
-              <div className="hwi-gallery-region">
-                <button
-                  type="button"
-                  className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
-                  onClick={handlePrevEvent}
-                  aria-label="Previous edition"
-                  data-cursor="link"
-                  data-cursor-label="PREV"
-                >
-                  <ChevronLeft size={22} />
-                </button>
-
-                <div
-                  className="hwi-gallery-track"
-                  ref={galleryTrackRef}
-                  onPointerLeave={handleTrackLeave}
-                >
-                  {EVENTS_DATA.map((event, idx) => {
-                    const isCardSelected = selectedEvent?.id === event.id;
-                    const isCardActive = activeCardId === event.id;
-
-                    return (
-                      <div
-                        key={event.id}
-                        className={`hwi-panel ${
-                          isCardActive ? 'hwi-panel--active' : 'hwi-panel--idle'
-                        } ${isCardSelected ? 'hwi-panel--selected' : ''}`}
-                        style={
-                          {
-                            '--panel-accent': event.accentColor || '#EF4444',
-                          } as React.CSSProperties
-                        }
-                        onClick={() => handleSelectEvent(event.id)}
-                        onMouseEnter={() => handleCardHover(event.id)}
-                        onPointerEnter={() => handleCardHover(event.id)}
-                        onFocus={() => handleCardHover(event.id)}
-                        role="button"
-                        tabIndex={0}
-                        aria-expanded={isCardActive}
-                        aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
-                        data-cursor="link"
-                        data-cursor-label="SELECT"
-                      >
-                        {/* Background Visual */}
-                        {event.cardImage ? (
-                          <div
-                            className="hwi-panel__bg-photo"
-                            style={{ backgroundImage: `url(${event.cardImage})` }}
+                  return (
+                    <article
+                      key={event.id}
+                      className={`hwi-panel ${isHovered ? 'hwi-panel--hovered' : 'hwi-panel--idle'}`}
+                      style={
+                        {
+                          '--panel-accent': event.accentColor || '#EF4444',
+                        } as React.CSSProperties
+                      }
+                      onMouseEnter={() => setHoveredCardId(event.id)}
+                      onMouseLeave={() => setHoveredCardId(null)}
+                      onPointerEnter={() => setHoveredCardId(event.id)}
+                      onFocus={() => setHoveredCardId(event.id)}
+                      onBlur={() => setHoveredCardId(null)}
+                      onClick={() => {
+                        // Mobile / touch accessible tap-to-toggle
+                        setHoveredCardId((prev) => (prev === event.id ? null : event.id));
+                      }}
+                      tabIndex={0}
+                      aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
+                      data-cursor="link"
+                      data-cursor-label="HOVER"
+                    >
+                      {/* Background Visual Photo / Artwork */}
+                      {event.cardImage ? (
+                        <div
+                          className="hwi-panel__bg-photo"
+                          style={{ backgroundImage: `url(${event.cardImage})` }}
+                        />
+                      ) : (
+                        <div className="hwi-panel__bg-art">
+                          <PanelArtwork
+                            graphicType={event.hudGraphicType || 'grid'}
+                            accent={event.accentColor || '#EF4444'}
                           />
-                        ) : (
-                          <div className="hwi-panel__bg-art">
-                            <PanelArtwork
-                              graphicType={event.hudGraphicType || 'grid'}
-                              accent={event.accentColor || '#EF4444'}
-                            />
-                          </div>
-                        )}
+                        </div>
+                      )}
 
-                        <div className="hwi-panel__scrim" />
+                      {/* Subtle Rest Scrim */}
+                      <div className="hwi-panel__scrim" />
 
-                        {/* Collapsed Spine Elements */}
+                      {/* ── CARD DEFAULT REST APPEARANCE ── */}
+                      <div className="hwi-panel__rest-content" aria-hidden={isHovered}>
                         <div className="hwi-panel__tedx-header">
                           <span className="hwi-panel__tedx-tag">EDITION</span>
                           <span className="hwi-panel__tedx-num">
@@ -1055,29 +853,105 @@ export function EventsExperience() {
                           </span>
                         </div>
 
-                        <div className="hwi-panel__tedx-vertical" aria-hidden="true">
-                          <span>{(event.shortTitle || event.title).toUpperCase()}</span>
+                        <div className="hwi-panel__rest-badges">
+                          <span className="hwi-panel__category-badge">{event.category}</span>
+                          <span className="hwi-panel__year-badge">{event.year}</span>
                         </div>
 
-                        <div className="hwi-panel__tedx-footer">
+                        <div className="hwi-panel__rest-footer">
+                          <h4 className="hwi-panel__rest-title">
+                            {event.shortTitle || event.title}
+                          </h4>
                           <span className="tedx-footer-date">{event.date}</span>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
 
-                <button
-                  type="button"
-                  className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
-                  onClick={handleNextEvent}
-                  aria-label="Next edition"
-                  data-cursor="link"
-                  data-cursor-label="NEXT"
-                >
-                  <ChevronRight size={22} />
-                </button>
+                      {/* ── CARD HOVER-REVEALED OVERLAY ── */}
+                      <div
+                        className="hwi-card-hover-overlay"
+                        aria-hidden={!isHovered}
+                      >
+                        <div className="card-hover-header">
+                          <div className="card-hover-tags">
+                            <span className="card-hover-edition-pill">
+                              EDITION {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span className="card-hover-category-pill">{event.category}</span>
+                            <span className="card-hover-year-pill">{event.year}</span>
+                          </div>
+                        </div>
+
+                        <div className="card-hover-body">
+                          {event.theme && (
+                            <div className="card-hover-theme-line">
+                              <span className="hover-theme-bullet" />
+                              <span className="hover-theme-text">Theme: {event.theme}</span>
+                            </div>
+                          )}
+
+                          <h3 className="card-hover-title">{event.title}</h3>
+
+                          <p className="card-hover-desc">
+                            {event.shortDescription || event.desc}
+                          </p>
+
+                          <div className="card-hover-meta">
+                            <div className="card-hover-meta-item">
+                              <Calendar size={12} className="card-hover-icon" />
+                              <span>{event.date}</span>
+                            </div>
+                            {event.venue && (
+                              <div className="card-hover-meta-item card-hover-meta-item--venue">
+                                <MapPin size={12} className="card-hover-icon" />
+                                <span className="hover-venue-text">{event.venue}</span>
+                              </div>
+                            )}
+                            {event.participants && (
+                              <div className="card-hover-meta-item">
+                                <Users size={12} className="card-hover-icon" />
+                                <span>
+                                  {typeof event.participants === 'string' &&
+                                  (event.participants.includes('Builders') ||
+                                    event.participants.includes('Researchers') ||
+                                    event.participants.includes('Students') ||
+                                    event.participants.includes('Participants'))
+                                    ? event.participants
+                                    : `${event.participants} Participants`}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="card-hover-footer">
+                          <button
+                            type="button"
+                            className="card-hover-chronicle-btn"
+                            onClick={(e) => handleOpenChronicle(e, event.id)}
+                            aria-label={`Explore complete chronicle for Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
+                            data-cursor="link"
+                            data-cursor-label="CHRONICLE"
+                          >
+                            <span>EXPLORE COMPLETE CHRONICLE</span>
+                            <ArrowUpRight size={14} className="chronicle-btn-arrow" />
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
+
+              <button
+                type="button"
+                className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
+                onClick={() => scrollGallery('right')}
+                aria-label="Scroll right"
+                data-cursor="link"
+                data-cursor-label="NEXT"
+              >
+                <ChevronRight size={22} />
+              </button>
             </div>
           </div>
         </div>

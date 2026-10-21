@@ -4,6 +4,37 @@
    Cyan Accent Details • Fluid Pinned Viewport • Responsive & Accessible
    ========================================================================== */
 
+/* Modern CSS Houdini angle registration for seamless GPU clockwise rotation */
+@property --tech-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: true;
+}
+
+@property --leaders-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: true;
+}
+
+@keyframes rotateTechClockwise {
+  0% {
+    --tech-border-angle: 0deg;
+  }
+  100% {
+    --tech-border-angle: 360deg;
+  }
+}
+
+@keyframes rotateLeadersClockwise {
+  0% {
+    --leaders-border-angle: 0deg;
+  }
+  100% {
+    --leaders-border-angle: 360deg;
+  }
+}
+
 .team-showcase-track {
   --tc-bg: #070709;
   --tc-surface: #0e0c14;
@@ -16,6 +47,12 @@
   --tc-accent: #EF4444;
   --tc-cyan: #06B6D4;
   --tc-cyan-bright: #22D3EE;
+
+  /* Department Dynamic Theme Variables (Default to Chapter Leadership) */
+  --dept-accent-start: #E63946;
+  --dept-accent-end: #F4A261;
+  --dept-glow: rgba(230, 57, 70, 0.28);
+  --dept-gradient: linear-gradient(135deg, #E63946 0%, #F4A261 100%);
 
   position: relative;
   width: 100%;
@@ -68,16 +105,18 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  color: var(--tc-accent);
+  color: var(--dept-accent-start, var(--tc-accent));
   text-transform: uppercase;
+  transition: color 0.35s ease;
 }
 
 .team-header-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--tc-accent);
-  box-shadow: 0 0 8px var(--tc-accent);
+  background: var(--dept-accent-start, var(--tc-accent));
+  box-shadow: 0 0 8px var(--dept-glow, var(--tc-accent));
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .team-header-divider {
@@ -123,7 +162,7 @@
   letter-spacing: 0.04em;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.22s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   user-select: none;
 }
 
@@ -134,10 +173,14 @@
 }
 
 .team-dept-pill.is-active {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: var(--tc-accent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--pill-accent-start, var(--dept-accent-start, #EF4444)) 20%, transparent) 0%,
+    color-mix(in srgb, var(--pill-accent-end, var(--dept-accent-end, #EF4444)) 14%, transparent) 100%
+  );
+  border-color: var(--pill-accent-start, var(--dept-accent-start, #EF4444));
   color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 14px var(--pill-glow, var(--dept-glow, rgba(239, 68, 68, 0.25)));
 }
 
 .team-dept-pill__dot {
@@ -149,8 +192,8 @@
 }
 
 .team-dept-pill.is-active .team-dept-pill__dot {
-  background: var(--tc-accent);
-  box-shadow: 0 0 6px var(--tc-accent);
+  background: var(--pill-accent-start, var(--dept-accent-start, #EF4444));
+  box-shadow: 0 0 6px var(--pill-accent-start, var(--dept-accent-start, #EF4444));
   opacity: 1;
 }
 
@@ -189,18 +232,6 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  animation: teamInfoFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes teamInfoFadeIn {
-  from {
-    opacity: 0.3;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .team-info__header-row {
@@ -218,16 +249,18 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: var(--tc-accent);
+  color: var(--dept-accent-start, var(--tc-accent));
   text-transform: uppercase;
+  transition: color 0.35s ease;
 }
 
 .team-info__dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--tc-accent);
-  box-shadow: 0 0 8px var(--tc-accent);
+  background: var(--dept-accent-start, var(--tc-accent));
+  box-shadow: 0 0 8px var(--dept-glow, var(--tc-accent));
+  transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .team-info__rank-tag {
@@ -245,13 +278,14 @@
 /* Full Name Headline */
 .team-info__name {
   font-family: var(--font-satoshi), sans-serif;
-  font-size: clamp(2.4rem, 4.2vw, 4.2rem);
+  font-size: clamp(2.2rem, 3.8vw, 3.8rem);
   font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
   color: #FFFFFF;
   margin: 0;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 /* Role & Academic tags */
@@ -260,6 +294,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  transition: opacity 0.2s ease;
 }
 
 .team-info__role-pill {
@@ -267,14 +302,15 @@
   align-items: center;
   padding: 4px 14px;
   border-radius: 999px;
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.32);
-  color: var(--tc-cyan-bright);
+  background: color-mix(in srgb, var(--dept-accent-start, #06B6D4) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dept-accent-start, #06B6D4) 38%, transparent);
+  color: var(--dept-accent-start, var(--tc-cyan-bright));
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
 .team-info__academic-pill {
@@ -286,11 +322,12 @@
 
 /* Bio Description */
 .team-info__bio {
-  font-size: clamp(0.96rem, 1.15vw, 1.1rem);
-  line-height: 1.65;
+  font-size: clamp(0.94rem, 1.1vw, 1.05rem);
+  line-height: 1.6;
   color: var(--tc-text-sec);
   margin: 0;
   max-width: 520px;
+  transition: opacity 0.2s ease;
 }
 
 /* Social & Contact Buttons */
@@ -425,11 +462,18 @@
   width: 100%;
   height: 100%;
   border-radius: 18px;
-  background: linear-gradient(165deg, #14121c 0%, #0d0b13 60%, #07060a 100%);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.85),
-              0 10px 24px rgba(0, 0, 0, 0.6),
-              0 0 25px rgba(6, 182, 212, 0.14);
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    var(--dept-gradient, linear-gradient(135deg, var(--dept-accent-start, #06B6D4) 0%, var(--dept-accent-end, #22D3EE) 100%)) border-box;
+  /* Shared Baseline Department Glow at Rest */
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 34%, transparent),
+    -14px -10px 36px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 26%, transparent),
+    14px 12px 36px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 26%, transparent),
+    0 0 65px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 16%, transparent),
+    0 0 95px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 12%, transparent);
   padding: 18px 20px;
   box-sizing: border-box;
   display: flex;
@@ -438,14 +482,76 @@
   user-select: none;
   cursor: pointer;
   will-change: transform, opacity;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  transform-style: preserve-3d;
+}
+
+/* Base Outer Ambient Aura Backdrop for standard departments */
+.team-physical-card::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      color-mix(in srgb, var(--dept-accent-start, #06B6D4) 38%, transparent) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      color-mix(in srgb, var(--dept-accent-end, #22D3EE) 38%, transparent) 0%,
+      transparent 60%
+    );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+/* Subtle two-sided surface gradient sheen */
+.team-physical-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16.5px;
+  background:
+    radial-gradient(circle at 10% 10%, color-mix(in srgb, var(--dept-accent-start, #06B6D4) 7%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, color-mix(in srgb, var(--dept-accent-end, #22D3EE) 7%, transparent) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .team-physical-card.is-active {
-  border-color: rgba(6, 182, 212, 0.6);
-  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9),
-              0 12px 28px rgba(0, 0, 0, 0.6),
-              0 0 35px rgba(6, 182, 212, 0.25);
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 44%, transparent),
+    -18px -14px 44px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 34%, transparent),
+    18px 16px 44px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 34%, transparent),
+    0 0 80px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 22%, transparent),
+    0 0 110px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 16%, transparent);
+}
+
+.team-physical-card.is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 52%, transparent),
+    -22px -16px 48px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 40%, transparent),
+    22px 20px 48px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 40%, transparent),
+    0 0 90px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 26%, transparent),
+    0 0 120px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 20%, transparent);
+}
+
+.team-physical-card:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
 }
 
 /* Top Lanyard Slot Cutout */
@@ -456,15 +562,22 @@
   background: rgba(0, 0, 0, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.12);
   margin: 0 auto 8px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 8px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 15%, transparent);
 }
 
-/* Glowing Top Cyan Security Line */
+/* Glowing Top Security Line with Department Gradient */
+.team-card__accent-strip,
 .team-card__cyan-strip {
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #06B6D4 50%, transparent 100%);
-  box-shadow: 0 0 10px #06B6D4;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--dept-accent-start, #06B6D4) 30%,
+    var(--dept-accent-end, #22D3EE) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px var(--dept-glow, rgba(6, 182, 212, 0.4));
   margin-bottom: 8px;
 }
 
@@ -473,14 +586,18 @@
   position: absolute;
   font-family: monospace;
   font-size: 10px;
-  color: var(--tc-cyan);
-  opacity: 0.55;
+  opacity: 0.85;
   pointer-events: none;
+  transition: color 0.35s ease;
 }
-.team-card__reticle.top-left { top: 8px; left: 8px; }
-.team-card__reticle.top-right { top: 8px; right: 8px; }
-.team-card__reticle.bottom-left { bottom: 8px; left: 8px; }
-.team-card__reticle.bottom-right { bottom: 8px; right: 8px; }
+.team-card__reticle.top-left,
+.team-card__reticle.bottom-left {
+  color: var(--dept-accent-start, var(--tc-cyan));
+}
+.team-card__reticle.top-right,
+.team-card__reticle.bottom-right {
+  color: var(--dept-accent-end, var(--tc-cyan));
+}
 
 /* Card Header */
 .team-card__header {
@@ -505,9 +622,11 @@
   letter-spacing: 0.12em;
   padding: 2px 5px;
   border-radius: 4px;
-  background: rgba(239, 68, 68, 0.18);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: var(--tc-accent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--dept-accent-start, #EF4444) 20%, transparent) 0%, color-mix(in srgb, var(--dept-accent-end, #EF4444) 20%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--dept-accent-start, #EF4444) 45%, rgba(255, 255, 255, 0.2));
+  color: #FFFFFF;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--dept-accent-start, #EF4444) 50%, transparent);
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
 .team-card__brand-text {
@@ -544,18 +663,12 @@
   color: #10B981;
 }
 
-.team-card__pulse-dot {
+.team-card__status-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background: #10B981;
   box-shadow: 0 0 6px #10B981;
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 0.6; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.2); }
 }
 
 /* Photo Window */
@@ -566,7 +679,10 @@
   border-radius: 12px;
   overflow: hidden;
   background: #0a0810;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    -2px -2px 10px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 14%, transparent),
+    2px 2px 10px color-mix(in srgb, var(--dept-accent-end, #22D3EE) 14%, transparent);
   margin-bottom: 10px;
 }
 
@@ -623,11 +739,13 @@
   border-radius: 4px;
   background: rgba(10, 8, 14, 0.88);
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  border: 1px solid color-mix(in srgb, var(--dept-accent-start, #06B6D4) 45%, transparent);
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.54rem;
   font-weight: 700;
-  color: var(--tc-cyan-bright);
+  color: var(--dept-accent-start, var(--tc-cyan-bright));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 25%, transparent);
+  transition: border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
 }
 
 /* Card Body */
@@ -648,10 +766,13 @@
 .team-card__dept-tag {
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.58rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.08em;
-  color: var(--tc-cyan-bright);
+  background: linear-gradient(90deg, var(--dept-accent-start, #06B6D4) 0%, var(--dept-accent-end, #22D3EE) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   text-transform: uppercase;
+  transition: opacity 0.35s ease;
 }
 
 .team-card__rank-tag {
@@ -724,9 +845,11 @@
 }
 
 .team-card__serial-code {
-  color: var(--tc-cyan);
+  color: var(--dept-accent-start, var(--tc-cyan));
+  text-shadow: 0 0 8px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 45%, transparent);
   font-weight: 700;
   letter-spacing: 0.08em;
+  transition: color 0.35s ease, text-shadow 0.35s ease;
 }
 
 /* ─── Bottom Footer Bar ──────────────────────────────────────────────────── */
@@ -845,8 +968,357 @@
   }
 }
 
+/* =========================================================================
+   1. LEADERS (CORE-LEADERSHIP): UNIQUE RAINBOW SPECTRUM GLOW
+   ========================================================================= */
+
+/* Rainbow border & ambient multi-color glow with clockwise rotation */
+.team-physical-card[data-dept="core-leadership"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--leaders-border-angle, 0deg) at 50% 50%,
+      #00F0FF 0deg,
+      #7000FF 60deg,
+      #D900FF 120deg,
+      #FF007A 180deg,
+      #FF7A00 240deg,
+      #00E878 300deg,
+      #00F0FF 360deg
+    ) border-box;
+  animation: rotateLeadersClockwise 12s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(0, 240, 255, 0.28);
+}
+
+.team-physical-card[data-dept="core-leadership"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--leaders-border-angle, 0deg) at 50% 50%,
+    rgba(0, 240, 255, 0.38) 0deg,
+    rgba(112, 0, 255, 0.30) 60deg,
+    rgba(217, 0, 255, 0.28) 120deg,
+    rgba(255, 0, 122, 0.32) 180deg,
+    rgba(255, 122, 0, 0.26) 240deg,
+    rgba(0, 232, 120, 0.24) 300deg,
+    rgba(0, 240, 255, 0.38) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateLeadersClockwise 12s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="core-leadership"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(0, 240, 255, 0.36);
+}
+
+.team-physical-card[data-dept="core-leadership"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="core-leadership"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(0, 240, 255, 0.44);
+}
+
+.team-physical-card[data-dept="core-leadership"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* Restrained rainbow sheen reflection across card surface */
+.team-physical-card[data-dept="core-leadership"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16.5px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 240, 255, 0.06) 0%,
+    rgba(112, 0, 255, 0.04) 25%,
+    rgba(255, 0, 122, 0.05) 50%,
+    rgba(255, 122, 0, 0.04) 75%,
+    rgba(0, 255, 133, 0.05) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Lanyard slot with subtle rainbow highlight */
+.team-physical-card[data-dept="core-leadership"] .team-card__lanyard-slot {
+  border-color: rgba(0, 240, 255, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 240, 255, 0.15);
+}
+
+/* Top Security Line with smooth-moving rainbow gradient */
+.team-physical-card[data-dept="core-leadership"] .team-card__accent-strip {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #00F0FF 15%,
+    #7000FF 35%,
+    #FF007A 55%,
+    #FF7A00 75%,
+    #00FF85 90%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.5), 0 0 18px rgba(255, 0, 122, 0.35);
+  animation: rainbowSheenMove 8s ease-in-out infinite alternate;
+}
+
+@keyframes rainbowSheenMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Rainbow Reticles */
+.team-physical-card[data-dept="core-leadership"] .team-card__reticle.top-left {
+  color: #00F0FF;
+  opacity: 0.85;
+}
+.team-physical-card[data-dept="core-leadership"] .team-card__reticle.top-right {
+  color: #D900FF;
+  opacity: 0.85;
+}
+.team-physical-card[data-dept="core-leadership"] .team-card__reticle.bottom-left {
+  color: #FF7A00;
+  opacity: 0.85;
+}
+.team-physical-card[data-dept="core-leadership"] .team-card__reticle.bottom-right {
+  color: #00FF85;
+  opacity: 0.85;
+}
+
+/* Emblem: Glassy rainbow finish */
+.team-physical-card[data-dept="core-leadership"] .team-card__emblem {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.16) 0%, rgba(255, 0, 122, 0.14) 100%);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #00F0FF;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* Portrait area: glassy, cinematic finish without obscuring image */
+.team-physical-card[data-dept="core-leadership"] .team-card__photo-container {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 0 18px rgba(112, 0, 255, 0.12),
+    0 0 16px rgba(0, 240, 255, 0.12);
+}
+
+/* Verified Badge in rainbow electric cyan */
+.team-physical-card[data-dept="core-leadership"] .team-card__verified-badge {
+  background: rgba(10, 8, 16, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  color: #00F0FF;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+}
+
+/* Department label: sophisticated rainbow gradient text */
+.team-physical-card[data-dept="core-leadership"] .team-card__dept-tag {
+  background: linear-gradient(90deg, #00F0FF 0%, #D900FF 50%, #FF007A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+/* Credential ID: electric cyan glow */
+.team-physical-card[data-dept="core-leadership"] .team-card__serial-code {
+  color: #00F0FF;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.55);
+}
+
+
+/* =========================================================================
+   2. TECHNICAL TEAM (TECHNICAL-TEAM): CLOCKWISE RED-TO-BLUE ROTATING GRADIENT
+   ========================================================================= */
+
+/* Clockwise continuous perimeter conic gradient & following dual ambient glow */
+.team-physical-card[data-dept="technical-team"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #121019 0%, #0a0911 60%, #060509 100%) padding-box,
+    conic-gradient(
+      from var(--tech-border-angle, 0deg) at 50% 50%,
+      #D6001C 0deg,
+      #FF1E42 35deg,
+      #C00099 75deg,
+      #7B00D9 110deg,
+      #0051FF 150deg,
+      #0084FF 180deg,
+      #00D4FF 210deg,
+      #0066FF 245deg,
+      #6B00D7 285deg,
+      #C00099 325deg,
+      #D6001C 360deg
+    ) border-box;
+  animation: rotateTechClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(121, 0, 216, 0.25);
+}
+
+.team-physical-card[data-dept="technical-team"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--tech-border-angle, 0deg) at 50% 50%,
+    rgba(214, 0, 28, 0.44) 0deg,
+    rgba(255, 30, 66, 0.38) 35deg,
+    rgba(192, 0, 153, 0.30) 75deg,
+    rgba(121, 0, 216, 0.30) 110deg,
+    rgba(0, 85, 255, 0.38) 150deg,
+    rgba(0, 132, 255, 0.48) 180deg,
+    rgba(0, 212, 255, 0.38) 210deg,
+    rgba(0, 102, 255, 0.38) 245deg,
+    rgba(107, 0, 215, 0.30) 285deg,
+    rgba(192, 0, 153, 0.30) 325deg,
+    rgba(214, 0, 28, 0.44) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateTechClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="technical-team"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(121, 0, 216, 0.32);
+}
+
+.team-physical-card[data-dept="technical-team"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="technical-team"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(121, 0, 216, 0.40);
+}
+
+.team-physical-card[data-dept="technical-team"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* Subtle two-sided surface gradient: Crimson top-left, Cobalt bottom-right */
+.team-physical-card[data-dept="technical-team"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16.5px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(229, 9, 20, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, rgba(0, 132, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Top Security Line: Red-through-Purple-to-Blue beam with dual glow */
+.team-physical-card[data-dept="technical-team"] .team-card__accent-strip {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #E50914 20%,
+    #8B00FF 50%,
+    #0084FF 80%,
+    transparent 100%
+  );
+  box-shadow: -10px 0 14px rgba(229, 9, 20, 0.5), 10px 0 14px rgba(0, 132, 255, 0.5);
+}
+
+/* Corner Reticle Crosshairs: Red on left, Blue on right */
+.team-physical-card[data-dept="technical-team"] .team-card__reticle.top-left {
+  color: #E50914;
+  opacity: 0.9;
+}
+.team-physical-card[data-dept="technical-team"] .team-card__reticle.top-right {
+  color: #0084FF;
+  opacity: 0.9;
+}
+.team-physical-card[data-dept="technical-team"] .team-card__reticle.bottom-left {
+  color: #E50914;
+  opacity: 0.9;
+}
+.team-physical-card[data-dept="technical-team"] .team-card__reticle.bottom-right {
+  color: #0084FF;
+  opacity: 0.9;
+}
+
+/* Emblem: Spider-Man dual red/blue badge with silver border */
+.team-physical-card[data-dept="technical-team"] .team-card__emblem {
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.22) 0%, rgba(0, 132, 255, 0.22) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  text-shadow: 0 0 8px rgba(229, 9, 20, 0.7);
+}
+
+/* Photo window: crisp silver highlight with subtle red-to-blue rim */
+.team-physical-card[data-dept="technical-team"] .team-card__photo-container {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    -3px -3px 12px rgba(229, 9, 20, 0.15),
+    3px 3px 12px rgba(0, 132, 255, 0.15);
+}
+
+/* Verified Badge in electric cobalt blue with silver border */
+.team-physical-card[data-dept="technical-team"] .team-card__verified-badge {
+  background: rgba(8, 7, 14, 0.9);
+  border: 1px solid rgba(0, 132, 255, 0.55);
+  color: #00D0FF;
+  box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
+}
+
+/* Department Label: bold Red-to-Blue gradient text */
+.team-physical-card[data-dept="technical-team"] .team-card__dept-tag {
+  background: linear-gradient(90deg, #FF1E27 0%, #9D4EDD 50%, #0084FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+/* Serial ID: electric blue with silver label */
+.team-physical-card[data-dept="technical-team"] .team-card__serial-code {
+  color: #00D0FF;
+  text-shadow: 0 0 8px rgba(0, 208, 255, 0.55);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .team-physical-card {
     transition: opacity 0.2s ease !important;
+  }
+  .team-physical-card[data-dept="core-leadership"],
+  .team-physical-card[data-dept="technical-team"],
+  .team-physical-card[data-dept="core-leadership"]::after,
+  .team-physical-card[data-dept="technical-team"]::after,
+  .team-physical-card[data-dept="core-leadership"] .team-card__accent-strip,
+  .team-physical-card[data-dept="technical-team"] .team-card__accent-strip {
+    animation: none !important;
   }
 }

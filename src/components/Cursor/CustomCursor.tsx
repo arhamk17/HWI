@@ -1,19 +1,36 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { cursorStore, CursorVariant } from '@/lib/cursorStore';
+import { introStore } from '@/lib/introStore';
 import './CustomCursor.css';
 
 export function CustomCursor() {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [variant, setVariant] = useState<CursorVariant>('default');
   const [label, setLabel] = useState<string>('');
   const [isVisible, setIsVisible] = useState(false);
   const [isOverInput, setIsOverInput] = useState(false);
+  const [isIntroComplete, setIsIntroComplete] = useState(() => introStore.isComplete);
 
   const cursorRef = useRef<HTMLDivElement>(null);
   const posRef = useRef({ x: -100, y: -100, targetX: -100, targetY: -100 });
   const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (introStore.isComplete) {
+      setIsIntroComplete(true);
+      return;
+    }
+    const unsub = introStore.subscribe((phase) => {
+      if (phase === 'complete' || introStore.isComplete) {
+        setIsIntroComplete(true);
+      }
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     // Disable on touch devices or coarse pointer
@@ -170,7 +187,8 @@ export function CustomCursor() {
     displayContent = <span className="hwi-cursor__label">↗ OPEN</span>;
   }
 
-  const shouldBeVisible = isVisible && !isOverInput;
+  const isHomepage = pathname === '/';
+  const shouldBeVisible = isVisible && !isOverInput && (!isHomepage || isIntroComplete);
 
   return (
     <div

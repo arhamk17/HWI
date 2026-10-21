@@ -20,6 +20,7 @@ export interface DepartmentMember {
   department: string;
   academicYear?: string;
   branch?: string;
+  credentialId?: string;
   image?: string;
   driveId?: string;
   email?: string;
@@ -32,10 +33,83 @@ export interface DepartmentMember {
   };
 }
 
+export interface DepartmentTheme {
+  start: string;
+  end: string;
+  glow: string;
+  gradient: string;
+  isHighContrastLightEnd?: boolean;
+}
+
+export const DEPARTMENT_THEMES: Record<string, DepartmentTheme> = {
+  'core-leadership': {
+    start: '#00F0FF',
+    end: '#FF007A',
+    glow: 'rgba(0, 240, 255, 0.35)',
+    gradient: 'linear-gradient(135deg, #00F0FF 0%, #7000FF 25%, #FF007A 50%, #FF7A00 75%, #00FF85 100%)',
+  },
+  'technical-team': {
+    start: '#E50914',
+    end: '#0084FF',
+    glow: 'rgba(229, 9, 20, 0.35)',
+    gradient: 'linear-gradient(135deg, #E50914 0%, #8B00FF 50%, #0084FF 100%)',
+  },
+  'design-team': {
+    start: '#A855F7',
+    end: '#EC4899',
+    glow: 'rgba(168, 85, 247, 0.28)',
+    gradient: 'linear-gradient(135deg, #A855F7 0%, #EC4899 100%)',
+  },
+  'pr-marketing': {
+    start: '#F97316',
+    end: '#FACC15',
+    glow: 'rgba(249, 115, 22, 0.28)',
+    gradient: 'linear-gradient(135deg, #F97316 0%, #FACC15 100%)',
+  },
+  'social-media': {
+    start: '#06B6D4',
+    end: '#6366F1',
+    glow: 'rgba(6, 182, 212, 0.28)',
+    gradient: 'linear-gradient(135deg, #06B6D4 0%, #6366F1 100%)',
+  },
+  'photography-editing': {
+    start: '#EC4899',
+    end: '#8B5CF6',
+    glow: 'rgba(236, 72, 153, 0.28)',
+    gradient: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
+  },
+  'event-logistics': {
+    start: '#22C55E',
+    end: '#14B8A6',
+    glow: 'rgba(34, 197, 94, 0.28)',
+    gradient: 'linear-gradient(135deg, #22C55E 0%, #14B8A6 100%)',
+  },
+  'documentation': {
+    start: '#3B82F6',
+    end: '#A5B4FC',
+    glow: 'rgba(59, 130, 246, 0.28)',
+    gradient: 'linear-gradient(135deg, #3B82F6 0%, #A5B4FC 100%)',
+  },
+  'sponsorship-partnerships': {
+    start: '#F59E0B',
+    end: '#D97706',
+    glow: 'rgba(245, 158, 11, 0.28)',
+    gradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+  },
+};
+
+export function getDepartmentTheme(deptId: string): DepartmentTheme {
+  if (DEPARTMENT_THEMES[deptId]) return DEPARTMENT_THEMES[deptId];
+  if (deptId === 'content-documentation') return DEPARTMENT_THEMES['documentation'];
+  if (deptId === 'social-media-photography' || deptId === 'social-media-pr') return DEPARTMENT_THEMES['social-media'];
+  return DEPARTMENT_THEMES['core-leadership'];
+}
+
 export interface Department {
   id: string;
   name: string;
   tagline: string;
+  theme?: DepartmentTheme;
   members: DepartmentMember[]; // Ordered: Head first, then Co-Head (if any), then Executive Members
 }
 
@@ -53,6 +127,7 @@ export const DEPARTMENTS: Department[] = [
         department: "Chapter Leadership",
         initials: 'KS',
         rank: 'head',
+        credentialId: 'HWI-PRESIDENT-KK',
         image: '/images/team/president.png',
         bio: "Spearheads chapter vision, national partnerships, and overall community growth at BVUDET-NM.",
         socials: {
@@ -68,6 +143,7 @@ export const DEPARTMENTS: Department[] = [
         department: "Chapter Leadership",
         initials: 'VC',
         rank: 'co-head',
+        credentialId: 'HWI-VICEPRES-VANISHKA',
         image: '/images/team/vice-president.png',
         bio: "Oversees internal chapter execution, student initiatives, and strategic ecosystem alliances.",
         socials: {

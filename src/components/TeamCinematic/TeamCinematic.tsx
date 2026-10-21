@@ -9,7 +9,13 @@ import {
   ChevronDown,
   Users,
 } from 'lucide-react';
-import { DEPARTMENTS, Department, DepartmentMember } from '@/data/teamDepartments';
+import {
+  DEPARTMENTS,
+  Department,
+  DepartmentMember,
+  DepartmentTheme,
+  getDepartmentTheme,
+} from '@/data/teamDepartments';
 import { scrollBus } from '@/lib/scrollBus';
 import { teamStore } from '@/lib/teamStore';
 import './TeamCinematic.css';
@@ -97,8 +103,17 @@ function MailIcon({ size = 15 }: { size?: number }) {
   );
 }
 
-// ─── Technical Cyan Barcode Graphic ──────────────────────────────────────────
-function CyanIdBarcode() {
+// ─── Department Dynamic ID Barcode Graphic ──────────────────────────────────
+function DepartmentIdBarcode({
+  startColor,
+  endColor,
+  uniqueId,
+}: {
+  startColor: string;
+  endColor: string;
+  uniqueId: string;
+}) {
+  const gradId = `barcode-grad-${uniqueId}`;
   return (
     <svg
       className="team-card__barcode-svg"
@@ -106,61 +121,67 @@ function CyanIdBarcode() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <rect x="0" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="4" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
-      <rect x="7" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="12" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="16" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
-      <rect x="19" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="24" y="0" width="1" height="22" fill="#06B6D4" />
-      <rect x="27" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="32" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
-      <rect x="35" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="39" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="43" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="48" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
-      <rect x="51" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="56" y="0" width="1" height="22" fill="#06B6D4" />
-      <rect x="59" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="63" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="67" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="72" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
-      <rect x="75" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="79" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="83" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="88" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
-      <rect x="91" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="96" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="100" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="104" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
-      <rect x="107" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="112" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="116" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="120" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
-      <rect x="123" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="128" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="132" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="137" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
-      <rect x="140" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="144" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="148" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="153" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
-      <rect x="156" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="161" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="165" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="169" y="0" width="1" height="22" fill="#06B6D4" opacity="0.7" />
-      <rect x="172" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="177" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="181" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="186" y="0" width="1" height="22" fill="#06B6D4" opacity="0.6" />
-      <rect x="189" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="193" y="0" width="1.5" height="22" fill="#06B6D4" />
-      <rect x="197" y="0" width="3" height="22" fill="#06B6D4" />
-      <rect x="202" y="0" width="1" height="22" fill="#06B6D4" opacity="0.5" />
-      <rect x="205" y="0" width="2.5" height="22" fill="#06B6D4" />
-      <rect x="210" y="0" width="1" height="22" fill="#06B6D4" />
-      <rect x="213" y="0" width="2" height="22" fill="#06B6D4" />
-      <rect x="217" y="0" width="3" height="22" fill="#06B6D4" />
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor={startColor} />
+          <stop offset="100%" stopColor={endColor} />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="4" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.6" />
+      <rect x="7" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="12" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="16" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.5" />
+      <rect x="19" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="24" y="0" width="1" height="22" fill={`url(#${gradId})`} />
+      <rect x="27" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="32" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.7" />
+      <rect x="35" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="39" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="43" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="48" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.5" />
+      <rect x="51" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="56" y="0" width="1" height="22" fill={`url(#${gradId})`} />
+      <rect x="59" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="63" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="67" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="72" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.6" />
+      <rect x="75" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="79" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="83" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="88" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.7" />
+      <rect x="91" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="96" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="100" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="104" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.5" />
+      <rect x="107" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="112" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="116" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="120" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.7" />
+      <rect x="123" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="128" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="132" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="137" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.6" />
+      <rect x="140" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="144" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="148" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="153" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.5" />
+      <rect x="156" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="161" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="165" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="169" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.7" />
+      <rect x="172" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="177" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="181" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="186" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.6" />
+      <rect x="189" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="193" y="0" width="1.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="197" y="0" width="3" height="22" fill={`url(#${gradId})`} />
+      <rect x="202" y="0" width="1" height="22" fill={`url(#${gradId})`} opacity="0.5" />
+      <rect x="205" y="0" width="2.5" height="22" fill={`url(#${gradId})`} />
+      <rect x="210" y="0" width="1" height="22" fill={`url(#${gradId})`} />
+      <rect x="213" y="0" width="2" height="22" fill={`url(#${gradId})`} />
+      <rect x="217" y="0" width="3" height="22" fill={`url(#${gradId})`} />
     </svg>
   );
 }
@@ -169,6 +190,7 @@ function CyanIdBarcode() {
 interface PhysicalIdCardProps {
   member: DepartmentMember;
   dept: Department;
+  theme: DepartmentTheme;
   index: number;
   total: number;
   diff: number;
@@ -179,6 +201,7 @@ interface PhysicalIdCardProps {
 function PhysicalIdCard({
   member,
   dept,
+  theme,
   index,
   total,
   diff,
@@ -187,10 +210,12 @@ function PhysicalIdCard({
 }: PhysicalIdCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
 
-  const serialId = `HWI-2026-${(dept.id || 'COR').slice(0, 3).toUpperCase()}-${member.id
-    .replace(/[^a-zA-Z0-9]/g, '')
-    .slice(0, 6)
-    .toUpperCase()}`;
+  const serialId =
+    member.credentialId ||
+    `HWI-2026-${(dept.id || 'COR').slice(0, 3).toUpperCase()}-${member.id
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .slice(0, 6)
+      .toUpperCase()}`;
 
   const rankLabel =
     member.rank === 'head'
@@ -201,7 +226,7 @@ function PhysicalIdCard({
       ? 'DEPARTMENT CO-HEAD'
       : 'EXECUTIVE MEMBER';
 
-  // Compute physical 3D stacking style
+  // Compute restrained, subtle physical stacking style
   const cardStyle = useMemo<React.CSSProperties>(() => {
     if (prefersReduced) {
       const isCurrent = Math.abs(diff) < 0.5;
@@ -214,11 +239,10 @@ function PhysicalIdCard({
       };
     }
 
-    // Active Card (diff near 0): prominent, centered, foreground focus
+    // Active Card (diff near 0): prominent, clean, foreground focus
     if (Math.abs(diff) <= 0.2) {
-      const tilt = (index % 2 === 0 ? 0.8 : -0.8) * (1 - Math.abs(diff) * 2);
       return {
-        transform: `translate3d(0px, 0px, 0px) rotate(${tilt.toFixed(2)}deg) scale(1)`,
+        transform: 'translate3d(0px, 0px, 0px) scale(1)',
         opacity: 1,
         zIndex: 25,
         pointerEvents: 'auto',
@@ -226,14 +250,14 @@ function PhysicalIdCard({
       };
     }
 
-    // Exited Card (diff < -0.2): slides up and peels away smoothly to the left
+    // Exited Card (diff < -0.2): slides up subtly and fades smoothly without wild rotation
     if (diff < -0.2) {
       const t = Math.min(1, (-diff - 0.2) / 0.8);
-      const x = -55 * t;
-      const y = -125 * t;
-      const rot = -6 * t;
-      const scale = 1 - 0.05 * t;
-      const opacity = Math.max(0, 1 - t * 1.5);
+      const x = -28 * t;
+      const y = -48 * t;
+      const rot = -1.2 * t;
+      const scale = 1 - 0.02 * t;
+      const opacity = Math.max(0, 1 - t * 1.6);
       return {
         transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0px) rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
         opacity: Number(opacity.toFixed(3)),
@@ -243,13 +267,13 @@ function PhysicalIdCard({
       };
     }
 
-    // Stacked Upcoming Cards (diff > 0.2): stacked behind with depth & realistic perspective
+    // Stacked Upcoming Cards (diff > 0.2): restrained, tidy stack behind
     const stackPos = diff;
-    const x = Math.min(56, 22 * stackPos);
-    const y = Math.min(38, 15 * stackPos);
-    const scale = Math.max(0.82, 1 - 0.06 * stackPos);
-    const rot = stackPos % 2 === 0 ? -2.5 : 3.2;
-    const opacity = Math.max(0, 0.9 - stackPos * 0.2);
+    const x = Math.min(32, 10 * stackPos);
+    const y = Math.min(22, 7 * stackPos);
+    const scale = Math.max(0.92, 1 - 0.025 * stackPos);
+    const rot = stackPos % 2 === 0 ? -0.75 : 0.75;
+    const opacity = Math.max(0, 0.95 - stackPos * 0.18);
 
     return {
       transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0px) rotate(${rot.toFixed(1)}deg) scale(${scale.toFixed(3)})`,
@@ -258,22 +282,31 @@ function PhysicalIdCard({
       pointerEvents: 'auto',
       visibility: opacity <= 0.01 ? 'hidden' : 'visible',
     };
-  }, [diff, index, prefersReduced]);
+  }, [diff, prefersReduced]);
 
   const isActive = Math.abs(diff) <= 0.5;
+
+  const cardCustomStyles: React.CSSProperties = {
+    ...cardStyle,
+    '--dept-accent-start': theme.start,
+    '--dept-accent-end': theme.end,
+    '--dept-glow': theme.glow,
+    '--dept-gradient': theme.gradient,
+  } as React.CSSProperties;
 
   return (
     <article
       className={`team-physical-card ${isActive ? 'is-active' : 'is-stacked'}`}
-      style={cardStyle}
+      data-dept={dept.id}
+      style={cardCustomStyles}
       onClick={onSelect}
       aria-label={`${member.name} — ${member.role}`}
     >
       {/* Top Lanyard Punch Slot */}
       <div className="team-card__lanyard-slot" aria-hidden="true" />
 
-      {/* Cyan Security Accent Line */}
-      <div className="team-card__cyan-strip" />
+      {/* Security Accent Line with Department Gradient */}
+      <div className="team-card__accent-strip" />
 
       {/* Corner Technical Registration Crosshairs */}
       <span className="team-card__reticle top-left" aria-hidden="true">+</span>
@@ -292,7 +325,7 @@ function PhysicalIdCard({
         </div>
 
         <div className="team-card__status-beacon">
-          <span className="team-card__pulse-dot" />
+          <span className="team-card__status-dot" />
           <span>VERIFIED</span>
         </div>
       </div>
@@ -342,7 +375,11 @@ function PhysicalIdCard({
       {/* Bottom Technical Barcode & Serial */}
       <div className="team-card__footer">
         <div className="team-card__barcode-wrap">
-          <CyanIdBarcode />
+          <DepartmentIdBarcode
+            startColor={theme.start}
+            endColor={theme.end}
+            uniqueId={dept.id}
+          />
         </div>
         <div className="team-card__serial-row">
           <span className="team-card__serial-label">CREDENTIAL ID</span>
@@ -361,75 +398,112 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const deptNavRef = useRef<HTMLElement>(null);
   const tickingRef = useRef(false);
 
+  // Calculate cumulative scroll segments across all 9 departments
+  const scrollSegments = useMemo(() => {
+    // Each member receives ~65vh, plus ~35vh transition headroom per department
+    const segments = DEPARTMENTS.map((dept) => {
+      const memberCount = dept.members.length;
+      const vh = Math.max(2, memberCount) * 65 + 35;
+      return { id: dept.id, memberCount, vh };
+    });
+
+    const totalVh = segments.reduce((sum, s) => sum + s.vh, 0);
+
+    let cumulativeP = 0;
+    const mapped = segments.map((s, idx) => {
+      const startP = cumulativeP;
+      const portion = s.vh / totalVh;
+      const endP = idx === segments.length - 1 ? 1.0 : startP + portion;
+      cumulativeP = endP;
+      return {
+        ...s,
+        index: idx,
+        startP,
+        endP,
+        rangeP: endP - startP,
+      };
+    });
+
+    return { mapped, totalVh };
+  }, []);
+
   const currentDept = DEPARTMENTS[activeDeptIdx] || DEPARTMENTS[0];
+  const currentTheme = useMemo(
+    () => currentDept.theme || getDepartmentTheme(currentDept.id),
+    [currentDept]
+  );
   const members = currentDept.members;
   const currentMember = members[activeMemberIdx] || members[0];
 
-  // Dynamic scroll height based on department member count
-  const trackHeightVh = Math.max(160, members.length * 75 + 40);
-
-  // Smooth scroll to a specific member index within the department
-  const scrollToMember = useCallback(
-    (index: number) => {
-      const clamped = Math.max(0, Math.min(members.length - 1, index));
-      setActiveMemberIdx(clamped);
-      setMemberFloat(clamped);
+  // Smooth scroll to a specific member or department across global progress
+  const scrollToMemberGlobal = useCallback(
+    (deptIdx: number, memberIdx: number) => {
       if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const seg = scrollSegments.mapped[deptIdx];
+      if (!seg) return;
+
       const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
       if (totalScrollable <= 0) return;
 
-      const targetRatio = members.length > 1 ? clamped / (members.length - 1) : 0;
-      const targetY = scrollY + rect.top + targetRatio * totalScrollable;
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = scrollY + rect.top;
+
+      const localFraction = seg.memberCount > 1 ? memberIdx / (seg.memberCount - 1) : 0;
+      const targetP = seg.startP + localFraction * seg.rangeP;
+      const targetY = containerTop + targetP * totalScrollable;
+
       window.scrollTo({ top: targetY, behavior: 'smooth' });
     },
-    [members.length]
+    [scrollSegments]
   );
 
-  // Switch department cleanly
+  // Switch department cleanly by scrolling directly to its segment start
   const selectDepartment = useCallback(
     (deptIdx: number) => {
-      if (deptIdx === activeDeptIdx) return;
-      setActiveDeptIdx(deptIdx);
-      setActiveMemberIdx(0);
-      setMemberFloat(0);
+      if (!containerRef.current) return;
+      const seg = scrollSegments.mapped[deptIdx];
+      if (!seg) return;
 
-      // Smooth scroll back to top of container if currently scrolled down
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        if (rect.top < -50) {
-          window.scrollTo({ top: scrollY + rect.top, behavior: 'smooth' });
-        }
-      }
+      const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
+      if (totalScrollable <= 0) return;
+
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = scrollY + rect.top;
+
+      const targetP = seg.startP + 0.001;
+      const targetY = containerTop + targetP * totalScrollable;
+
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
     },
-    [activeDeptIdx]
+    [scrollSegments]
   );
 
   // Step to previous / next member with accessible buttons
   const handlePrevMember = useCallback(() => {
     if (activeMemberIdx > 0) {
-      scrollToMember(activeMemberIdx - 1);
+      scrollToMemberGlobal(activeDeptIdx, activeMemberIdx - 1);
     } else if (activeDeptIdx > 0) {
-      // Step to previous department's last member
-      const prevDeptIdx = activeDeptIdx - 1;
-      selectDepartment(prevDeptIdx);
+      const prevDept = activeDeptIdx - 1;
+      const lastMemberIdx = DEPARTMENTS[prevDept].members.length - 1;
+      scrollToMemberGlobal(prevDept, lastMemberIdx);
     }
-  }, [activeMemberIdx, activeDeptIdx, scrollToMember, selectDepartment]);
+  }, [activeMemberIdx, activeDeptIdx, scrollToMemberGlobal]);
 
   const handleNextMember = useCallback(() => {
-    if (activeMemberIdx < members.length - 1) {
-      scrollToMember(activeMemberIdx + 1);
+    const currentDeptMembers = DEPARTMENTS[activeDeptIdx].members;
+    if (activeMemberIdx < currentDeptMembers.length - 1) {
+      scrollToMemberGlobal(activeDeptIdx, activeMemberIdx + 1);
     } else if (activeDeptIdx < DEPARTMENTS.length - 1) {
-      // Step to next department
-      selectDepartment(activeDeptIdx + 1);
+      scrollToMemberGlobal(activeDeptIdx + 1, 0);
     }
-  }, [activeMemberIdx, members.length, activeDeptIdx, scrollToMember, selectDepartment]);
+  }, [activeMemberIdx, activeDeptIdx, scrollToMemberGlobal]);
 
-  // ─── Continuous Scroll-Linked Animation Engine ───────────────────────────
+  // ─── Single Authoritative Continuous Scroll-Linked Engine ─────────────────
   useEffect(() => {
     const updateScrollProgress = () => {
       if (!containerRef.current || !stickyRef.current) return;
@@ -437,22 +511,35 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
       if (totalScrollable <= 0) return;
 
-      // Normalized progress (0 to 1) through the pinned section
+      // Normalized progress (0 to 1) through the pinned sequence
       const rawP = -rect.top / totalScrollable;
       const p = Math.max(0, Math.min(1, rawP));
 
-      // Continuous float coordinate across members
-      const count = members.length;
-      const curFloat = count > 1 ? p * (count - 1) : 0;
-      setMemberFloat(curFloat);
+      // 1. Identify which department is active based on global progress
+      let resolvedDeptIdx = scrollSegments.mapped.findIndex(
+        (seg) => p >= seg.startP && p < seg.endP
+      );
+      if (resolvedDeptIdx === -1) {
+        resolvedDeptIdx = p >= 1 ? DEPARTMENTS.length - 1 : 0;
+      }
 
-      const nearestIdx = Math.min(count - 1, Math.max(0, Math.round(curFloat)));
+      const seg = scrollSegments.mapped[resolvedDeptIdx];
+      const localP =
+        seg.rangeP > 0 ? Math.max(0, Math.min(1, (p - seg.startP) / seg.rangeP)) : 0;
+      const memberCount = seg.memberCount;
+
+      // 2. Continuous float coordinate within the active department's card deck
+      const curFloat = memberCount > 1 ? localP * (memberCount - 1) : 0;
+      const nearestIdx = Math.min(memberCount - 1, Math.max(0, Math.round(curFloat)));
+
+      setActiveDeptIdx(resolvedDeptIdx);
+      setMemberFloat(curFloat);
       setActiveMemberIdx(nearestIdx);
 
       // Synchronize with global background particles
-      teamStore.update(activeDeptIdx, p);
+      teamStore.update(resolvedDeptIdx, localP);
 
-      if (p >= 0.98 && onCompleteAll) {
+      if (p >= 0.99 && onCompleteAll) {
         onCompleteAll(true);
       }
     };
@@ -478,24 +565,35 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       window.removeEventListener('resize', handleScroll);
       unsubscribeBus();
     };
-  }, [members.length, activeDeptIdx, onCompleteAll]);
+  }, [scrollSegments, onCompleteAll]);
+
+  // Keep active department pill smoothly centered in horizontal nav
+  useEffect(() => {
+    if (!deptNavRef.current) return;
+    const activeBtn = deptNavRef.current.querySelector<HTMLElement>('.team-dept-pill.is-active');
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [activeDeptIdx]);
 
   // Keyboard navigation shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
-        // If container is currently visible in viewport
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        if (rect.top <= 100 && rect.bottom >= 200) {
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      )
+        return;
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      if (rect.top <= 100 && rect.bottom >= 200) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           handleNextMember();
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        if (rect.top <= 100 && rect.bottom >= 200) {
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
           handlePrevMember();
         }
       }
@@ -518,16 +616,26 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       ? 'Department Co-Head'
       : 'Executive Member';
 
+  const trackTotalHeight = scrollSegments.totalVh + 100;
+
   return (
     <section
       className="team-showcase-track"
       ref={containerRef}
-      style={{ height: `${trackHeightVh}vh` }}
+      style={
+        {
+          height: `${trackTotalHeight}vh`,
+          '--dept-accent-start': currentTheme.start,
+          '--dept-accent-end': currentTheme.end,
+          '--dept-glow': currentTheme.glow,
+          '--dept-gradient': currentTheme.gradient,
+        } as React.CSSProperties
+      }
       id="team"
       aria-label="HackWithIndia Team Showcase"
     >
       <div className="team-showcase-sticky" ref={stickyRef}>
-        {/* ─── Top Header: Sleek Department Selector Bar ─────────────────── */}
+        {/* ─── Top Header: Compact Department Selector Bar ────────────────── */}
         <header className="team-showcase-header">
           <div className="team-header-identity">
             <div className="team-header-kicker">
@@ -538,10 +646,16 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
             <span className="team-header-tagline">{currentDept.tagline}</span>
           </div>
 
-          {/* Minimalist Department Selection Pills */}
-          <nav className="team-dept-nav" role="tablist" aria-label="Select Team Department">
+          {/* Understated Department Selection Pills */}
+          <nav
+            className="team-dept-nav"
+            ref={deptNavRef}
+            role="tablist"
+            aria-label="Select Team Department"
+          >
             {DEPARTMENTS.map((dept, dIdx) => {
               const isActive = dIdx === activeDeptIdx;
+              const deptTheme = dept.theme || getDepartmentTheme(dept.id);
               return (
                 <button
                   key={dept.id}
@@ -550,6 +664,15 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                   aria-selected={isActive}
                   className={`team-dept-pill ${isActive ? 'is-active' : ''}`}
                   onClick={() => selectDepartment(dIdx)}
+                  style={
+                    isActive
+                      ? ({
+                          '--pill-accent-start': deptTheme.start,
+                          '--pill-accent-end': deptTheme.end,
+                          '--pill-glow': deptTheme.glow,
+                        } as React.CSSProperties)
+                      : undefined
+                  }
                   title={dept.name}
                 >
                   <span className="team-dept-pill__dot" />
@@ -576,12 +699,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               </div>
 
               {/* Large Display Heading: Full Name */}
-              <h1 className="team-info__name" key={`name-${currentMember.id}`}>
+              <h1 className="team-info__name">
                 {currentMember.name}
               </h1>
 
               {/* Role Title */}
-              <div className="team-info__role-wrap" key={`role-${currentMember.id}`}>
+              <div className="team-info__role-wrap">
                 <span className="team-info__role-pill">{currentMember.role}</span>
                 {currentMember.academicYear && currentMember.branch && (
                   <span className="team-info__academic-pill">
@@ -591,7 +714,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               </div>
 
               {/* Concise Description / Responsibilities */}
-              <p className="team-info__bio" key={`bio-${currentMember.id}`}>
+              <p className="team-info__bio">
                 {currentMember.bio ||
                   `Active contributor in ${currentDept.name} for the HackWithIndia BVUDET-NM student chapter.`}
               </p>
@@ -700,14 +823,15 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 const diff = idx - memberFloat;
                 return (
                   <PhysicalIdCard
-                    key={m.id}
+                    key={`${currentDept.id}-${m.id}`}
                     member={m}
                     dept={currentDept}
+                    theme={currentTheme}
                     index={idx}
                     total={members.length}
                     diff={diff}
                     prefersReduced={prefersReduced}
-                    onSelect={() => scrollToMember(idx)}
+                    onSelect={() => scrollToMemberGlobal(activeDeptIdx, idx)}
                   />
                 );
               })}
@@ -722,15 +846,18 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               <span className="team-footer__wheel" />
             </div>
             <span className="team-footer__cue-text">
-              {activeMemberIdx === members.length - 1 && activeDeptIdx === DEPARTMENTS.length - 1
+              {activeMemberIdx === members.length - 1 &&
+              activeDeptIdx === DEPARTMENTS.length - 1
                 ? 'CONTINUE SCROLLING FOR CHAPTER FOOTER'
-                : 'SCROLL TO ADVANCE MEMBER CREDENTIALS'}
+                : 'SCROLL TO ADVANCE MEMBER CREDENTIALS & DEPARTMENTS'}
             </span>
           </div>
 
-          {/* Secondary Department Quick Navigator */}
+          {/* Secondary Department Quick Indicator */}
           <div className="team-footer__dept-jump">
-            <span className="team-footer__dept-label">DEPARTMENT:</span>
+            <span className="team-footer__dept-label">
+              DEPARTMENT {String(activeDeptIdx + 1).padStart(2, '0')}/09:
+            </span>
             <span className="team-footer__dept-name">{currentDept.name}</span>
           </div>
         </footer>

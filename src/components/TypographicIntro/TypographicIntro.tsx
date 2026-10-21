@@ -21,9 +21,15 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
   const safetyTimerRef = useRef<NodeJS.Timeout | null>(null);
   const animFrameRef = useRef<number | null>(null);
 
+  const resizeRef = useRef<(() => void) | null>(null);
+
   const clearTimers = useCallback(() => {
     if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (resizeRef.current) {
+      window.removeEventListener('resize', resizeRef.current);
+      resizeRef.current = null;
+    }
   }, []);
 
   const handleFinish = useCallback(() => {
@@ -33,10 +39,14 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
     if (onComplete) onComplete();
   }, [clearTimers, onComplete]);
 
-    // ─── Phase 2 & 3: Reference-Matched Canvas Fluid Animation ───────────────
+  // ─── Phase 2 & 3: Reference-Matched Canvas Fluid Animation ───────────────
   const startFluidSequence = useCallback(() => {
     setPhase('fluid-transition');
     introStore.setPhase('fluid-transition');
+
+    if (containerRef.current) {
+      containerRef.current.classList.add('intro--fluid');
+    }
 
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -58,6 +68,7 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
+    resizeRef.current = onResize;
     window.addEventListener('resize', onResize);
 
     const maxScreenDist = Math.hypot(width, height);
@@ -73,7 +84,7 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
       { ox: 0.40 * width, oy: -10, rMult: 0.72, phase: 5.2, speed: 2.4 },
     ];
 
-    const surgeDuration = 440; // ms: organic liquid growth & text deformation
+    const surgeDuration = 480; // ms: organic liquid growth & text deformation
     const recedeDuration = 520; // ms: liquid blanket recedes & reveals hero
     let startTime: number | null = null;
     let subPhase: 'surge' | 'recede' = 'surge';
@@ -89,10 +100,16 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
         const elapsed = now - (subStartTime || now);
         const p = Math.min(elapsed / surgeDuration, 1);
         // Smooth cubic-out surge growth
-        const easedP = 1 - Math.pow(1 - p, 2.5);
+        const easedP = 1 - Math.pow(1 - p, 2.4);
 
-        // Ramp SVG displacement scale synchronously with fluid surge
-        setDispScale(easedP * 65);
+        // Controlled, organic displacement scale that preserves letterforms without tearing
+        setDispScale(easedP * 22);
+
+        // Gently dissolve text as fluid mass expands to full coverage
+        if (stageRef.current) {
+          const textOpacity = Math.max(0, 1 - Math.max(0, p - 0.45) * 1.82);
+          stageRef.current.style.opacity = textOpacity.toFixed(3);
+        }
 
         ctx.clearRect(0, 0, width, height);
 
@@ -101,7 +118,7 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
         const t = (now - startTime) * 0.0035;
 
         // Base radius expands until it completely covers the entire screen
-        const baseR = 50 + easedP * (maxScreenDist * 0.78);
+        const baseR = 40 + easedP * (maxScreenDist * 0.82);
 
         ctx.save();
         ctx.fillStyle = '#000000';
@@ -204,8 +221,8 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
         const t = (now - startTime) * 0.0035;
 
         // Wave front Y position sweeps downward from above top to below bottom
-        // Y goes from -120 down to (height + 250)
-        const waveY = easedP * (height + 370) - 120;
+        // Y goes from -120 down to (height + 300)
+        const waveY = easedP * (height + 420) - 120;
 
         // 1. Organic fluid meniscus boundary points
         const segments = 42;
@@ -272,7 +289,10 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
 
         if (p >= 1) {
           // Liquid completely cleared off the screen
-          window.removeEventListener('resize', onResize);
+          if (resizeRef.current) {
+            window.removeEventListener('resize', resizeRef.current);
+            resizeRef.current = null;
+          }
           handleFinish();
           return;
         }
@@ -295,7 +315,7 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const reducedTimer = setTimeout(() => {
         handleFinish();
-      }, 350);
+      }, 300);
       return () => clearTimeout(reducedTimer);
     }
 
@@ -310,8 +330,8 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
     }
 
     // Set initial animation states
-    anime.set(slideEls, { opacity: 0, translateY: 22 });
-    anime.set(finalEl, { opacity: 0, translateY: 24, scale: 0.96 });
+    anime.set(slideEls, { opacity: 0, translateY: 18 });
+    anime.set(finalEl, { opacity: 0, translateY: 20, scale: 0.97 });
 
     const tl = anime.timeline({
       easing: 'easeOutExpo',
@@ -321,27 +341,32 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
       },
     });
 
-    // Phase 1: Sequence through Indian writing systems (~210ms cadence per script)
+    // Phase 1: Sequence through Indian writing systems (~260ms clean cadence per script)
+    // Non-overlapping: each script finishes exiting completely before the next enters
     slideEls.forEach((slide, idx) => {
+      // Step A: Slide enters smoothly from beneath
       tl.add(
         {
           targets: slide,
           opacity: [0, 1],
-          translateY: [20, 0],
-          duration: 115,
+          translateY: [14, 0],
+          duration: 105,
           easing: 'easeOutCubic',
         },
-        idx === 0 ? 0 : '-=35'
-      ).add(
-        {
-          targets: slide,
-          opacity: [1, 0],
-          translateY: [0, -20],
-          duration: 90,
-          easing: 'easeInCubic',
-        },
-        '+=70'
-      );
+        idx === 0 ? 0 : '+=0'
+      )
+      // Step B: Slide holds legibly
+      .add({
+        duration: 85,
+      })
+      // Step C: Slide exits cleanly before the next script enters
+      .add({
+        targets: slide,
+        opacity: [1, 0],
+        translateY: [0, -14],
+        duration: 70,
+        easing: 'easeInCubic',
+      });
     });
 
     // Grand Finale — Final bold English title enters with prominence
@@ -349,16 +374,16 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
       {
         targets: finalEl,
         opacity: [0, 1],
-        translateY: [24, 0],
-        scale: [0.96, 1.0],
-        duration: 260,
+        translateY: [18, 0],
+        scale: [0.97, 1.0],
+        duration: 300,
         easing: 'easeOutExpo',
       },
-      '+=30'
+      '+=40'
     )
       // Hold final title prominently before launching the fluid-distortion reveal
       .add({
-        duration: 360,
+        duration: 520,
       });
 
     // Robust safety fallback timer (never leave page stuck)
@@ -376,7 +401,7 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
 
   return (
     <section
-      className="intro"
+      className={`intro ${phase === 'fluid-transition' ? 'intro--fluid' : ''}`}
       ref={containerRef}
       aria-label="Loading sequence"
     >
@@ -386,17 +411,17 @@ export function TypographicIntro({ onComplete }: TypographicIntroProps) {
       <svg className="intro-fluid-svg-defs" aria-hidden="true">
         <filter
           id="hwi-intro-fluid-filter"
-          x="-30%"
-          y="-30%"
-          width="160%"
-          height="160%"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
           colorInterpolationFilters="sRGB"
         >
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.015 0.045"
-            numOctaves="3"
-            seed="77"
+            baseFrequency="0.012 0.024"
+            numOctaves="2"
+            seed="42"
             result="noise"
           />
           <feDisplacementMap

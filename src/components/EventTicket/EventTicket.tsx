@@ -540,43 +540,47 @@ export function EventTicket() {
                 </span>
               </div>
 
-              {/* ─── Compact Thermal Printer Hardware Housing ───────────────── */}
-              <div className="thermal-printer-unit" aria-label="Thermal receipt printer">
-                <div className="thermal-printer-unit__housing">
-                  <div className="thermal-printer-unit__meta">
-                    <div className="thermal-printer-status-group">
-                      <span
-                        className={`thermal-printer-led thermal-printer-led--${printerStatus}`}
-                        aria-hidden="true"
-                      />
-                      <span className="thermal-printer-status-label">
-                        {printerStatus === 'printing'
-                          ? 'FEEDING PAPER // PRINT HEAD ACTIVE'
-                          : printerStatus === 'complete'
-                          ? 'PRINT COMPLETE // PASS ISSUED'
-                          : 'THERMAL FEED READY // DISPATCH SLOT'}
-                      </span>
+              {/* ─── Unified Thermal Printer & Receipt Assembly ───────────────── */}
+              <div className="thermal-printer-assembly" id="thermal-printer-assembly">
+                {/* Compact Thermal Printer Hardware Housing */}
+                <div className="thermal-printer-unit" aria-label="Thermal receipt printer">
+                  <div className="thermal-printer-unit__housing">
+                    <div className="thermal-printer-unit__meta">
+                      <div className="thermal-printer-status-group">
+                        <span
+                          className={`thermal-printer-led thermal-printer-led--${printerStatus}`}
+                          aria-hidden="true"
+                        />
+                        <span className="thermal-printer-status-label">
+                          {printerStatus === 'printing'
+                            ? 'FEEDING PAPER // PRINT HEAD ACTIVE'
+                            : printerStatus === 'complete'
+                            ? 'PRINT COMPLETE // PASS ISSUED'
+                            : 'THERMAL FEED READY // DISPATCH SLOT'}
+                        </span>
+                      </div>
+                      <div className="thermal-printer-specs">
+                        <span>203 DPI</span>
+                        <span className="specs-sep">·</span>
+                        <span>80MM FEED</span>
+                      </div>
                     </div>
-                    <div className="thermal-printer-specs">
-                      <span>203 DPI</span>
-                      <span className="specs-sep">·</span>
-                      <span>80MM FEED</span>
-                    </div>
-                  </div>
 
-                  {/* Physical output slot */}
-                  <div className="thermal-printer-slot">
-                    <div className="thermal-printer-slot__recess">
-                      <div className="thermal-printer-slot__slit" />
-                      <div className="thermal-printer-slot__cutter-edge" />
+                    {/* Physical output slot with recessed cavity & front cutter bezel */}
+                    <div className="thermal-printer-slot">
+                      <div className="thermal-printer-slot__cavity">
+                        <div className="thermal-printer-slot__slit" />
+                      </div>
+                      <div className="thermal-printer-slot__cutter-lip">
+                        <div className="thermal-printer-slot__cutter-edge" />
+                      </div>
+                      {/* Active print-head optical scanner line during printing */}
+                      {printerStatus === 'printing' && (
+                        <div className="thermal-printhead-beam" aria-hidden="true" />
+                      )}
                     </div>
-                    {/* Active print-head optical scanner line during printing */}
-                    {printerStatus === 'printing' && (
-                      <div className="thermal-printhead-beam" aria-hidden="true" />
-                    )}
                   </div>
                 </div>
-              </div>
 
               {/* ─── Paper Feeding Stage: Stable Reserved Layout Space ─────── */}
               <div
@@ -753,6 +757,7 @@ export function EventTicket() {
                 </div>
               </div>
             </div>
+          </div>
 
               {/* ─── Ticket Output Controls ─────────────────────────────────── */}
               <div className="ticket-output-controls">
