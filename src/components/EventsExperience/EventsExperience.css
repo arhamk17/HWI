@@ -303,30 +303,21 @@
   width: 100%;
 }
 
-/* Subtle edge vignette fades so cards scroll cleanly under edges */
-.hwi-gallery-region::before,
-.hwi-gallery-region::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 28px;
-  z-index: 15;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+/* Base Track & Panels (Desktop Default: All 7 fit simultaneously) */
+.hwi-gallery-track {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  height: clamp(450px, 52vh, 480px);
+  padding: 8px 0 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  align-items: stretch;
 }
 
-.hwi-gallery-region::before {
-  left: 0;
-  background: linear-gradient(90deg, #070709 0%, transparent 100%);
-}
-
-.hwi-gallery-region::after {
-  right: 0;
-  background: linear-gradient(-90deg, #070709 0%, transparent 100%);
-}
-
+/* ── Floating Navigation Arrows (Mobile / Tablet fallback only) ── */
 .hwi-palette-floating-arrow {
+  display: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -339,7 +330,6 @@
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: #FFFFFF;
-  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -362,30 +352,14 @@
   right: 8px;
 }
 
-/* ── Horizontal Scroll Track ── */
-.hwi-gallery-track {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-  padding: 12px 6px 20px;
-  box-sizing: border-box;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.hwi-gallery-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* ── Base Edition Panel Card ── */
+/* ── Base Edition Panel Card (Equal widths at rest on Desktop) ── */
 .hwi-panel {
-  flex: 0 0 clamp(260px, 22vw, 300px);
-  min-width: clamp(260px, 22vw, 300px);
-  height: clamp(480px, 56vh, 520px);
-  border-radius: 20px;
   position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 0;
+  height: 100%;
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
   user-select: none;
@@ -395,10 +369,12 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
+  transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.3s ease;
+  will-change: flex;
 }
 
 .hwi-panel:focus-visible {
@@ -406,15 +382,35 @@
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
 }
 
-.hwi-panel:hover,
-.hwi-panel--hovered {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--panel-accent, #EF4444) 65%, rgba(255, 255, 255, 0.3));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9),
-              0 0 30px color-mix(in srgb, var(--panel-accent, #EF4444) 30%, transparent);
+/* ── Desktop Hover Accordion Expansion ── */
+@media (min-width: 992px) {
+  /* When the user hovers anywhere over the track, or when a card is hovered/focused */
+  .hwi-gallery-track:hover .hwi-panel,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel {
+    flex: 0.65 1 0%;
+    opacity: 0.85;
+  }
+
+  /* The hovered card expands smoothly to reveal all info */
+  .hwi-gallery-track .hwi-panel:hover,
+  .hwi-gallery-track .hwi-panel.hwi-panel--hovered {
+    flex: 3.5 1 0% !important;
+    opacity: 1 !important;
+    z-index: 5;
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--panel-accent, #EF4444) 65%, rgba(255, 255, 255, 0.3));
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9),
+                0 0 32px color-mix(in srgb, var(--panel-accent, #EF4444) 30%, transparent);
+  }
+
+  /* Keep the particle layer behind */
+  .hwi-gallery-section {
+    position: relative;
+    z-index: 10;
+  }
 }
 
-/* Background Layers */
+/* ── Background Layers ── */
 .hwi-panel__bg-photo {
   position: absolute;
   inset: 0;
@@ -426,7 +422,7 @@
 
 .hwi-panel:hover .hwi-panel__bg-photo,
 .hwi-panel--hovered .hwi-panel__bg-photo {
-  opacity: 0.35;
+  opacity: 0.32;
   transform: scale(1.05);
 }
 
@@ -450,7 +446,7 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(7, 7, 9, 0.3) 0%,
+    rgba(7, 7, 9, 0.32) 0%,
     rgba(7, 7, 9, 0.2) 40%,
     rgba(7, 7, 9, 0.75) 75%,
     rgba(7, 7, 9, 0.96) 100%
@@ -468,10 +464,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 22px 20px;
+  padding: 20px 14px;
   box-sizing: border-box;
   pointer-events: none;
-  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .hwi-panel:hover .hwi-panel__rest-content,
@@ -488,7 +484,7 @@
 
 .hwi-panel__tedx-tag {
   font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.75);
@@ -498,7 +494,7 @@
 
 .hwi-panel__tedx-num {
   font-family: var(--font-display, inherit);
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 900;
   line-height: 0.95;
   color: #FFFFFF;
@@ -508,35 +504,37 @@
 
 .hwi-panel__rest-badges {
   position: absolute;
-  top: 22px;
-  right: 20px;
+  top: 20px;
+  right: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 5px;
+  transition: opacity 0.2s ease;
 }
 
 .hwi-panel__category-badge {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--panel-accent, #EF4444);
   background: rgba(10, 8, 14, 0.75);
   border: 1px solid color-mix(in srgb, var(--panel-accent, #EF4444) 40%, transparent);
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 2px 6px;
+  border-radius: 5px;
   text-transform: uppercase;
   backdrop-filter: blur(4px);
+  white-space: nowrap;
 }
 
 .hwi-panel__year-badge {
   font-family: var(--font-mono, monospace);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 2px 7px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
   border-radius: 4px;
 }
 
@@ -544,11 +542,12 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .hwi-panel__rest-title {
   font-family: var(--font-display, inherit);
-  font-size: 1.25rem;
+  font-size: 0.98rem;
   font-weight: 800;
   line-height: 1.25;
   color: #FFFFFF;
@@ -559,18 +558,43 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
 }
 
 .tedx-footer-date {
   font-family: var(--font-mono, monospace);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* On Desktop when another card is hovered, compress unhovered cards gracefully */
+@media (min-width: 992px) {
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__category-badge,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__category-badge {
+    display: none;
+  }
+
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__rest-content,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-content {
+    padding: 16px 8px;
+  }
+
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__rest-title,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-title {
+    font-size: 0.82rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .tedx-footer-date,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .tedx-footer-date {
+    font-size: 0.62rem;
+  }
 }
 
 /* ── Card Hover-Revealed Overlay ── */
@@ -585,19 +609,20 @@
   box-sizing: border-box;
   background: linear-gradient(
     180deg,
-    rgba(8, 7, 12, 0.72) 0%,
+    rgba(8, 7, 12, 0.78) 0%,
     rgba(9, 8, 14, 0.94) 36%,
     rgba(6, 5, 10, 0.98) 100%
   );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(8px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.3s;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s;
+  transition-delay: 0s;
 }
 
 .hwi-panel:hover .hwi-card-hover-overlay,
@@ -606,6 +631,7 @@
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 0.08s;
 }
 
 /* Hover Header */
@@ -697,7 +723,7 @@
 
 .card-hover-title {
   font-family: var(--font-display, inherit);
-  font-size: clamp(1.2rem, 1.4vw, 1.4rem);
+  font-size: clamp(1.15rem, 1.35vw, 1.4rem);
   font-weight: 800;
   line-height: 1.22;
   letter-spacing: -0.02em;
@@ -799,19 +825,48 @@
 }
 
 /* ── Responsive Breakpoints ── */
-@media (min-width: 992px) and (max-width: 1200px) {
-  .hwi-panel {
-    flex: 0 0 260px;
-    min-width: 260px;
-    height: 480px;
-  }
-}
-
 @media (min-width: 768px) and (max-width: 991px) {
+  .hwi-palette-floating-arrow {
+    display: flex;
+  }
+  .hwi-gallery-region::before,
+  .hwi-gallery-region::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 28px;
+    z-index: 15;
+    pointer-events: none;
+  }
+  .hwi-gallery-region::before {
+    left: 0;
+    background: linear-gradient(90deg, #070709 0%, transparent 100%);
+  }
+  .hwi-gallery-region::after {
+    right: 0;
+    background: linear-gradient(-90deg, #070709 0%, transparent 100%);
+  }
+  .hwi-gallery-track {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding: 8px 6px 20px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hwi-gallery-track::-webkit-scrollbar {
+    display: none;
+  }
   .hwi-panel {
     flex: 0 0 250px;
     min-width: 250px;
     height: 460px;
+    scroll-snap-align: start;
+  }
+  .hwi-panel--hovered {
+    flex: 0 0 320px !important;
+    min-width: 320px !important;
   }
   .card-hover-desc {
     -webkit-line-clamp: 2;
@@ -827,16 +882,26 @@
     max-width: 140px;
   }
   .hwi-gallery-track {
-    gap: 14px;
-    padding: 6px 0 16px;
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 6px 0 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hwi-gallery-track::-webkit-scrollbar {
+    display: none;
   }
   .hwi-panel {
-    flex: 0 0 265px;
-    min-width: 265px;
+    flex: 0 0 260px;
+    min-width: 260px;
     height: 440px;
     border-radius: 16px;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
+  }
+  .hwi-panel--hovered {
+    flex: 0 0 290px !important;
+    min-width: 290px !important;
   }
   .hwi-palette-floating-arrow {
     display: none;

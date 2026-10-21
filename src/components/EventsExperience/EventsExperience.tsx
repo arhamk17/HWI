@@ -270,6 +270,34 @@ export function EventsExperience() {
     });
   }, []);
 
+  // Handle Gallery Header Prev / Next controls
+  // On desktop (where all 7 cards fit simultaneously in one view): cycles hovered card
+  // On mobile / tablet (where track scrolls): smoothly scrolls the track
+  const handleGalleryNav = useCallback(
+    (direction: 'left' | 'right') => {
+      if (
+        galleryTrackRef.current &&
+        galleryTrackRef.current.scrollWidth <= galleryTrackRef.current.clientWidth + 20
+      ) {
+        // Desktop single-view: cycle hovered card
+        const currentIdx = hoveredCardId
+          ? EVENTS_DATA.findIndex((e) => e.id === hoveredCardId)
+          : -1;
+        let nextIdx = 0;
+        if (direction === 'right') {
+          nextIdx = currentIdx === -1 || currentIdx >= EVENTS_DATA.length - 1 ? 0 : currentIdx + 1;
+        } else {
+          nextIdx = currentIdx <= 0 ? EVENTS_DATA.length - 1 : currentIdx - 1;
+        }
+        setHoveredCardId(EVENTS_DATA[nextIdx].id);
+      } else {
+        // Mobile / tablet scrollable view
+        scrollGallery(direction);
+      }
+    },
+    [hoveredCardId, scrollGallery]
+  );
+
   // Open the complete chronicle for a specific edition and scroll smoothly to it
   const handleOpenChronicle = useCallback((e: React.MouseEvent, eventId: string) => {
     e.stopPropagation();
@@ -286,7 +314,7 @@ export function EventsExperience() {
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
       if (!selectedId) {
-        scrollGallery('left');
+        handleGalleryNav('left');
         return;
       }
       const prevIdx =
@@ -296,14 +324,14 @@ export function EventsExperience() {
       const targetId = EVENTS_DATA[prevIdx].id;
       setSelectedId(targetId);
     },
-    [currentIndex, selectedId, scrollGallery]
+    [currentIndex, selectedId, handleGalleryNav]
   );
 
   const handleNextEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
       if (!selectedId) {
-        scrollGallery('right');
+        handleGalleryNav('right');
         return;
       }
       const nextIdx =
@@ -313,7 +341,7 @@ export function EventsExperience() {
       const targetId = EVENTS_DATA[nextIdx].id;
       setSelectedId(targetId);
     },
-    [currentIndex, selectedId, scrollGallery]
+    [currentIndex, selectedId, handleGalleryNav]
   );
 
   // Global keyboard shortcuts: Esc to collapse chronicle, ArrowLeft/Right to scroll or cycle
@@ -323,15 +351,15 @@ export function EventsExperience() {
         setSelectedId(null);
       } else if (e.key === 'ArrowRight') {
         if (selectedId) handleNextEvent();
-        else scrollGallery('right');
+        else handleGalleryNav('right');
       } else if (e.key === 'ArrowLeft') {
         if (selectedId) handlePrevEvent();
-        else scrollGallery('left');
+        else handleGalleryNav('left');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedId, handleNextEvent, handlePrevEvent, scrollGallery]);
+  }, [selectedId, handleNextEvent, handlePrevEvent, handleGalleryNav]);
 
   // Staggered reveal of editorial dossier items when event changes  // Staggered reveal of editorial dossier items when event changes
   useEffect(() => {
@@ -765,7 +793,7 @@ export function EventsExperience() {
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--prev"
-                onClick={() => scrollGallery('left')}
+                onClick={() => handleGalleryNav('left')}
                 aria-label="Previous edition"
               >
                 <ChevronLeft size={16} />
@@ -773,7 +801,7 @@ export function EventsExperience() {
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--next"
-                onClick={() => scrollGallery('right')}
+                onClick={() => handleGalleryNav('right')}
                 aria-label="Next edition"
               >
                 <ChevronRight size={16} />

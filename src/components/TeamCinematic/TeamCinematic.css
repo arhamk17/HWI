@@ -4,7 +4,13 @@
    Cyan Accent Details • Fluid Pinned Viewport • Responsive & Accessible
    ========================================================================== */
 
-/* Modern CSS Houdini angle registration for seamless GPU clockwise rotation */
+/* Modern CSS Houdini angle registration for seamless GPU clockwise rotation across all departments */
+@property --card-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: true;
+}
+
 @property --tech-border-angle {
   syntax: '<angle>';
   initial-value: 0deg;
@@ -17,21 +23,38 @@
   inherits: true;
 }
 
+@keyframes rotateCardBorderClockwise {
+  0% {
+    --card-border-angle: 0deg;
+    --tech-border-angle: 0deg;
+    --leaders-border-angle: 0deg;
+  }
+  100% {
+    --card-border-angle: 360deg;
+    --tech-border-angle: 360deg;
+    --leaders-border-angle: 360deg;
+  }
+}
+
 @keyframes rotateTechClockwise {
   0% {
     --tech-border-angle: 0deg;
+    --card-border-angle: 0deg;
   }
   100% {
     --tech-border-angle: 360deg;
+    --card-border-angle: 360deg;
   }
 }
 
 @keyframes rotateLeadersClockwise {
   0% {
     --leaders-border-angle: 0deg;
+    --card-border-angle: 0deg;
   }
   100% {
     --leaders-border-angle: 360deg;
+    --card-border-angle: 360deg;
   }
 }
 
@@ -465,7 +488,15 @@
   border: 1.5px solid transparent;
   background:
     linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
-    var(--dept-gradient, linear-gradient(135deg, var(--dept-accent-start, #06B6D4) 0%, var(--dept-accent-end, #22D3EE) 100%)) border-box;
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      var(--dept-accent-start, #06B6D4) 0deg,
+      color-mix(in srgb, var(--dept-accent-start, #06B6D4) 45%, var(--dept-accent-end, #22D3EE)) 75deg,
+      var(--dept-accent-end, #22D3EE) 160deg,
+      color-mix(in srgb, var(--dept-accent-end, #22D3EE) 45%, var(--dept-accent-start, #06B6D4)) 255deg,
+      var(--dept-accent-start, #06B6D4) 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
   /* Shared Baseline Department Glow at Rest */
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.85),
@@ -486,25 +517,21 @@
   transform-style: preserve-3d;
 }
 
-/* Base Outer Ambient Aura Backdrop for standard departments */
+/* Base Outer Ambient Aura Backdrop with Clockwise Rotation */
 .team-physical-card::after {
   content: '';
   position: absolute;
   inset: -12px;
   border-radius: 30px;
-  background:
-    radial-gradient(
-      circle at 20% 20%,
-      color-mix(in srgb, var(--dept-accent-start, #06B6D4) 38%, transparent) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      color-mix(in srgb, var(--dept-accent-end, #22D3EE) 38%, transparent) 0%,
-      transparent 60%
-    );
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    color-mix(in srgb, var(--dept-accent-start, #06B6D4) 40%, transparent) 0deg,
+    color-mix(in srgb, var(--dept-accent-end, #22D3EE) 34%, transparent) 160deg,
+    color-mix(in srgb, var(--dept-accent-start, #06B6D4) 40%, transparent) 360deg
+  );
   filter: blur(28px);
   transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
   opacity: 0.85;
   pointer-events: none;
   z-index: -1;
@@ -987,7 +1014,7 @@
       #00E878 300deg,
       #00F0FF 360deg
     ) border-box;
-  animation: rotateLeadersClockwise 12s linear infinite;
+  animation: rotateLeadersClockwise 8s linear infinite;
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.85),
     0 0 20px rgba(0, 240, 255, 0.28);
@@ -1010,7 +1037,7 @@
   );
   filter: blur(28px);
   transform: translateZ(-2px);
-  animation: rotateLeadersClockwise 12s linear infinite;
+  animation: rotateLeadersClockwise 8s linear infinite;
   opacity: 0.85;
   pointer-events: none;
   z-index: -1;
@@ -1309,16 +1336,528 @@
   text-shadow: 0 0 8px rgba(0, 208, 255, 0.55);
 }
 
+
+/* =========================================================================
+   3. DESIGN TEAM (DESIGN-TEAM): ROTATING PURPLE-MAGENTA CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="design-team"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #A855F7 0deg,
+      #C084FC 45deg,
+      #E879F9 90deg,
+      #EC4899 150deg,
+      #F43F5E 180deg,
+      #EC4899 210deg,
+      #D946EF 270deg,
+      #9333EA 320deg,
+      #A855F7 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(168, 85, 247, 0.28);
+}
+
+.team-physical-card[data-dept="design-team"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(168, 85, 247, 0.40) 0deg,
+    rgba(192, 132, 252, 0.32) 45deg,
+    rgba(232, 121, 249, 0.34) 90deg,
+    rgba(236, 72, 153, 0.42) 150deg,
+    rgba(244, 63, 94, 0.38) 180deg,
+    rgba(236, 72, 153, 0.42) 210deg,
+    rgba(217, 70, 239, 0.34) 270deg,
+    rgba(147, 51, 234, 0.32) 320deg,
+    rgba(168, 85, 247, 0.40) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="design-team"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(168, 85, 247, 0.36);
+}
+
+.team-physical-card[data-dept="design-team"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="design-team"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(168, 85, 247, 0.44);
+}
+
+.team-physical-card[data-dept="design-team"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   4. PR & MARKETING (PR-MARKETING): ROTATING ORANGE-GOLD CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="pr-marketing"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #F97316 0deg,
+      #FB923C 45deg,
+      #F59E0B 90deg,
+      #FACC15 150deg,
+      #FDE047 180deg,
+      #FACC15 210deg,
+      #F59E0B 270deg,
+      #EA580C 320deg,
+      #F97316 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(249, 115, 22, 0.28);
+}
+
+.team-physical-card[data-dept="pr-marketing"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(249, 115, 22, 0.42) 0deg,
+    rgba(251, 146, 60, 0.34) 45deg,
+    rgba(245, 158, 11, 0.36) 90deg,
+    rgba(250, 204, 21, 0.42) 150deg,
+    rgba(253, 224, 71, 0.38) 180deg,
+    rgba(250, 204, 21, 0.42) 210deg,
+    rgba(245, 158, 11, 0.36) 270deg,
+    rgba(234, 88, 12, 0.34) 320deg,
+    rgba(249, 115, 22, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="pr-marketing"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(249, 115, 22, 0.36);
+}
+
+.team-physical-card[data-dept="pr-marketing"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="pr-marketing"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(249, 115, 22, 0.44);
+}
+
+.team-physical-card[data-dept="pr-marketing"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   5. SOCIAL MEDIA (SOCIAL-MEDIA): ROTATING CYAN-INDIGO CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="social-media"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #06B6D4 0deg,
+      #0EA5E9 45deg,
+      #3B82F6 90deg,
+      #6366F1 150deg,
+      #818CF8 180deg,
+      #6366F1 210deg,
+      #3B82F6 270deg,
+      #0891B2 320deg,
+      #06B6D4 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(6, 182, 212, 0.28);
+}
+
+.team-physical-card[data-dept="social-media"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(6, 182, 212, 0.42) 0deg,
+    rgba(14, 165, 233, 0.36) 45deg,
+    rgba(59, 130, 246, 0.36) 90deg,
+    rgba(99, 102, 241, 0.42) 150deg,
+    rgba(129, 140, 248, 0.36) 180deg,
+    rgba(99, 102, 241, 0.42) 210deg,
+    rgba(59, 130, 246, 0.36) 270deg,
+    rgba(8, 145, 178, 0.34) 320deg,
+    rgba(6, 182, 212, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="social-media"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(6, 182, 212, 0.36);
+}
+
+.team-physical-card[data-dept="social-media"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="social-media"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(6, 182, 212, 0.44);
+}
+
+.team-physical-card[data-dept="social-media"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   6. PHOTOGRAPHY & EDITING (PHOTOGRAPHY-EDITING): ROTATING PINK-PURPLE CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="photography-editing"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #EC4899 0deg,
+      #F43F5E 45deg,
+      #D946EF 90deg,
+      #8B5CF6 150deg,
+      #A78BFA 180deg,
+      #8B5CF6 210deg,
+      #D946EF 270deg,
+      #BE185D 320deg,
+      #EC4899 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(236, 72, 153, 0.28);
+}
+
+.team-physical-card[data-dept="photography-editing"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(236, 72, 153, 0.42) 0deg,
+    rgba(244, 63, 94, 0.36) 45deg,
+    rgba(217, 70, 239, 0.36) 90deg,
+    rgba(139, 92, 246, 0.42) 150deg,
+    rgba(167, 139, 250, 0.36) 180deg,
+    rgba(139, 92, 246, 0.42) 210deg,
+    rgba(217, 70, 239, 0.36) 270deg,
+    rgba(190, 24, 93, 0.34) 320deg,
+    rgba(236, 72, 153, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="photography-editing"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(236, 72, 153, 0.36);
+}
+
+.team-physical-card[data-dept="photography-editing"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="photography-editing"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(236, 72, 153, 0.44);
+}
+
+.team-physical-card[data-dept="photography-editing"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   7. EVENT & LOGISTICS (EVENT-LOGISTICS): ROTATING GREEN-TEAL CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="event-logistics"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #22C55E 0deg,
+      #34D399 45deg,
+      #10B981 90deg,
+      #14B8A6 150deg,
+      #2DD4BF 180deg,
+      #14B8A6 210deg,
+      #10B981 270deg,
+      #15803D 320deg,
+      #22C55E 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(34, 197, 94, 0.28);
+}
+
+.team-physical-card[data-dept="event-logistics"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(34, 197, 94, 0.42) 0deg,
+    rgba(52, 211, 153, 0.36) 45deg,
+    rgba(16, 185, 129, 0.36) 90deg,
+    rgba(20, 184, 166, 0.42) 150deg,
+    rgba(45, 212, 191, 0.36) 180deg,
+    rgba(20, 184, 166, 0.42) 210deg,
+    rgba(16, 185, 129, 0.36) 270deg,
+    rgba(21, 128, 61, 0.34) 320deg,
+    rgba(34, 197, 94, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="event-logistics"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(34, 197, 94, 0.36);
+}
+
+.team-physical-card[data-dept="event-logistics"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="event-logistics"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(34, 197, 94, 0.44);
+}
+
+.team-physical-card[data-dept="event-logistics"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   8. DOCUMENTATION (DOCUMENTATION): ROTATING BLUE-LAVENDER CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="documentation"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #3B82F6 0deg,
+      #60A5FA 45deg,
+      #818CF8 90deg,
+      #A5B4FC 150deg,
+      #C7D2FE 180deg,
+      #A5B4FC 210deg,
+      #818CF8 270deg,
+      #1D4ED8 320deg,
+      #3B82F6 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(59, 130, 246, 0.28);
+}
+
+.team-physical-card[data-dept="documentation"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(59, 130, 246, 0.42) 0deg,
+    rgba(96, 165, 250, 0.36) 45deg,
+    rgba(129, 140, 248, 0.36) 90deg,
+    rgba(165, 180, 252, 0.42) 150deg,
+    rgba(199, 210, 254, 0.36) 180deg,
+    rgba(165, 180, 252, 0.42) 210deg,
+    rgba(129, 140, 248, 0.36) 270deg,
+    rgba(29, 78, 216, 0.34) 320deg,
+    rgba(59, 130, 246, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="documentation"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(59, 130, 246, 0.36);
+}
+
+.team-physical-card[data-dept="documentation"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="documentation"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(59, 130, 246, 0.44);
+}
+
+.team-physical-card[data-dept="documentation"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   9. SPONSORSHIP & PARTNERSHIPS (SPONSORSHIP-PARTNERSHIPS): ROTATING AMBER-BRONZE CONIC GRADIENT
+   ========================================================================= */
+.team-physical-card[data-dept="sponsorship-partnerships"] {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(165deg, #13111c 0%, #0c0a12 60%, #06050a 100%) padding-box,
+    conic-gradient(
+      from var(--card-border-angle, 0deg) at 50% 50%,
+      #F59E0B 0deg,
+      #FBBF24 45deg,
+      #FCD34D 90deg,
+      #D97706 150deg,
+      #B45309 180deg,
+      #D97706 210deg,
+      #FBBF24 270deg,
+      #EA580C 320deg,
+      #F59E0B 360deg
+    ) border-box;
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(245, 158, 11, 0.28);
+}
+
+.team-physical-card[data-dept="sponsorship-partnerships"]::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: conic-gradient(
+    from var(--card-border-angle, 0deg) at 50% 50%,
+    rgba(245, 158, 11, 0.42) 0deg,
+    rgba(251, 191, 36, 0.36) 45deg,
+    rgba(252, 211, 77, 0.36) 90deg,
+    rgba(217, 119, 6, 0.42) 150deg,
+    rgba(180, 83, 9, 0.34) 180deg,
+    rgba(217, 119, 6, 0.42) 210deg,
+    rgba(251, 191, 36, 0.36) 270deg,
+    rgba(234, 88, 12, 0.34) 320deg,
+    rgba(245, 158, 11, 0.42) 360deg
+  );
+  filter: blur(28px);
+  transform: translateZ(-2px);
+  animation: rotateCardBorderClockwise 8s linear infinite;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+}
+
+.team-physical-card[data-dept="sponsorship-partnerships"].is-active {
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(245, 158, 11, 0.36);
+}
+
+.team-physical-card[data-dept="sponsorship-partnerships"].is-active::after {
+  opacity: 1;
+  filter: blur(32px);
+}
+
+.team-physical-card[data-dept="sponsorship-partnerships"]:hover {
+  box-shadow:
+    0 36px 72px rgba(0, 0, 0, 0.92),
+    0 0 30px rgba(245, 158, 11, 0.44);
+}
+
+.team-physical-card[data-dept="sponsorship-partnerships"]:hover::after {
+  opacity: 1.1;
+  filter: blur(34px);
+}
+
+/* =========================================================================
+   ACCESSIBILITY: REDUCED MOTION PREFERENCES
+   ========================================================================= */
 @media (prefers-reduced-motion: reduce) {
   .team-physical-card {
     transition: opacity 0.2s ease !important;
   }
-  .team-physical-card[data-dept="core-leadership"],
-  .team-physical-card[data-dept="technical-team"],
-  .team-physical-card[data-dept="core-leadership"]::after,
-  .team-physical-card[data-dept="technical-team"]::after,
-  .team-physical-card[data-dept="core-leadership"] .team-card__accent-strip,
-  .team-physical-card[data-dept="technical-team"] .team-card__accent-strip {
+  .team-physical-card,
+  .team-physical-card::after,
+  .team-card__accent-strip {
     animation: none !important;
   }
 }
