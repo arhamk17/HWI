@@ -1,0 +1,985 @@
+/* ==========================================================================
+   HWI ABOUT EXPERIENCE — CINEMATIC EDITORIAL DESIGN SYSTEM
+   Visual Direction: Cinematic + Editorial with Selective Neon Accents
+   ========================================================================== */
+
+.about-page-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--surface-primary, #070709);
+  color: var(--text-primary, #FFFFFF);
+  overflow-x: clip;
+  z-index: 1;
+}
+
+/* Ambient subtle background grid & luminous lighting */
+.about-ambient-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+  background: 
+    radial-gradient(circle at 15% 20%, rgba(239, 68, 68, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(0, 240, 255, 0.04) 0%, transparent 40%);
+}
+
+.about-grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+}
+
+/* Base Chapter Section Layout */
+.about-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: clamp(80px, 12vh, 160px) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  scroll-margin-top: 100px;
+}
+
+.about-container {
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+}
+
+/* Reveal choreography */
+.about-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.about-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay classes */
+.about-delay-1 { transition-delay: 100ms; }
+.about-delay-2 { transition-delay: 200ms; }
+.about-delay-3 { transition-delay: 300ms; }
+.about-delay-4 { transition-delay: 400ms; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   1. HERO SECTION
+   ────────────────────────────────────────────────────────────────────────── */
+.about-hero {
+  position: relative;
+  min-height: 94vh;
+  display: flex;
+  align-items: center;
+  padding-top: clamp(120px, 16vh, 180px);
+  padding-bottom: clamp(60px, 10vh, 100px);
+}
+
+.about-hero__telemetry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.about-hero__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary, #94A3B8);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-hero__tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #EF4444;
+  box-shadow: 0 0 8px #EF4444;
+  animation: pulseNeonDot 2.2s infinite ease-in-out;
+}
+
+@keyframes pulseNeonDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.about-hero__headline {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.75rem, 7.5vw, 6.75rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  margin-bottom: clamp(24px, 3.5vw, 36px);
+  max-width: 1100px;
+}
+
+.about-hero__headline-accent {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EF4444 60%, #FF7A00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.about-hero__subtext {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.6;
+  color: var(--text-secondary, #CBD5E1);
+  max-width: 720px;
+  margin-bottom: 40px;
+}
+
+.about-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.about-hero__scroll-cue {
+  margin-top: clamp(48px, 8vh, 80px);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-tertiary, #94A3B8);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.about-hero__scroll-cue:hover {
+  color: #FFFFFF;
+}
+
+.about-hero__laser-line {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(to right, #EF4444, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero__laser-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  animation: laserSweep 2s infinite linear;
+}
+
+@keyframes laserSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   2. WHO WE ARE (IDENTITY & GENESIS)
+   ────────────────────────────────────────────────────────────────────────── */
+.about-identity__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+
+.about-section-eyebrow {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #EF4444;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.about-section-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 1px;
+  background-color: #EF4444;
+}
+
+.about-identity__heading {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  color: #FFFFFF;
+}
+
+.about-identity__prose {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary, #CBD5E1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-identity__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.about-identity__badge-pill {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary, #CBD5E1);
+}
+
+.about-identity__frame {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #110F17;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(239, 68, 68, 0.12);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-identity__frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 45px rgba(239, 68, 68, 0.22);
+}
+
+.about-identity__img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.about-identity__hud-bar {
+  padding: 14px 18px;
+  background: rgba(12, 10, 16, 0.9);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary, #94A3B8);
+}
+
+/* Corner HUD accents */
+.about-hud-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #EF4444;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.about-hud-corner--tl { top: 12px; left: 12px; border-top: 2px solid; border-left: 2px solid; }
+.about-hud-corner--tr { top: 12px; right: 12px; border-top: 2px solid; border-right: 2px solid; }
+.about-hud-corner--bl { bottom: 12px; left: 12px; border-bottom: 2px solid; border-left: 2px solid; }
+.about-hud-corner--br { bottom: 12px; right: 12px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. THE HWI MANIFESTO
+   ────────────────────────────────────────────────────────────────────────── */
+.about-manifesto__header {
+  margin-bottom: clamp(48px, 6vw, 72px);
+  max-width: 800px;
+}
+
+.about-manifesto__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.about-manifesto__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.about-manifesto__card {
+  position: relative;
+  background: rgba(18, 16, 24, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: clamp(28px, 3.5vw, 40px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.about-manifesto__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--card-accent, #EF4444);
+  opacity: 0.2;
+  transition: opacity 0.35s ease, height 0.35s ease;
+}
+
+.about-manifesto__card:hover,
+.about-manifesto__card.is-active {
+  background: rgba(24, 20, 32, 0.85);
+  border-color: var(--card-border-glow, rgba(239, 68, 68, 0.35));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px var(--card-ambient-glow, rgba(239, 68, 68, 0.15));
+  transform: translateY(-3px);
+}
+
+.about-manifesto__card:hover::before,
+.about-manifesto__card.is-active::before {
+  opacity: 1;
+  height: 3px;
+}
+
+.about-manifesto__card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.about-manifesto__num {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 800;
+  color: var(--card-accent, #EF4444);
+  letter-spacing: -0.02em;
+}
+
+.about-manifesto__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary, #94A3B8);
+}
+
+.about-manifesto__card-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.about-manifesto__card-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-secondary, #CBD5E1);
+  margin-bottom: 20px;
+}
+
+.about-manifesto__code-snippet {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--card-accent, #EF4444);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 2px solid var(--card-accent, #EF4444);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. THE HWI JOURNEY (INTERACTIVE CHRONICLE)
+   ────────────────────────────────────────────────────────────────────────── */
+.about-journey__grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+.about-journey__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-journey__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-journey__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(4px);
+}
+
+.about-journey__item.is-selected {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #EF4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+  transform: translateX(8px);
+}
+
+.about-journey__item-date {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary, #94A3B8);
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.about-journey__item.is-selected .about-journey__item-date {
+  color: #EF4444;
+  font-weight: 700;
+}
+
+.about-journey__item-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+  flex: 1;
+}
+
+.about-journey__item-metric {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  color: var(--text-secondary, #CBD5E1);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Preview Dossier */
+.about-journey__dossier {
+  position: sticky;
+  top: 100px;
+  background: rgba(18, 16, 24, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(239, 68, 68, 0.12);
+  transition: all 0.4s ease;
+}
+
+.about-journey__dossier-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.about-journey__dossier-body {
+  padding: clamp(24px, 3vw, 32px);
+}
+
+.about-journey__dossier-badge {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #EF4444;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.about-journey__dossier-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+}
+
+.about-journey__dossier-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary, #CBD5E1);
+  margin-bottom: 24px;
+}
+
+.about-journey__dossier-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-journey__dossier-stat-num {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.about-journey__dossier-stat-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary, #94A3B8);
+  text-transform: uppercase;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   5. WHAT HWI DOES (FOUR OPERATIONAL VECTORS)
+   ────────────────────────────────────────────────────────────────────────── */
+.about-what__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.about-what__card {
+  position: relative;
+  background: rgba(18, 16, 24, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.about-what__card:hover {
+  border-color: var(--what-color, #EF4444);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px var(--what-glow, rgba(239, 68, 68, 0.2));
+  transform: translateY(-4px);
+}
+
+.about-what__media-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.about-what__card-content {
+  padding: clamp(24px, 3vw, 36px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.about-what__card-eyebrow {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--what-color, #EF4444);
+  margin-bottom: 12px;
+}
+
+.about-what__card-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin-bottom: 14px;
+}
+
+.about-what__card-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary, #CBD5E1);
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.about-what__card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.about-what__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-tertiary, #94A3B8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   6. THE PEOPLE BEHIND HWI (HUMAN ELEMENT & LEADERSHIP)
+   ────────────────────────────────────────────────────────────────────────── */
+.about-people__leadership-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.about-people__leader-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(18, 16, 24, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-people__leader-card:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 240, 255, 0.15);
+  transform: translateY(-3px);
+}
+
+.about-people__avatar-frame {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.about-people__leader-info {
+  flex: 1;
+}
+
+.about-people__leader-badge {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #00F0FF;
+  margin-bottom: 6px;
+}
+
+.about-people__leader-name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.about-people__leader-id {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--text-tertiary, #94A3B8);
+  margin-bottom: 10px;
+}
+
+.about-people__leader-bio {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary, #CBD5E1);
+}
+
+/* Departments Grid */
+.about-people__departments-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.about-people__dept-chip {
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+}
+
+.about-people__dept-chip:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+.about-people__dept-name {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.about-people__dept-count {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--text-tertiary, #94A3B8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   7. COMMUNITY TELEMETRY & VERIFIED IMPACT
+   ────────────────────────────────────────────────────────────────────────── */
+.about-impact__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+}
+
+.about-impact__card {
+  padding: clamp(24px, 3vw, 32px);
+  background: rgba(18, 16, 24, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-impact__card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #EF4444, transparent);
+  opacity: 0.4;
+}
+
+.about-impact__card:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.1);
+  transform: translateY(-3px);
+}
+
+.about-impact__num {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 3.8vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+}
+
+.about-impact__label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #EF4444;
+  margin-bottom: 8px;
+}
+
+.about-impact__desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-tertiary, #94A3B8);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   8. CLOSING STATEMENT & CALL TO ACTION
+   ────────────────────────────────────────────────────────────────────────── */
+.about-closing {
+  position: relative;
+  text-align: center;
+  padding: clamp(100px, 15vh, 180px) 0;
+}
+
+.about-closing__content {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.about-closing__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.4rem, 5.5vw, 4.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+.about-closing__subtext {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.65;
+  color: var(--text-secondary, #CBD5E1);
+  max-width: 640px;
+}
+
+.about-closing__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   RESPONSIVE LAYOUTS & BREAKPOINTS
+   ────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .about-identity__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .about-journey__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .about-journey__dossier {
+    position: static;
+  }
+  
+  .about-what__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-manifesto__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-impact__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .about-people__departments-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-people__leadership-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-people__departments-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-impact__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-journey__item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .about-journey__item-date {
+    width: 100%;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .about-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .about-hero__tag-dot,
+  .about-hero__laser-line::after {
+    animation: none !important;
+  }
+  
+  .about-identity__frame,
+  .about-manifesto__card,
+  .about-what__card,
+  .about-journey__item,
+  .about-people__leader-card,
+  .about-impact__card {
+    transition: none !important;
+    transform: none !important;
+  }
+}
