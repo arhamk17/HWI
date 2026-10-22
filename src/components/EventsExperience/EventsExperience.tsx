@@ -824,7 +824,7 @@ export function EventsExperience() {
               </button>
 
               <div
-                className="hwi-gallery-track"
+                className={`hwi-gallery-track ${hoveredCardId ? 'hwi-gallery-track--has-active' : ''}`}
                 ref={galleryTrackRef}
                 onPointerLeave={() => setHoveredCardId(null)}
               >
@@ -840,19 +840,28 @@ export function EventsExperience() {
                           '--panel-accent': event.accentColor || '#EF4444',
                         } as React.CSSProperties
                       }
-                      onMouseEnter={() => setHoveredCardId(event.id)}
-                      onMouseLeave={() => setHoveredCardId(null)}
-                      onPointerEnter={() => setHoveredCardId(event.id)}
+                      onPointerEnter={(e) => {
+                        if (e.pointerType !== 'touch') {
+                          setHoveredCardId(event.id);
+                        }
+                      }}
                       onFocus={() => setHoveredCardId(event.id)}
-                      onBlur={() => setHoveredCardId(null)}
-                      onClick={() => {
-                        // Mobile / touch accessible tap-to-toggle
-                        setHoveredCardId((prev) => (prev === event.id ? null : event.id));
+                      onClick={(e) => {
+                        const isTouch =
+                          (e.nativeEvent as PointerEvent)?.pointerType === 'touch' ||
+                          (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches);
+
+                        if (isTouch) {
+                          setHoveredCardId((prev) => (prev === event.id ? null : event.id));
+                        } else {
+                          // Desktop click solidifies selection without competing with hover
+                          setHoveredCardId(event.id);
+                        }
                       }}
                       tabIndex={0}
                       aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
                       data-cursor="link"
-                      data-cursor-label="HOVER"
+                      data-cursor-label="EXPLORE"
                     >
                       {/* Background Visual Photo / Artwork */}
                       {event.cardImage ? (

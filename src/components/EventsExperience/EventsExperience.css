@@ -375,11 +375,12 @@
   flex-direction: column;
   box-sizing: border-box;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
-  transition: flex 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
-  will-change: flex;
+  transition: flex 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.4s ease,
+              opacity 0.4s ease;
+  will-change: flex, transform;
 }
 
 .hwi-panel:focus-visible {
@@ -389,16 +390,17 @@
 
 /* ── Desktop Hover Accordion Expansion ── */
 @media (min-width: 992px) {
-  /* When the user hovers anywhere over the track, or when a card is hovered/focused */
+  /* When any card is hovered, contract the inactive siblings smoothly */
+  .hwi-gallery-track--has-active .hwi-panel,
   .hwi-gallery-track:hover .hwi-panel,
   .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel {
-    flex: 0.65 1 0%;
-    opacity: 0.85;
+    flex: 0.68 1 0%;
+    opacity: 0.88;
   }
 
-  /* The hovered card expands smoothly to reveal all info */
-  .hwi-gallery-track .hwi-panel:hover,
-  .hwi-gallery-track .hwi-panel.hwi-panel--hovered {
+  /* The active card expands smoothly to reveal all info */
+  .hwi-gallery-track .hwi-panel.hwi-panel--hovered,
+  .hwi-gallery-track .hwi-panel:hover {
     flex: 3.5 1 0% !important;
     opacity: 1 !important;
     z-index: 5;
@@ -422,7 +424,9 @@
   background-size: cover;
   background-position: center;
   opacity: 0.85;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  transform: scale(1);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  will-change: transform, opacity;
 }
 
 .hwi-panel:hover .hwi-panel__bg-photo,
@@ -472,13 +476,14 @@
   padding: 20px 14px;
   box-sizing: border-box;
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hwi-panel:hover .hwi-panel__rest-content,
 .hwi-panel--hovered .hwi-panel__rest-content {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(-8px);
 }
 
 .hwi-panel__tedx-header {
@@ -505,6 +510,7 @@
   color: #FFFFFF;
   letter-spacing: -0.03em;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+  transition: font-size 0.4s ease;
 }
 
 .hwi-panel__rest-badges {
@@ -515,7 +521,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 5px;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .hwi-panel__category-badge {
@@ -580,22 +586,40 @@
 
 /* On Desktop when another card is hovered, compress unhovered cards gracefully */
 @media (min-width: 992px) {
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-badges,
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__rest-badges,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-badges {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__category-badge,
   .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__category-badge,
   .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__category-badge {
     display: none;
   }
 
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-content,
   .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__rest-content,
   .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-content {
-    padding: 16px 8px;
+    padding: 16px 10px;
   }
 
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__tedx-num,
+  .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__tedx-num,
+  .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__tedx-num {
+    font-size: 1.85rem;
+  }
+
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-title,
   .hwi-gallery-track:hover .hwi-panel:not(:hover) .hwi-panel__rest-title,
   .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .hwi-panel__rest-title {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     -webkit-line-clamp: 2;
   }
 
+  .hwi-gallery-track--has-active .hwi-panel:not(.hwi-panel--hovered) .tedx-footer-date,
   .hwi-gallery-track:hover .hwi-panel:not(:hover) .tedx-footer-date,
   .hwi-gallery-track:has(.hwi-panel--hovered) .hwi-panel:not(.hwi-panel--hovered) .tedx-footer-date {
     font-size: 0.62rem;
@@ -623,10 +647,10 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(8px);
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.25s;
+  transform: translateY(6px);
+  transition: opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.42s;
   transition-delay: 0s;
 }
 
@@ -636,7 +660,7 @@
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
-  transition-delay: 0.08s;
+  transition-delay: 0s;
 }
 
 /* Hover Header */
@@ -868,6 +892,10 @@
     min-width: 250px;
     height: 460px;
     scroll-snap-align: start;
+    transition: flex 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                min-width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.48s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .hwi-panel--hovered {
     flex: 0 0 320px !important;
@@ -903,6 +931,10 @@
     height: 440px;
     border-radius: 16px;
     scroll-snap-align: center;
+    transition: flex 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                min-width 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.48s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .hwi-panel--hovered {
     flex: 0 0 290px !important;
@@ -924,6 +956,7 @@
   .hwi-panel__bg-photo,
   .hwi-panel__rest-content,
   .hwi-card-hover-overlay,
+  .hwi-panel__rest-badges,
   .card-hover-chronicle-btn {
     transition: none !important;
   }
