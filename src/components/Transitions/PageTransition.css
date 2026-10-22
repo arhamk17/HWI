@@ -213,7 +213,7 @@
 }
 
 .fluid-hud-protocol {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -254,7 +254,7 @@
 }
 
 .fluid-hud-subtext {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10px;
   letter-spacing: 0.2em;
   color: rgba(255, 255, 255, 0.45);

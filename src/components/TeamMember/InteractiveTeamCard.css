@@ -102,7 +102,7 @@
 }
 
 .team-card-role {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   color: var(--accent);
   letter-spacing: 0.08em;
@@ -151,7 +151,7 @@
 }
 
 .team-popup-role {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10px;
   color: var(--accent);
   letter-spacing: 0.1em;
@@ -174,7 +174,7 @@
 }
 
 .team-popup-dept {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 9px;
   letter-spacing: 0.12em;
   color: var(--text-tertiary);
@@ -182,7 +182,7 @@
 }
 
 .team-popup-hint {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 9px;
   color: var(--accent);
   letter-spacing: 0.05em;
@@ -290,7 +290,7 @@
 }
 
 .team-modal-role {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 12px;
   color: var(--accent);
   letter-spacing: 0.1em;
@@ -305,7 +305,7 @@
 }
 
 .team-modal-achievements-title {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   color: var(--text-tertiary);
@@ -342,7 +342,7 @@
 }
 
 .team-modal-social-btn {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.04);

@@ -27,13 +27,13 @@ export function AboutClosing() {
 
           <div className="about-closing__actions">
             <KokonutButton href="/join" variant="primary">
-              Generate Chapter Pass
+              Join the Chapter
             </KokonutButton>
             <KokonutButton href="/events" variant="outline">
               Explore Chronicle
             </KokonutButton>
             <KokonutButton href="/team" variant="outline">
-              Meet the 41 Roster
+              Meet the Team
             </KokonutButton>
           </div>
         </div>

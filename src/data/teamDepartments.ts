@@ -199,7 +199,7 @@ export const DEPARTMENTS: Department[] = [
         academicYear: 'FY',
         branch: 'AIML',
         driveId: '1DnJegqy8ix2lgJxazlPHXjETX94JPYPX',
-        image: 'https://lh3.googleusercontent.com/d/1DnJegqy8ix2lgJxazlPHXjETX94JPYPX',
+        image: '/images/team/Sushant.png',
         email: 'thesushantpanchal07@gmail.com',
         socials: {
           linkedin: 'https://www.linkedin.com/in/sushant-08b1243ab?utm_source=share_via&utm_content=profile&utm_medium=member_android',

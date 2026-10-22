@@ -655,7 +655,7 @@ function ProceduralHudGraphic({ type }: { type: EventImage['hudGraphicType'] }) 
             <circle cx="290" cy="110" r="4" fill="#EF4444" />
           </g>
           <rect x="250" y="170" width="100" height="60" rx="6" fill="rgba(24, 21, 29, 0.8)" stroke="#EF4444" strokeWidth="1.2" />
-          <text x="300" y="205" fill="#EF4444" fontSize="11" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
+          <text x="300" y="205" fill="#EF4444" fontSize="11" fontFamily="var(--font-primary)" textAnchor="middle" letterSpacing="2">
             IC // SYNAPSE
           </text>
         </svg>
@@ -669,11 +669,11 @@ function ProceduralHudGraphic({ type }: { type: EventImage['hudGraphicType'] }) 
           <circle cx="85" cy="68" r="4" fill="#EF4444" />
           <circle cx="100" cy="68" r="4" fill="rgba(255,255,255,0.3)" />
           <circle cx="115" cy="68" r="4" fill="rgba(255,255,255,0.3)" />
-          <text x="85" y="125" fill="#EF4444" fontSize="13" fontFamily="monospace">$ hwi agent run --autonomous</text>
-          <text x="85" y="155" fill="rgba(255,255,255,0.7)" fontSize="12" fontFamily="monospace">[+] Initializing distributed cluster...</text>
-          <text x="85" y="180" fill="rgba(255,255,255,0.7)" fontSize="12" fontFamily="monospace">[+] GPU tensor stream active: 8x H100</text>
-          <text x="85" y="205" fill="rgba(239, 68, 68, 0.9)" fontSize="12" fontFamily="monospace">[✔] 24h Hackathon HackWithMumbai online</text>
-          <text x="85" y="235" fill="rgba(255,255,255,0.4)" fontSize="12" fontFamily="monospace">&gt; compiling prototypes 70/70</text>
+          <text x="85" y="125" fill="#EF4444" fontSize="13" fontFamily="var(--font-primary)">$ hwi agent run --autonomous</text>
+          <text x="85" y="155" fill="rgba(255,255,255,0.7)" fontSize="12" fontFamily="var(--font-primary)">[+] Initializing distributed cluster...</text>
+          <text x="85" y="180" fill="rgba(255,255,255,0.7)" fontSize="12" fontFamily="var(--font-primary)">[+] GPU tensor stream active: 8x H100</text>
+          <text x="85" y="205" fill="rgba(239, 68, 68, 0.9)" fontSize="12" fontFamily="var(--font-primary)">[✔] 24h Hackathon HackWithMumbai online</text>
+          <text x="85" y="235" fill="rgba(255,255,255,0.4)" fontSize="12" fontFamily="var(--font-primary)">&gt; compiling prototypes 70/70</text>
           <rect x="85" y="255" width="12" height="18" fill="#EF4444" opacity="0.85" />
         </svg>
       );

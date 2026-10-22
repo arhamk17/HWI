@@ -19,23 +19,11 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
-    id: 'learn-it-tour',
-    date: '16 JUL 2025',
-    title: 'HACKWITHINDIA - BVUDET LEARN IT TOUR',
-    badge: 'COMMUNITY TECH TOUR',
-    participants: '220 BUILDERS',
-    projects: '3 KEYNOTES & SESSIONS',
-    duration: '5 HOURS',
-    venue: 'BVUDET-NM Auditorium',
-    image: '/images/events/learn_it_tour_image4.png',
-    description: 'Organized in collaboration with Devnovate, uniting 220 students from across Maharashtra for practical sessions on open source, developer career growth, and startup engineering.',
-  },
-  {
     id: 'hackwithmumbai-1',
     date: 'FEB 2025',
     title: 'HACKWITHMUMBAI 1.0',
     badge: 'FLAGSHIP 24H SPRINT',
-    participants: '340+ DEVELOPERS',
+    participants: '340+ BUILDERS',
     projects: '45 REAL APPS',
     duration: '24 HOURS CONTINUOUS',
     venue: 'BVUDET Auditorium & Computer Center',
@@ -47,12 +35,24 @@ const MILESTONES: Milestone[] = [
     date: 'APR 2025',
     title: 'BUILD IT TOUR 2025',
     badge: 'STATEWIDE SPRINT',
-    participants: '180+ DEVELOPERS',
+    participants: '180+ BUILDERS',
     projects: '28 PROTOTYPES',
     duration: 'MULTI-CITY WORKSHOPS',
     venue: 'Campus Tech Hubs',
     image: '/images/events/hack_with_mumbai_1_image6.jpeg',
     description: 'A dedicated engineering roadshow bringing modern developer toolkits, API integrations, and hackathon strategies directly to student laboratories across the region.',
+  },
+  {
+    id: 'learn-it-tour',
+    date: 'JUL 2025',
+    title: 'HACKWITHINDIA - BVUDET LEARN IT TOUR',
+    badge: 'COMMUNITY TECH TOUR',
+    participants: '220 BUILDERS',
+    projects: '3 KEYNOTES & SESSIONS',
+    duration: '5 HOURS',
+    venue: 'BVUDET-NM Auditorium',
+    image: '/images/events/learn_it_tour_image4.png',
+    description: 'Organized in collaboration with Devnovate, uniting 220 students from across Maharashtra for practical sessions on open source, developer career growth, and startup engineering.',
   },
   {
     id: 'buildthefuture',
@@ -71,7 +71,7 @@ const MILESTONES: Milestone[] = [
     date: 'OCT 2025',
     title: 'ZERO2WEB3 BUILDATHON',
     badge: 'BLOCKCHAIN & PROTOCOLS',
-    participants: '160+ DEVS',
+    participants: '160+ BUILDERS',
     projects: '22 SMART CONTRACTS',
     duration: '18 HOURS INTENSIVE',
     venue: 'Central Computing Lab, BVUDET',
@@ -82,13 +82,13 @@ const MILESTONES: Milestone[] = [
     id: 'rocketride',
     date: 'JAN 2026',
     title: 'ROCKETRIDE BUILDATHON',
-    badge: 'GLOBAL SF DELEGATION',
-    participants: '47 TEAMS // 280+ DEVS',
+    badge: 'INTERNATIONAL DELEGATION',
+    participants: '47 TEAMS (183 BUILDERS)',
     projects: '42 PLATFORMS',
     duration: '30 HOURS SPRINT',
     venue: 'BVUDET Main Auditorium',
     image: '/images/events/rocketride_auditorium.jpg',
-    description: 'Silicon Valley delegation with international keynote sessions by Ryan Christensen and Rod Christensen, connecting student builders directly with global tech mentorship.',
+    description: 'International keynote sessions by Ryan Christensen and Rod Christensen from RocketRide, San Francisco, connecting 183 student builders across 47 teams with global tech mentorship.',
   },
   {
     id: 'hackwithmumbai-2',
@@ -104,17 +104,31 @@ const MILESTONES: Milestone[] = [
   },
 ];
 
+/**
+ * Normalizes any date string to strictly Month and Year (e.g., "JUL 2025", "FEB 2025").
+ * Removes any leading day numbers or range indicators.
+ */
+function formatJourneyDate(dateString: string): string {
+  // Strip leading day numbers/ranges like "16 ", "7–8 ", "21 "
+  const cleaned = dateString.replace(/^\d+[\s–-]*[A-Za-z]*/, (match) => {
+    return match.replace(/^\d+[\s–-]*/, '');
+  }).trim();
+
+  // If already "MMM YYYY", return uppercase
+  return cleaned.toUpperCase();
+}
+
 export function AboutJourney() {
   const [selectedId, setSelectedId] = useState<string>('hackwithmumbai-1');
 
-  const selected = MILESTONES.find((m) => m.id === selectedId) || MILESTONES[1];
+  const selected = MILESTONES.find((m) => m.id === selectedId) || MILESTONES[0];
 
   return (
     <section className="about-section" id="journey">
       <div className="about-container">
         <div className="about-manifesto__header about-reveal">
           <div className="about-section-eyebrow">
-            03 // CHRONOLOGY OF EXECUTION
+            03 // CHAPTER MILESTONES
           </div>
           <h2 className="about-manifesto__title">
             THE HWI JOURNEY
@@ -129,6 +143,7 @@ export function AboutJourney() {
           <div className="about-journey__list about-reveal">
             {MILESTONES.map((milestone) => {
               const isSelected = milestone.id === selected.id;
+              const formattedDate = formatJourneyDate(milestone.date);
               return (
                 <div
                   key={milestone.id}
@@ -144,7 +159,7 @@ export function AboutJourney() {
                   aria-pressed={isSelected}
                 >
                   <span className="about-journey__item-date">
-                    {milestone.date}
+                    {formattedDate}
                   </span>
                   <span className="about-journey__item-title">
                     {milestone.title}
@@ -160,6 +175,12 @@ export function AboutJourney() {
           {/* Sticky Milestone Dossier Preview */}
           <div className="about-reveal about-delay-2">
             <div className="about-journey__dossier">
+              {/* Corner HUD markers */}
+              <div className="about-hud-corner about-hud-corner--tl" />
+              <div className="about-hud-corner about-hud-corner--tr" />
+              <div className="about-hud-corner about-hud-corner--bl" />
+              <div className="about-hud-corner about-hud-corner--br" />
+
               <div className="about-journey__dossier-media">
                 <Image
                   src={selected.image}
@@ -223,12 +244,13 @@ export function AboutJourney() {
                     href="/events"
                     className="type-label"
                     style={{
-                      color: '#EF4444',
+                      color: '#00F0FF',
                       textDecoration: 'none',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '8px',
                       letterSpacing: '0.12em',
+                      fontWeight: 600,
                     }}
                   >
                     <span>EXPLORE ALL EDITIONS IN CHRONICLE →</span>

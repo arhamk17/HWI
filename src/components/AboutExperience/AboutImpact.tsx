@@ -9,6 +9,7 @@ interface StatItem {
   suffix: string;
   label: string;
   desc: string;
+  category: string;
 }
 
 const STATS: StatItem[] = [
@@ -18,6 +19,7 @@ const STATS: StatItem[] = [
     suffix: '',
     label: 'MILESTONE EDITIONS',
     desc: 'Flagship hackathons, lab bootcamps, and developer tours hosted across 2025–2026.',
+    category: 'EDITIONS',
   },
   {
     id: 'builders',
@@ -25,6 +27,7 @@ const STATS: StatItem[] = [
     suffix: '+',
     label: 'VERIFIED BUILDERS',
     desc: 'Active student participants representing engineering colleges throughout Maharashtra.',
+    category: 'COMMUNITY',
   },
   {
     id: 'projects',
@@ -32,20 +35,23 @@ const STATS: StatItem[] = [
     suffix: '+',
     label: 'PROTOTYPES SHIPPED',
     desc: 'Functional full-stack platforms, smart contracts, and machine learning models deployed.',
+    category: 'PROJECTS',
   },
   {
     id: 'roster',
     target: 41,
     suffix: '',
-    label: 'ROSTER CONTRIBUTORS',
+    label: 'CORE TEAM MEMBERS',
     desc: 'Dedicated student leaders organized across 9 specialized operational departments.',
+    category: 'ROSTER',
   },
   {
     id: 'sprint',
     target: 36,
     suffix: 'h',
-    label: 'LONGEST CONTINUOUS SPRINT',
+    label: 'LONGEST SPRINT',
     desc: 'Chapter record set during the BuildTheFuture 36-hour nonstop engineering marathon.',
+    category: 'DURATION',
   },
 ];
 
@@ -84,7 +90,7 @@ export function AboutImpact() {
           }
         });
       },
-      { threshold: 0.25 }
+      { threshold: 0.15 }
     );
 
     observer.observe(el);
@@ -99,13 +105,13 @@ export function AboutImpact() {
       <div className="about-container">
         <div className="about-manifesto__header about-reveal">
           <div className="about-section-eyebrow">
-            06 // VERIFIED TELEMETRY
+            07 // CHAPTER IMPACT & REACH
           </div>
           <h2 className="about-manifesto__title">
             COMMUNITY & IMPACT
           </h2>
           <p className="type-body text-secondary" style={{ marginTop: '16px' }}>
-            Empirical metrics representing real students, codebases, and hackathon hours at HackWithIndia BVUDET-NM.
+            Verified metrics representing real students, deployed codebases, and hackathon hours at HackWithIndia BVUDET-NM.
           </p>
         </div>
 
@@ -116,6 +122,10 @@ export function AboutImpact() {
               className={`about-impact__card about-reveal about-delay-${index + 1}`}
             >
               <div>
+                <div className="about-impact__card-code">
+                  <span>{stat.category}</span>
+                  <span style={{ color: '#00F0FF', opacity: 0.6 }}>0{index + 1}</span>
+                </div>
                 <div
                   className="about-impact__num"
                   id={`stat-num-${stat.id}`}

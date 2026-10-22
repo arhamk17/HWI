@@ -1953,7 +1953,7 @@ function PanelArtwork({
             <circle cx="250" cy="420" r="5" fill={accent} />
           </g>
           <rect x="230" y="270" width="140" height="90" rx="8" fill="rgba(18, 16, 22, 0.85)" stroke={accent} strokeWidth="1.5" />
-          <text x="300" y="320" fill={accent} fontSize="14" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
+          <text x="300" y="320" fill={accent} fontSize="14" fontFamily="var(--font-primary)" textAnchor="middle" letterSpacing="2">
             IC · SYNAPSE
           </text>
         </svg>
@@ -1967,10 +1967,10 @@ function PanelArtwork({
           <circle cx="85" cy="205" r="5" fill={accent} />
           <circle cx="102" cy="205" r="5" fill="rgba(255,255,255,0.3)" />
           <circle cx="119" cy="205" r="5" fill="rgba(255,255,255,0.3)" />
-          <text x="85" y="275" fill={accent} fontSize="14" fontFamily="monospace">$ hwi agent run --autonomous</text>
-          <text x="85" y="315" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="monospace">[+] Initializing distributed cluster...</text>
-          <text x="85" y="355" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="monospace">[+] GPU tensor stream active: 8x H100</text>
-          <text x="85" y="395" fill={accent} fontSize="13" fontFamily="monospace">[✔] 18 Agentic prototypes running</text>
+          <text x="85" y="275" fill={accent} fontSize="14" fontFamily="var(--font-primary)">$ hwi agent run --autonomous</text>
+          <text x="85" y="315" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="var(--font-primary)">[+] Initializing distributed cluster...</text>
+          <text x="85" y="355" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="var(--font-primary)">[+] GPU tensor stream active: 8x H100</text>
+          <text x="85" y="395" fill={accent} fontSize="13" fontFamily="var(--font-primary)">[✔] 18 Agentic prototypes running</text>
         </svg>
       );
 

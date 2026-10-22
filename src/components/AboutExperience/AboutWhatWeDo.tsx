@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
 
 interface WhatCard {
   id: string;
@@ -20,7 +21,7 @@ interface WhatCard {
 const WHAT_CARDS: WhatCard[] = [
   {
     id: 'hackathons',
-    eyebrow: 'VECTOR 01 // CRUCIBLE OF SPRINTING',
+    eyebrow: '01 // HACKATHONS & SPRINTS',
     title: '24H–36H HIGH-VELOCITY HACKATHONS',
     desc: 'High-intensity, continuous engineering marathons where student teams architect, debug, and ship production prototypes under strict deadlines with live industry judging and venture awards.',
     image: '/images/events/rocketride_hackers.jpg',
@@ -32,7 +33,7 @@ const WHAT_CARDS: WhatCard[] = [
   },
   {
     id: 'bootcamps',
-    eyebrow: 'VECTOR 02 // LAB ACCELERATION',
+    eyebrow: '02 // TECHNICAL BOOTCAMPS',
     title: 'TECHNICAL LAB BOOTCAMPS & WORKSHOPS',
     desc: 'Hands-on architectural masterclasses held in campus computing labs, training developers in smart contract security, machine learning pipelines, and distributed systems design.',
     image: '/images/events/rocketride_mentorship_lab.jpg',
@@ -44,7 +45,7 @@ const WHAT_CARDS: WhatCard[] = [
   },
   {
     id: 'delegations',
-    eyebrow: 'VECTOR 03 // GLOBAL ECOSYSTEM',
+    eyebrow: '03 // INDUSTRY DELEGATIONS',
     title: 'GLOBAL DELEGATIONS & TECH SUMMITS',
     desc: 'Direct partnerships connecting our Navi Mumbai campus with international tech leaders, venture founders, and Silicon Valley engineers for keynotes, live code audits, and global career pathways.',
     image: '/images/events/rocketride_keynote.jpg',
@@ -56,7 +57,7 @@ const WHAT_CARDS: WhatCard[] = [
   },
   {
     id: 'commons',
-    eyebrow: 'VECTOR 04 // COLLECTIVE POWER',
+    eyebrow: '04 // BUILDER COMMONS',
     title: 'PAN-MAHARASHTRA BUILDER COMMONS',
     desc: 'An interconnected network of over 1,400 student builders, collegiate campus leads, and alumni across western India collaborating on open-source repositories and cross-college hackathon squads.',
     image: '/images/events/learn_it_tour_image12.jpeg',
@@ -74,78 +75,87 @@ export function AboutWhatWeDo() {
       <div className="about-container">
         <div className="about-manifesto__header about-reveal">
           <div className="about-section-eyebrow">
-            04 // CORE INITIATIVES
+            05 // CORE INITIATIVES
           </div>
           <h2 className="about-manifesto__title">
             WHAT HWI DOES
           </h2>
           <p className="type-body text-secondary" style={{ marginTop: '16px' }}>
-            Four operational vectors delivering real engineering opportunities, high-stakes events, and global industry access.
+            Four core programs delivering real engineering opportunities, high-stakes events, and global industry access.
           </p>
         </div>
 
         <div className="about-what__grid">
           {WHAT_CARDS.map((card, index) => (
-            <div
+            <CardContainer
               key={card.id}
-              className={`about-what__card about-reveal about-delay-${index + 1}`}
-              style={
-                {
-                  '--what-color': card.color,
-                  '--what-glow': card.glow,
-                } as React.CSSProperties
-              }
+              containerClassName={`about-what__card-container about-reveal about-delay-${index + 1}`}
+              maxTilt={4.5}
+              lift={6}
+              glowColor={card.glow}
             >
-              <div className="about-what__media-wrapper">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
+              <CardBody
+                className="about-what__card"
+                style={
+                  {
+                    '--what-color': card.color,
+                    '--what-glow': card.glow,
+                  } as React.CSSProperties
+                }
+              >
+                <CardItem translateZ={18} className="about-what__media-wrapper">
+                  <Image
+                    src={card.image}
+                    alt={card.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </CardItem>
 
-              <div className="about-what__card-content">
-                <span className="about-what__card-eyebrow">
-                  {card.eyebrow}
-                </span>
+                <div className="about-what__card-content">
+                  <CardItem translateZ={12} as="span" className="about-what__card-eyebrow">
+                    {card.eyebrow}
+                  </CardItem>
 
-                <h3 className="about-what__card-title">
-                  {card.title}
-                </h3>
+                  <CardItem translateZ={24} as="h3" className="about-what__card-title">
+                    {card.title}
+                  </CardItem>
 
-                <p className="about-what__card-desc">
-                  {card.desc}
-                </p>
+                  <CardItem translateZ={14} as="p" className="about-what__card-desc">
+                    {card.desc}
+                  </CardItem>
 
-                <div className="about-what__card-tags">
-                  {card.tags.map((tag) => (
-                    <span key={tag} className="about-what__tag">
-                      {tag}
-                    </span>
-                  ))}
+                  <CardItem translateZ={20} className="about-what__card-tags">
+                    {card.tags.map((tag) => (
+                      <span key={tag} className="about-what__tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </CardItem>
+
+                  <div>
+                    <CardItem translateZ={26} as="div">
+                      <Link
+                        href={card.href}
+                        className="type-label"
+                        style={{
+                          color: card.color,
+                          textDecoration: 'none',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          letterSpacing: '0.12em',
+                          fontWeight: 600,
+                        }}
+                      >
+                        <span>{card.linkText} →</span>
+                      </Link>
+                    </CardItem>
+                  </div>
                 </div>
-
-                <div>
-                  <Link
-                    href={card.href}
-                    className="type-label"
-                    style={{
-                      color: card.color,
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      letterSpacing: '0.12em',
-                      fontWeight: 600,
-                    }}
-                  >
-                    <span>{card.linkText} →</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
+              </CardBody>
+            </CardContainer>
           ))}
         </div>
       </div>

@@ -1,4 +1,21 @@
 :root {
+  /* =========================================================================
+     HWI TYPOGRAPHY TOKENS — POPPINS UNIFIED
+     Poppins as the consistent primary font throughout entire HWI website
+     ========================================================================= */
+  --font-poppins-fallback: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-primary: var(--font-poppins), var(--font-poppins-fallback);
+  --font-body: var(--font-primary);
+  --font-heading: var(--font-primary);
+  --font-display: var(--font-primary);
+
+  /* Legacy typography tokens mapped directly to Poppins */
+  --font-satoshi: var(--font-primary);
+  --font-general-sans: var(--font-primary);
+  --font-jetbrains-mono: var(--font-primary);
+  --font-mono: var(--font-primary);
+  --font-syne: var(--font-primary);
+  --font-playfair-display: var(--font-primary);
   /* HWI COLOR SYSTEM */
   
   /* SURFACES */
@@ -85,18 +102,33 @@
 }
 
 html {
+  font-family: var(--font-primary);
   scroll-behavior: auto; /* Lenis handles smoothing */
   overflow-x: clip;
   max-width: 100vw;
 }
 
 body {
+  font-family: var(--font-primary);
   background-color: var(--surface-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
   max-width: 100vw;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+code,
+kbd,
+samp {
+  font-family: var(--font-primary);
 }
 
 
@@ -136,7 +168,7 @@ html.lenis, html.lenis body {
 /* ============================================ */
 
 .type-massive {
-  font-family: var(--font-satoshi), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 900;
   font-size: clamp(6rem, 18vw, 20rem);
   line-height: 0.8;
@@ -145,7 +177,7 @@ html.lenis, html.lenis body {
 }
 
 .type-intro {
-  font-family: var(--font-satoshi), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 900;
   font-size: clamp(3.5rem, 10vw, 10rem);
   line-height: 0.85;
@@ -154,7 +186,7 @@ html.lenis, html.lenis body {
 }
 
 .type-display {
-  font-family: var(--font-satoshi), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 700;
   font-size: clamp(2.5rem, 6vw, 6rem);
   line-height: 0.9;
@@ -163,7 +195,7 @@ html.lenis, html.lenis body {
 }
 
 .type-heading-1 {
-  font-family: var(--font-satoshi), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 600;
   font-size: clamp(1.5rem, 3.5vw, 3rem);
   line-height: 0.95;
@@ -171,7 +203,7 @@ html.lenis, html.lenis body {
 }
 
 .type-heading-2 {
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 600;
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   line-height: 1.1;
@@ -179,7 +211,7 @@ html.lenis, html.lenis body {
 }
 
 .type-eyebrow {
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 500;
   font-size: clamp(10px, 1vw, 12px);
   line-height: 1.3;
@@ -188,21 +220,21 @@ html.lenis, html.lenis body {
 }
 
 .type-body {
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 400;
   font-size: clamp(15px, 1.5vw, 17px);
   line-height: 1.65;
 }
 
 .type-body-small {
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 400;
   font-size: clamp(13px, 1vw, 14px);
   line-height: 1.5;
 }
 
 .type-label {
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 500;
   font-size: clamp(12px, 1vw, 13px);
   line-height: 1.0;
@@ -211,7 +243,7 @@ html.lenis, html.lenis body {
 }
 
 .type-number {
-  font-family: var(--font-satoshi), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 700;
   font-size: clamp(3rem, 5vw, 5rem);
   line-height: 1.0;
@@ -219,7 +251,7 @@ html.lenis, html.lenis body {
 }
 
 .type-mono {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-primary);
   font-weight: 400;
   font-size: clamp(12px, 1vw, 14px);
   line-height: 1.5;
@@ -271,7 +303,7 @@ html.lenis, html.lenis body {
   justify-content: center;
   padding: 16px 32px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-general-sans), sans-serif;
+  font-family: var(--font-primary);
   font-weight: 500;
   font-size: 13px;
   letter-spacing: 0.08em;

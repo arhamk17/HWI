@@ -1,0 +1,45 @@
+/* ==========================================================================
+   HWI 3D PERSPECTIVE CARD SYSTEM
+   Cinematic Layered Depth, Conservative Perspective Tilt, Zero Layout Shift
+   ========================================================================== */
+
+.hwi-3d-card-container {
+  position: relative;
+  box-sizing: border-box;
+  /* Perspective context for child 3D transforms */
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.hwi-3d-card-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* When active, transition is fast and responsive to mouse glide */
+.hwi-3d-card-body.is-hovering {
+  transition: transform 0.08s ease-out, box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hwi-3d-card-item {
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .hwi-3d-card-container,
+  .hwi-3d-card-body,
+  .hwi-3d-card-item {
+    perspective: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

@@ -99,7 +99,7 @@
 
 /* Category numbers: muted light gray #9A9A9A when inactive, active HWI Red when selected */
 .wwd__number {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: #9A9A9A !important;
@@ -127,7 +127,7 @@
 }
 
 .wwd__arrow {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 16px;
   color: #9A9A9A !important;
   transition: transform 0.25s ease, color 0.25s ease;
@@ -166,7 +166,7 @@
 
 /* Red Tagline Accent */
 .wwd__detail-tagline {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 12px;
   color: var(--accent) !important;
   letter-spacing: 0.15em;
@@ -195,7 +195,7 @@
 
 /* Small Labels / Metadata Header: muted light gray #9A9A9A */
 .wwd__deliverables-header {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   letter-spacing: 0.15em;
   color: #9A9A9A !important;
@@ -229,7 +229,7 @@
 
 /* Feature / Content Titles: white / near-white #F5F5F5 */
 .wwd__deliverable-tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: #F5F5F5 !important;

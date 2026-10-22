@@ -69,7 +69,7 @@
 }
 
 .teams-hero__tenure {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -131,7 +131,7 @@
 }
 
 .teams-stat__label {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -242,7 +242,7 @@
 }
 
 .team-level__tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -290,7 +290,7 @@
 
 .apex-leadership__label,
 .core-depts__label {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -487,7 +487,7 @@
 }
 
 .apex-card__watermark {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 7.5px;
   letter-spacing: 0.12em;
   color: var(--accent);
@@ -523,7 +523,7 @@
 }
 
 .apex-card__role-pill {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -535,7 +535,7 @@
 }
 
 .apex-card__dept-pill {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -688,6 +688,10 @@
   z-index: 2;
 }
 
+.core-card__img[src*="Sushant"] {
+  object-position: center 42%;
+}
+
 .core-card__initials {
   font-family: var(--font-satoshi), sans-serif;
   font-size: 17px;
@@ -698,7 +702,7 @@
 }
 
 .core-card__watermark {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 6.5px;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -716,7 +720,7 @@
 }
 
 .core-card__role {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -797,7 +801,7 @@
 }
 
 .exec-dept-block__idx {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -834,7 +838,7 @@
 }
 
 .exec-dept-block__count {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -914,7 +918,7 @@
 }
 
 .exec-card__year {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10.5px;
   font-weight: 800;
   color: #FFFFFF;
@@ -927,7 +931,7 @@
 }
 
 .exec-card__branch {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10.5px;
   font-weight: 700;
   color: var(--accent-secondary);
@@ -961,7 +965,7 @@
 .exec-card__role--special {
   color: var(--accent);
   font-weight: 700;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -973,7 +977,7 @@
 }
 
 .exec-card__dept-label {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 9.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;

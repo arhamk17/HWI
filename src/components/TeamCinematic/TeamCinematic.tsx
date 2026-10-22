@@ -18,6 +18,7 @@ import {
 } from '@/data/teamDepartments';
 import { scrollBus } from '@/lib/scrollBus';
 import { teamStore } from '@/lib/teamStore';
+import { CometCard, CometCardViewIndicator } from '@/components/ui/comet-card';
 import './TeamCinematic.css';
 
 interface TeamCinematicProps {
@@ -286,107 +287,113 @@ function PhysicalIdCard({
 
   const isActive = Math.abs(diff) <= 0.5;
 
-  const cardCustomStyles: React.CSSProperties = {
-    ...cardStyle,
-    '--dept-accent-start': theme.start,
-    '--dept-accent-end': theme.end,
-    '--dept-glow': theme.glow,
-    '--dept-gradient': theme.gradient,
-  } as React.CSSProperties;
-
   return (
-    <article
-      className={`team-physical-card ${isActive ? 'is-active' : 'is-stacked'}`}
-      data-dept={dept.id}
-      style={cardCustomStyles}
-      onClick={onSelect}
-      aria-label={`${member.name} — ${member.role}`}
+    <div
+      className={`team-deck-card-slot ${isActive ? 'is-active' : 'is-stacked'}`}
+      style={cardStyle}
     >
-      {/* Top Lanyard Punch Slot */}
-      <div className="team-card__lanyard-slot" aria-hidden="true" />
+      <CometCard
+        className={`team-physical-card ${isActive ? 'is-active' : 'is-stacked'}`}
+        deptId={dept.id}
+        deptTheme={theme}
+        isActive={isActive}
+        disabled={!isActive}
+        prefersReducedMotion={prefersReduced}
+        onSelect={onSelect}
+        ariaLabel={`${member.name} — ${member.role}`}
+        maxTilt={4.5}
+        elevation={8}
+        showSheen={true}
+      >
+        {/* Top Lanyard Punch Slot */}
+        <div className="team-card__lanyard-slot" aria-hidden="true" />
 
-      {/* Security Accent Line with Department Gradient */}
-      <div className="team-card__accent-strip" />
+        {/* Security Accent Line with Department Gradient */}
+        <div className="team-card__accent-strip" />
 
-      {/* Corner Technical Registration Crosshairs */}
-      <span className="team-card__reticle top-left" aria-hidden="true">+</span>
-      <span className="team-card__reticle top-right" aria-hidden="true">+</span>
-      <span className="team-card__reticle bottom-left" aria-hidden="true">+</span>
-      <span className="team-card__reticle bottom-right" aria-hidden="true">+</span>
+        {/* Corner Technical Registration Crosshairs */}
+        <span className="team-card__reticle top-left" aria-hidden="true">+</span>
+        <span className="team-card__reticle top-right" aria-hidden="true">+</span>
+        <span className="team-card__reticle bottom-left" aria-hidden="true">+</span>
+        <span className="team-card__reticle bottom-right" aria-hidden="true">+</span>
 
-      {/* Card Header: Brand & Security Watermark */}
-      <div className="team-card__header">
-        <div className="team-card__brand">
-          <span className="team-card__emblem">HWI</span>
-          <div className="team-card__brand-text">
-            <span className="team-card__org">HACKWITHINDIA</span>
-            <span className="team-card__suborg">OFFICIAL CHAPTER CREDENTIAL</span>
+        {/* Card Header: Brand & Security Watermark */}
+        <div className="team-card__header">
+          <div className="team-card__brand">
+            <span className="team-card__emblem">HWI</span>
+            <div className="team-card__brand-text">
+              <span className="team-card__org">HACKWITHINDIA</span>
+              <span className="team-card__suborg">OFFICIAL CHAPTER CREDENTIAL</span>
+            </div>
+          </div>
+
+          <div className="team-card__status-beacon">
+            <span className="team-card__status-dot" />
+            <span>VERIFIED</span>
           </div>
         </div>
 
-        <div className="team-card__status-beacon">
-          <span className="team-card__status-dot" />
-          <span>VERIFIED</span>
-        </div>
-      </div>
+        {/* Photo Frame Container */}
+        <div className="team-card__photo-container">
+          <div className="team-card__photo-frame">
+            {member.image && !imgFailed ? (
+              <img
+                src={member.image}
+                alt={member.name}
+                className="team-card__photo-img"
+                loading="lazy"
+                onError={() => setImgFailed(true)}
+              />
+            ) : (
+              <div className="team-card__photo-fallback">
+                <span className="team-card__initials">{member.initials}</span>
+                <span className="team-card__watermark">HWI // 26</span>
+              </div>
+            )}
+          </div>
 
-      {/* Photo Frame Container */}
-      <div className="team-card__photo-container">
-        <div className="team-card__photo-frame">
-          {member.image && !imgFailed ? (
-            <img
-              src={member.image}
-              alt={member.name}
-              className="team-card__photo-img"
-              loading="lazy"
-              onError={() => setImgFailed(true)}
-            />
-          ) : (
-            <div className="team-card__photo-fallback">
-              <span className="team-card__initials">{member.initials}</span>
-              <span className="team-card__watermark">HWI // 26</span>
+          <div className="team-card__verified-badge">
+            <ShieldCheck size={11} />
+            <span>OFFICIAL</span>
+          </div>
+
+          {/* Floating Circular VIEW Indicator */}
+          <CometCardViewIndicator text="VIEW" />
+        </div>
+
+        {/* Card Body: Name, Role & Department */}
+        <div className="team-card__body">
+          <div className="team-card__meta-tags">
+            <span className="team-card__dept-tag">{dept.name}</span>
+            <span className="team-card__rank-tag">{rankLabel}</span>
+          </div>
+
+          <h3 className="team-card__name">{member.name}</h3>
+          <p className="team-card__role">{member.role}</p>
+
+          {member.academicYear && member.branch && (
+            <div className="team-card__academic">
+              <span>{member.academicYear} • {member.branch}</span>
             </div>
           )}
         </div>
 
-        <div className="team-card__verified-badge">
-          <ShieldCheck size={11} />
-          <span>OFFICIAL</span>
-        </div>
-      </div>
-
-      {/* Card Body: Name, Role & Department */}
-      <div className="team-card__body">
-        <div className="team-card__meta-tags">
-          <span className="team-card__dept-tag">{dept.name}</span>
-          <span className="team-card__rank-tag">{rankLabel}</span>
-        </div>
-
-        <h3 className="team-card__name">{member.name}</h3>
-        <p className="team-card__role">{member.role}</p>
-
-        {member.academicYear && member.branch && (
-          <div className="team-card__academic">
-            <span>{member.academicYear} • {member.branch}</span>
+        {/* Bottom Technical Barcode & Serial */}
+        <div className="team-card__footer">
+          <div className="team-card__barcode-wrap">
+            <DepartmentIdBarcode
+              startColor={theme.start}
+              endColor={theme.end}
+              uniqueId={dept.id}
+            />
           </div>
-        )}
-      </div>
-
-      {/* Bottom Technical Barcode & Serial */}
-      <div className="team-card__footer">
-        <div className="team-card__barcode-wrap">
-          <DepartmentIdBarcode
-            startColor={theme.start}
-            endColor={theme.end}
-            uniqueId={dept.id}
-          />
+          <div className="team-card__serial-row">
+            <span className="team-card__serial-label">CREDENTIAL ID</span>
+            <code className="team-card__serial-code">{serialId}</code>
+          </div>
         </div>
-        <div className="team-card__serial-row">
-          <span className="team-card__serial-label">CREDENTIAL ID</span>
-          <code className="team-card__serial-code">{serialId}</code>
-        </div>
-      </div>
-    </article>
+      </CometCard>
+    </div>
   );
 }
 

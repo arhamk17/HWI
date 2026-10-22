@@ -154,7 +154,7 @@
 }
 
 .wwo__kicker {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   color: #ef4444;
@@ -337,7 +337,7 @@
 .wwo__indicator-label {
   position: absolute;
   bottom: -20px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   color: rgba(255, 255, 255, 0.5);

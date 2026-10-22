@@ -76,7 +76,7 @@
 }
 
 .hwi-easter-egg__tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 11px;
   color: var(--accent);
   letter-spacing: 0.3em;

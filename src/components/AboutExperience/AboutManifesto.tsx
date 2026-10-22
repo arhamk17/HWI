@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
 
 interface ManifestoItem {
   id: string;
@@ -8,7 +9,7 @@ interface ManifestoItem {
   tag: string;
   title: string;
   desc: string;
-  terminalLog: string;
+  focus: string;
   color: string;
   glow: string;
 }
@@ -17,54 +18,52 @@ const MANIFESTO_ITEMS: ManifestoItem[] = [
   {
     id: 'shipping',
     num: '01',
-    tag: 'TENET // VELOCITY',
+    tag: 'CORE PILLAR',
     title: 'SHIPPING OVER SPECULATION',
-    desc: 'Code deployed to production beats theoretical whiteboard diagrams every time. We measure engineering velocity in functioning binaries, deployed smart contracts, and real user validation.',
-    terminalLog: '$ git push origin main && deploy --env=prod --verified',
+    desc: 'Working software beats theoretical whiteboard diagrams every time. We measure engineering velocity in functioning applications, deployed smart contracts, and real user validation.',
+    focus: 'Focus: Production deployment and working prototypes',
     color: '#EF4444',
-    glow: 'rgba(239, 68, 68, 0.25)',
+    glow: 'rgba(239, 68, 68, 0.35)',
   },
   {
     id: 'collaboration',
     num: '02',
-    tag: 'TENET // SYNERGY',
+    tag: 'FOUNDATIONAL PRINCIPLE',
     title: 'RADICAL COLLABORATION',
-    desc: 'The lone hacker is a myth. High-impact software requires cross-functional synergy between systems architects, UI artists, and infrastructure leads shipping under 36-hour constraints.',
-    terminalLog: '$ p2p-sync --cluster=bvudet-nm --peers=41 --status=mesh',
+    desc: 'The lone hacker is a myth. High-impact software requires cross-functional synergy between systems architects, UI designers, and team leads shipping under tight constraints.',
+    focus: 'Focus: Multidisciplinary teams building end-to-end',
     color: '#00F0FF',
-    glow: 'rgba(0, 240, 255, 0.25)',
+    glow: 'rgba(0, 240, 255, 0.35)',
   },
   {
     id: 'open-source',
     num: '03',
-    tag: 'TENET // COMMONS',
+    tag: 'COMMUNITY VALUE',
     title: 'BUILD IN THE OPEN',
-    desc: 'Open source is our foundation. From our internal tooling and curriculum to hackathon starter kits, everything we architect is contributed directly back to the student developer commons.',
-    terminalLog: '$ gh repo fork hackwithindia/commons --upstream=public',
+    desc: 'Open source is our foundation. From our internal tooling and curriculum to hackathon starter kits, resources built by the chapter are contributed directly back to the student developer community.',
+    focus: 'Focus: Public repositories, open tooling, and shared kits',
     color: '#A855F7',
-    glow: 'rgba(168, 85, 247, 0.25)',
+    glow: 'rgba(168, 85, 247, 0.35)',
   },
   {
     id: 'sprinting',
     num: '04',
-    tag: 'TENET // CRUCIBLE',
+    tag: 'CULTURE & FOCUS',
     title: 'RELENTLESS SPRINTING',
-    desc: 'Hackathons are engineering crucibles, not casual mixers. Pressure, tight deadlines, and sleepless dedication burn away self-doubt, forging developers who execute without excuses.',
-    terminalLog: '$ timer --duration=36h --burn-rate=continuous --target=demo',
+    desc: 'Hackathons are engineering crucibles, not casual mixers. Focused pressure, tight deadlines, and dedicated effort forge developers who know how to ship without excuses.',
+    focus: 'Focus: 24-to-36-hour nonstop buildathon execution',
     color: '#22C55E',
-    glow: 'rgba(34, 197, 94, 0.25)',
+    glow: 'rgba(34, 197, 94, 0.35)',
   },
 ];
 
 export function AboutManifesto() {
-  const [activeId, setActiveId] = useState<string>('shipping');
-
   return (
     <section className="about-section" id="manifesto">
       <div className="about-container">
         <div className="about-manifesto__header about-reveal">
           <div className="about-section-eyebrow">
-            02 // THE ARCHITECTURAL CORE
+            02 // CORE PRINCIPLES
           </div>
           <h2 className="about-manifesto__title">
             THE HWI MANIFESTO
@@ -74,13 +73,17 @@ export function AboutManifesto() {
           </p>
         </div>
 
-        <div className="about-manifesto__grid">
-          {MANIFESTO_ITEMS.map((item, index) => {
-            const isActive = activeId === item.id;
-            return (
-              <div
-                key={item.id}
-                className={`about-manifesto__card about-reveal about-delay-${index + 1} ${isActive ? 'is-active' : ''}`}
+        <div className="about-manifesto__grid about-reveal">
+          {MANIFESTO_ITEMS.map((item) => (
+            <CardContainer
+              key={item.id}
+              maxTilt={4}
+              lift={5}
+              glowColor={item.glow}
+              containerClassName="about-manifesto__card-container"
+            >
+              <CardBody
+                className="about-manifesto__card"
                 style={
                   {
                     '--card-accent': item.color,
@@ -88,30 +91,32 @@ export function AboutManifesto() {
                     '--card-ambient-glow': item.glow,
                   } as React.CSSProperties
                 }
-                onClick={() => setActiveId(item.id)}
-                onMouseEnter={() => setActiveId(item.id)}
+                tabIndex={0}
+                role="region"
+                aria-label={`${item.title} - ${item.tag}`}
               >
                 <div>
-                  <div className="about-manifesto__card-header">
+                  <CardItem translateZ={16} className="about-manifesto__card-header">
                     <span className="about-manifesto__num">{item.num}</span>
                     <span className="about-manifesto__tag">{item.tag}</span>
-                  </div>
+                  </CardItem>
 
-                  <h3 className="about-manifesto__card-title">
+                  <CardItem translateZ={24} as="h3" className="about-manifesto__card-title">
                     {item.title}
-                  </h3>
+                  </CardItem>
 
-                  <p className="about-manifesto__card-desc">
+                  <CardItem translateZ={12} as="p" className="about-manifesto__card-desc">
                     {item.desc}
-                  </p>
+                  </CardItem>
                 </div>
 
-                <div className="about-manifesto__code-snippet">
-                  {item.terminalLog}
-                </div>
-              </div>
-            );
-          })}
+                <CardItem translateZ={18} className="about-manifesto__focus-note">
+                  <span className="about-manifesto__focus-dot" style={{ backgroundColor: item.color }} />
+                  <span>{item.focus}</span>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
+          ))}
         </div>
       </div>
     </section>

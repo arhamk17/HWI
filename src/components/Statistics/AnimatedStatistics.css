@@ -115,7 +115,7 @@
 }
 
 .stat-card__sublabel {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 10px;
   letter-spacing: 0.12em;
   color: var(--accent);

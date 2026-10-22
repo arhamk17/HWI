@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Outfit, Inter, JetBrains_Mono } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import { GlobalBackground } from '@/components/GlobalBackground/GlobalBackground';
 import { Navigation } from '@/components/Navigation/Navigation';
 import { RulerScrollbar } from '@/components/RulerScrollbar/RulerScrollbar';
@@ -10,21 +10,10 @@ import { EasterEgg } from '@/components/EasterEgg/EasterEgg';
 import { PageTransitionProvider } from '@/components/Transitions/PageTransition';
 import './globals.css';
 
-const outfit = Outfit({
+const poppins = Poppins({
   subsets: ['latin'],
-  variable: '--font-satoshi',
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-general-sans',
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-poppins',
   display: 'swap',
 });
 
@@ -39,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${poppins.className}`}>
       <head>
         <script
           dangerouslySetInnerHTML={{

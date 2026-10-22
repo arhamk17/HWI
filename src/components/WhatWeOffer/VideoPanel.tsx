@@ -1,7 +1,11 @@
 'use client';
 
-import { forwardRef, useRef, useEffect } from 'react';
+import { forwardRef, useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
+import {
+  CinematicVideoModal,
+  Skiper67PlayCursor,
+} from '@/components/ui/skiper67';
 import './VideoPanel.css';
 
 export const DEFAULT_OFFER_VIDEO_SRC = '/91562-629172467_medium.mp4';
@@ -48,8 +52,19 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
     forwardedRef
   ) {
     const internalVideoRef = useRef<HTMLVideoElement | null>(null);
+    const mediaWrapRef = useRef<HTMLDivElement>(null);
     const progressFillRef = useRef<HTMLDivElement>(null);
     const timerTextRef = useRef<HTMLSpanElement>(null);
+
+    // Modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalInitialTime, setModalInitialTime] = useState(0);
+    const [originRect, setOriginRect] = useState<{
+      top: number;
+      left: number;
+      width: number;
+      height: number;
+    } | null>(null);
 
     const setRefs = (el: HTMLVideoElement | null) => {
       internalVideoRef.current = el;
@@ -114,101 +129,166 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
       }
     };
 
-    const content = (
-      <div className={`video-panel ${href ? 'video-panel--interactive' : ''} ${className}`}>
-        <div className="video-panel__frame">
-          {/* Subtle light sweep shimmer */}
-          <div className="video-panel__shimmer" aria-hidden="true" />
+    // Pointer-following Play indicator handlers (Zero React state updates)
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      e.currentTarget.style.setProperty('--play-x', `${x}px`);
+      e.currentTarget.style.setProperty('--play-y', `${y}px`);
+      e.currentTarget.style.setProperty('--play-opacity', '1');
+    };
 
-          {/* Header Bar */}
-          <div className="video-panel__header">
-            <div className="video-panel__dot-group">
-              <span className="video-panel__dot video-panel__dot--red" />
-              <span className="video-panel__dot video-panel__dot--gray" />
-              <span className="video-panel__dot video-panel__dot--gray" />
-            </div>
-            <div className="video-panel__badge-group">
-              <span className="video-panel__badge">HWI PREVIEW // CHAPTER 03</span>
-              {href && (
-                <span className="video-panel__cta-badge">
-                  <span>ABOUT HWI</span>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7" />
-                    <polyline points="7 7 17 7 17 17" />
-                  </svg>
-                </span>
-              )}
-            </div>
-          </div>
+    const handlePointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+      e.currentTarget.style.setProperty('--play-opacity', '0');
+    };
 
-          {/* Video Container */}
-          <div className="video-panel__media-wrap">
-            <video
-              ref={setRefs}
-              src={src}
-              poster={poster}
-              playsInline
-              muted
-              autoPlay={autoPlay}
-              loop={loop}
-              preload="auto"
-              className="video-panel__video"
-              onTimeUpdate={handleTimeUpdate}
-              onLoadedMetadata={handleLoadedMetadata}
-              onSeeked={handleTimeUpdate}
-              onEnded={onEnded}
-              onError={onError}
-            />
-            {/* Subtle cinematic overlay gradient */}
-            <div className="video-panel__overlay" />
+    // Open Cinematic Modal
+    const handleOpenModal = (e?: React.MouseEvent | React.KeyboardEvent) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const rect = mediaWrapRef.current?.getBoundingClientRect();
+      if (rect) {
+        setOriginRect({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+      const curTime = internalVideoRef.current?.currentTime || 0;
+      setModalInitialTime(curTime);
 
-            {/* Hover Floating Pill Prompt */}
-            {href && (
-              <div className="video-panel__hover-pill" aria-hidden="true">
-                <span className="video-panel__hover-pill-dot" />
-                <span>EXPLORE ABOUT HWI</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
+      // Pause preview video while modal is active
+      if (internalVideoRef.current) {
+        internalVideoRef.current.pause();
+      }
+
+      setIsModalOpen(true);
+    };
+
+    // Close Cinematic Modal
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+
+      // Resume preview video
+      if (autoPlay && internalVideoRef.current) {
+        internalVideoRef.current.play().catch(() => {});
+      }
+    };
+
+    return (
+      <>
+        <div className={`video-panel video-panel--interactive ${className}`}>
+          <div className="video-panel__frame">
+            {/* Subtle light sweep shimmer */}
+            <div className="video-panel__shimmer" aria-hidden="true" />
+
+            {/* Header Bar */}
+            <div className="video-panel__header">
+              <div className="video-panel__dot-group">
+                <span className="video-panel__dot video-panel__dot--red" />
+                <span className="video-panel__dot video-panel__dot--gray" />
+                <span className="video-panel__dot video-panel__dot--gray" />
               </div>
-            )}
-          </div>
-
-          {/* Real-time Video Progress Bar */}
-          <div className="video-panel__progress-bar">
-            <div
-              className="video-panel__progress-fill"
-              ref={progressFillRef}
-              style={{ width: '0%' }}
-            />
-          </div>
-
-          {/* Footer Bar */}
-          <div className="video-panel__footer">
-            <div className="video-panel__status-wrap">
-              <span className="video-panel__status">
-                PLAYING • 1.0X
-              </span>
+              <div className="video-panel__badge-group">
+                <span className="video-panel__badge">HWI PREVIEW // CHAPTER 03</span>
+                {href && (
+                  <Link
+                    href={href}
+                    className="video-panel__cta-badge"
+                    onClick={(e) => e.stopPropagation()}
+                    title="Explore About HWI"
+                  >
+                    <span>ABOUT HWI</span>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7" />
+                      <polyline points="7 7 17 7 17 17" />
+                    </svg>
+                  </Link>
+                )}
+              </div>
             </div>
-            <div className="video-panel__timer-wrap">
-              <span className="video-panel__timer" ref={timerTextRef}>
-                --:-- / --:--
-              </span>
+
+            {/* Video Container (Target preview with Skiper67 interaction) */}
+            <div
+              ref={mediaWrapRef}
+              className="video-panel__media-wrap"
+              onClick={handleOpenModal}
+              onPointerMove={handlePointerMove}
+              onPointerLeave={handlePointerLeave}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleOpenModal();
+                }
+              }}
+              aria-label="Play cinematic showreel video"
+            >
+              <video
+                ref={setRefs}
+                src={src}
+                poster={poster}
+                playsInline
+                muted
+                autoPlay={autoPlay}
+                loop={loop}
+                preload="auto"
+                className="video-panel__video"
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                onSeeked={handleTimeUpdate}
+                onEnded={onEnded}
+                onError={onError}
+              />
+              {/* Subtle cinematic overlay gradient */}
+              <div className="video-panel__overlay" />
+
+              {/* Skiper67 Pointer-Following Custom PLAY Cursor */}
+              <Skiper67PlayCursor />
+            </div>
+
+            {/* Real-time Video Progress Bar */}
+            <div className="video-panel__progress-bar">
+              <div
+                className="video-panel__progress-fill"
+                ref={progressFillRef}
+                style={{ width: '0%' }}
+              />
+            </div>
+
+            {/* Footer Bar */}
+            <div className="video-panel__footer" onClick={handleOpenModal} style={{ cursor: 'pointer' }}>
+              <div className="video-panel__status-wrap">
+                <span className="video-panel__status">
+                  PLAYING • 1.0X
+                </span>
+              </div>
+              <div className="video-panel__timer-wrap">
+                <span className="video-panel__timer" ref={timerTextRef}>
+                  --:-- / --:--
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Cinematic Expandable Video Player Modal */}
+        <CinematicVideoModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          src={src}
+          poster={poster}
+          initialTime={modalInitialTime}
+          originRect={originRect}
+          title="HWI SHOWREEL // CURRICULUM & INITIATIVES"
+        />
+      </>
     );
-
-    if (href) {
-      return (
-        <Link href={href} className="video-panel__link" title="Explore About HWI">
-          {content}
-        </Link>
-      );
-    }
-
-    return content;
   }
 );
+

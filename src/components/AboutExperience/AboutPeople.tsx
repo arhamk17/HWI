@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
+import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card';
 
 interface DepartmentOverview {
   name: string;
@@ -28,7 +29,7 @@ export function AboutPeople() {
       <div className="about-container">
         <div className="about-manifesto__header about-reveal">
           <div className="about-section-eyebrow">
-            05 // STUDENT GOVERNANCE
+            06 // CHAPTER LEADERSHIP & ROSTER
           </div>
           <h2 className="about-manifesto__title">
             THE PEOPLE BEHIND HWI
@@ -41,58 +42,82 @@ export function AboutPeople() {
         {/* Leadership Spotlight: President & Vice-President */}
         <div className="about-people__leadership-grid">
           {/* President Card */}
-          <div className="about-people__leader-card about-reveal">
-            <div className="about-people__avatar-frame">
-              <Image
-                src="/images/team/president.png"
-                alt="Krishnakant Sharma, President of HackWithIndia BVUDET-NM"
-                fill
-                sizes="120px"
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-            <div className="about-people__leader-info">
-              <div className="about-people__leader-badge">
-                CHAPTER PRESIDENT // EXECUTIVE
+          <CardContainer
+            containerClassName="about-people__leader-container about-reveal"
+            maxTilt={4}
+            lift={5}
+            glowColor="rgba(0, 240, 255, 0.25)"
+          >
+            <CardBody className="about-people__leader-card">
+              <div className="about-hud-corner about-hud-corner--tl" />
+              <div className="about-hud-corner about-hud-corner--tr" />
+              <div className="about-hud-corner about-hud-corner--bl" />
+              <div className="about-hud-corner about-hud-corner--br" />
+
+              <CardItem translateZ={26} className="about-people__avatar-frame">
+                <Image
+                  src="/images/team/president.png"
+                  alt="Krishnakant Sharma, President of HackWithIndia BVUDET-NM"
+                  fill
+                  sizes="120px"
+                  style={{ objectFit: 'cover' }}
+                />
+              </CardItem>
+              <div className="about-people__leader-info">
+                <CardItem translateZ={14} className="about-people__leader-badge">
+                  CHAPTER PRESIDENT
+                </CardItem>
+                <CardItem translateZ={22} as="h3" className="about-people__leader-name">
+                  Krishnakant Sharma
+                </CardItem>
+                <CardItem translateZ={16} className="about-people__leader-id">
+                  CREDENTIAL ID: <span style={{ color: '#00F0FF' }}>HWI-PRESIDENT-KK</span>
+                </CardItem>
+                <CardItem translateZ={12} as="p" className="about-people__leader-bio">
+                  Spearheads chapter vision, national partnerships, and overall community growth at BVUDET-NM.
+                </CardItem>
               </div>
-              <h3 className="about-people__leader-name">
-                Krishnakant Sharma
-              </h3>
-              <div className="about-people__leader-id">
-                CREDENTIAL ID: HWI-PRESIDENT-KK
-              </div>
-              <p className="about-people__leader-bio">
-                Spearheads chapter vision, national partnerships, and overall community growth at BVUDET-NM.
-              </p>
-            </div>
-          </div>
+            </CardBody>
+          </CardContainer>
 
           {/* Vice-President Card */}
-          <div className="about-people__leader-card about-reveal about-delay-1">
-            <div className="about-people__avatar-frame">
-              <Image
-                src="/images/team/vice-president.png"
-                alt="Vanshika Chandra, Vice-President of HackWithIndia BVUDET-NM"
-                fill
-                sizes="120px"
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-            <div className="about-people__leader-info">
-              <div className="about-people__leader-badge" style={{ color: '#FF007A' }}>
-                CHAPTER VICE-PRESIDENT // OPERATIONS
+          <CardContainer
+            containerClassName="about-people__leader-container about-reveal about-delay-1"
+            maxTilt={4}
+            lift={5}
+            glowColor="rgba(255, 0, 122, 0.25)"
+          >
+            <CardBody className="about-people__leader-card">
+              <div className="about-hud-corner about-hud-corner--tl" />
+              <div className="about-hud-corner about-hud-corner--tr" />
+              <div className="about-hud-corner about-hud-corner--bl" />
+              <div className="about-hud-corner about-hud-corner--br" />
+
+              <CardItem translateZ={26} className="about-people__avatar-frame">
+                <Image
+                  src="/images/team/vice-president.png"
+                  alt="Vanshika Chandra, Vice-President of HackWithIndia BVUDET-NM"
+                  fill
+                  sizes="120px"
+                  style={{ objectFit: 'cover' }}
+                />
+              </CardItem>
+              <div className="about-people__leader-info">
+                <CardItem translateZ={14} className="about-people__leader-badge" style={{ color: '#FF007A' }}>
+                  CHAPTER VICE-PRESIDENT
+                </CardItem>
+                <CardItem translateZ={22} as="h3" className="about-people__leader-name">
+                  Vanshika Chandra
+                </CardItem>
+                <CardItem translateZ={16} className="about-people__leader-id">
+                  CREDENTIAL ID: <span style={{ color: '#00F0FF' }}>HWI-VICEPRES-VANISHKA</span>
+                </CardItem>
+                <CardItem translateZ={12} as="p" className="about-people__leader-bio">
+                  Oversees internal chapter execution, student initiatives, and strategic ecosystem alliances.
+                </CardItem>
               </div>
-              <h3 className="about-people__leader-name">
-                Vanshika Chandra
-              </h3>
-              <div className="about-people__leader-id">
-                CREDENTIAL ID: HWI-VICEPRES-VANISHKA
-              </div>
-              <p className="about-people__leader-bio">
-                Oversees internal chapter execution, student initiatives, and strategic ecosystem alliances.
-              </p>
-            </div>
-          </div>
+            </CardBody>
+          </CardContainer>
         </div>
 
         {/* 9 Department Overview Grid */}
@@ -111,7 +136,9 @@ export function AboutPeople() {
                 />
                 <span className="about-people__dept-name">{dept.name}</span>
               </div>
-              <span className="about-people__dept-count">{dept.count}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span className="about-people__dept-count">{dept.count}</span>
+              </div>
             </div>
           ))}
         </div>

@@ -124,7 +124,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -179,7 +179,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--tc-text-sec);
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -268,7 +268,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -287,7 +287,7 @@
 }
 
 .team-info__rank-tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
   color: rgba(255, 255, 255, 0.4);
@@ -328,7 +328,7 @@
   background: color-mix(in srgb, var(--dept-accent-start, #06B6D4) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--dept-accent-start, #06B6D4) 38%, transparent);
   color: var(--dept-accent-start, var(--tc-cyan-bright));
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -337,7 +337,7 @@
 }
 
 .team-info__academic-pill {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.74rem;
   color: var(--tc-text-ter);
   letter-spacing: 0.02em;
@@ -371,7 +371,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--tc-text-sec);
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -408,7 +408,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 4px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.88rem;
   font-weight: 800;
 }
@@ -440,7 +440,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--tc-text-sec);
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
@@ -478,7 +478,18 @@
   transform-style: preserve-3d;
 }
 
-/* Physical ID Card */
+/* Deck Slot Wrapper - isolates scroll-driven stack translation from pointer tilt */
+.team-deck-card-slot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+/* Physical ID Card - handles 3D tilt perspective, rotating RGB borders, & lighting */
 .team-physical-card {
   position: absolute;
   inset: 0;
@@ -512,9 +523,40 @@
   justify-content: space-between;
   user-select: none;
   cursor: pointer;
-  will-change: transform, opacity;
-  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  will-change: transform;
   transform-style: preserve-3d;
+  transform: perspective(1000px)
+             rotateX(var(--comet-rx, 0deg))
+             rotateY(var(--comet-ry, 0deg))
+             translateZ(var(--comet-tz, 0px));
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.team-physical-card.is-leaving {
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Layered 3D Depth inside card */
+.team-physical-card .team-card__photo-container {
+  transform: translateZ(12px);
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.team-physical-card:hover .team-card__photo-container {
+  transform: translateZ(16px);
+}
+
+.team-physical-card .team-card__verified-badge {
+  transform: translateZ(18px);
+}
+
+.team-physical-card .team-card__body {
+  transform: translateZ(8px);
+}
+
+.team-physical-card .team-card__footer {
+  transform: translateZ(6px);
 }
 
 /* Base Outer Ambient Aura Backdrop with Clockwise Rotation */
@@ -611,7 +653,7 @@
 /* Corner Reticle Crosshairs */
 .team-card__reticle {
   position: absolute;
-  font-family: monospace;
+  font-family: var(--font-primary);
   font-size: 10px;
   opacity: 0.85;
   pointer-events: none;
@@ -662,7 +704,7 @@
 }
 
 .team-card__org {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.64rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -670,7 +712,7 @@
 }
 
 .team-card__suborg {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.52rem;
   letter-spacing: 0.06em;
   color: rgba(255, 255, 255, 0.4);
@@ -684,7 +726,7 @@
   border-radius: 999px;
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.56rem;
   font-weight: 700;
   color: #10B981;
@@ -727,6 +769,10 @@
   display: block;
 }
 
+.team-card__photo-img[src*="Sushant"] {
+  object-position: center 42%;
+}
+
 .team-card__photo-fallback {
   width: 100%;
   height: 100%;
@@ -749,7 +795,7 @@
 .team-card__watermark {
   position: absolute;
   bottom: 8px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.15em;
   color: rgba(255, 255, 255, 0.25);
@@ -767,7 +813,7 @@
   background: rgba(10, 8, 14, 0.88);
   backdrop-filter: blur(4px);
   border: 1px solid color-mix(in srgb, var(--dept-accent-start, #06B6D4) 45%, transparent);
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.54rem;
   font-weight: 700;
   color: var(--dept-accent-start, var(--tc-cyan-bright));
@@ -791,7 +837,7 @@
 }
 
 .team-card__dept-tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -803,7 +849,7 @@
 }
 
 .team-card__rank-tag {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.52rem;
   color: rgba(255, 255, 255, 0.4);
   text-transform: uppercase;
@@ -823,7 +869,7 @@
 }
 
 .team-card__role {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
@@ -832,7 +878,7 @@
 }
 
 .team-card__academic {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.6rem;
   color: rgba(255, 255, 255, 0.45);
   margin-top: 2px;
@@ -862,7 +908,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.56rem;
 }
 
@@ -924,7 +970,7 @@
 }
 
 .team-footer__cue-text {
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   color: var(--tc-text-ter);
@@ -934,7 +980,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-jetbrains-mono), monospace;
+  font-family: var(--font-jetbrains-mono), sans-serif;
   font-size: 0.68rem;
 }
 

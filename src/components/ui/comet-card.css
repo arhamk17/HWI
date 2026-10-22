@@ -1,0 +1,196 @@
+/* =========================================================================
+   HWI COMET CARD INTERACTION STYLES
+   Tactile 3D perspective tilt, localized department spotlight, & floating VIEW
+   ========================================================================= */
+
+/* Root Comet Card Wrapper */
+.comet-card-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: perspective(1000px)
+             rotateX(var(--comet-rx, 0deg))
+             rotateY(var(--comet-ry, 0deg))
+             translateZ(var(--comet-tz, 0px));
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  outline: none;
+}
+
+.comet-card-root:focus-visible {
+  outline: 2px solid var(--dept-accent-start, #06B6D4);
+  outline-offset: 4px;
+}
+
+/* Smooth return to resting state when cursor exits */
+.comet-card-root.is-leaving {
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* =========================================================================
+   DYNAMIC COMET SPOTLIGHT / SHEEN OVERLAY
+   Localized glow tracking cursor coordinates across card face
+   ========================================================================= */
+
+.comet-card__sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    360px circle at var(--comet-x, 50%) var(--comet-y, 50%),
+    color-mix(in srgb, var(--dept-accent-start, #06B6D4) 24%, rgba(255, 255, 255, 0.18)) 0%,
+    color-mix(in srgb, var(--dept-accent-end, #22D3EE) 12%, transparent) 40%,
+    transparent 75%
+  );
+  opacity: var(--comet-opacity, 0);
+  transition: opacity 0.3s ease;
+  mix-blend-mode: screen;
+  z-index: 15;
+}
+
+/* Department-Specific Glare Customizations */
+
+/* 1. Core Leadership: Multicolor Prismatic Comet Sheen */
+.comet-card-root[data-dept="core-leadership"] .comet-card__sheen,
+.team-physical-card[data-dept="core-leadership"] .comet-card__sheen {
+  background: radial-gradient(
+    380px circle at var(--comet-x, 50%) var(--comet-y, 50%),
+    rgba(0, 240, 255, 0.28) 0%,
+    rgba(217, 0, 255, 0.20) 25%,
+    rgba(255, 0, 122, 0.14) 50%,
+    transparent 75%
+  );
+}
+
+/* 2. Technical Team: Smooth Crimson-to-Cobalt Red-Blue Comet Sheen */
+.comet-card-root[data-dept="technical-team"] .comet-card__sheen,
+.team-physical-card[data-dept="technical-team"] .comet-card__sheen {
+  background: radial-gradient(
+    380px circle at var(--comet-x, 50%) var(--comet-y, 50%),
+    rgba(255, 30, 66, 0.26) 0%,
+    rgba(121, 0, 216, 0.18) 32%,
+    rgba(0, 132, 255, 0.22) 58%,
+    transparent 75%
+  );
+}
+
+/* 3. Design Team: Ultra-Violet / Electric Violet Comet Sheen */
+.comet-card-root[data-dept="design-team"] .comet-card__sheen,
+.team-physical-card[data-dept="design-team"] .comet-card__sheen {
+  background: radial-gradient(
+    360px circle at var(--comet-x, 50%) var(--comet-y, 50%),
+    rgba(168, 85, 247, 0.28) 0%,
+    rgba(192, 132, 252, 0.15) 40%,
+    transparent 75%
+  );
+}
+
+/* 4. PR & Marketing: Sunset Amber / Orange Comet Sheen */
+.comet-card-root[data-dept="pr-marketing"] .comet-card__sheen,
+.team-physical-card[data-dept="pr-marketing"] .comet-card__sheen {
+  background: radial-gradient(
+    360px circle at var(--comet-x, 50%) var(--comet-y, 50%),
+    rgba(249, 115, 22, 0.28) 0%,
+    rgba(251, 146, 60, 0.15) 40%,
+    transparent 75%
+  );
+}
+
+/* =========================================================================
+   FLOATING CIRCULAR VIEW INDICATOR
+   Translucent circular badge with subtle border, glow, & parallax
+   ========================================================================= */
+
+.comet-card__view-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(14, 12, 20, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 0 10px color-mix(in srgb, var(--dept-accent-start, #06B6D4) 30%, transparent);
+  transform: translate3d(var(--comet-view-ox, 0px), var(--comet-view-oy, 0px), 26px);
+  transition:
+    transform 0.15s ease-out,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    opacity 0.3s ease;
+  z-index: 14;
+  cursor: pointer;
+  user-select: none;
+}
+
+.comet-card__view-text {
+  font-family: var(--font-primary, 'Poppins', sans-serif);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+/* Active vs Stacked Card indicator visibility */
+.team-physical-card.is-active .comet-card__view-indicator,
+.comet-card-root.is-active .comet-card__view-indicator {
+  opacity: 0.88;
+}
+
+.team-physical-card.is-stacked .comet-card__view-indicator,
+.comet-card-root.is-stacked .comet-card__view-indicator {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Hover state enhancement */
+.team-physical-card:hover .comet-card__view-indicator,
+.comet-card-root:hover .comet-card__view-indicator {
+  opacity: 1;
+  border-color: var(--dept-accent-start, rgba(255, 255, 255, 0.5));
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.72),
+    0 0 16px var(--dept-glow, color-mix(in srgb, var(--dept-accent-start, #06B6D4) 50%, transparent));
+  background: rgba(18, 16, 26, 0.94);
+  transform: translate3d(var(--comet-view-ox, 0px), var(--comet-view-oy, 0px), 30px) scale(1.05);
+}
+
+/* =========================================================================
+   ACCESSIBILITY & RESPONSIVE BEHAVIOR
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .comet-card-root {
+    transform: none !important;
+    transition: none !important;
+  }
+  .comet-card__sheen {
+    display: none !important;
+  }
+  .comet-card__view-indicator {
+    transform: none !important;
+  }
+}
+
+@media (hover: none) {
+  .comet-card-root {
+    transform: none !important;
+    transition: none !important;
+  }
+  .comet-card__sheen {
+    display: none !important;
+  }
+  .comet-card__view-indicator {
+    transform: none !important;
+  }
+}

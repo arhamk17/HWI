@@ -7,10 +7,12 @@ import { AboutHero } from './AboutHero';
 import { AboutIdentity } from './AboutIdentity';
 import { AboutManifesto } from './AboutManifesto';
 import { AboutJourney } from './AboutJourney';
+import { AboutLabExperience } from './AboutLabExperience';
 import { AboutWhatWeDo } from './AboutWhatWeDo';
 import { AboutPeople } from './AboutPeople';
 import { AboutImpact } from './AboutImpact';
 import { AboutClosing } from './AboutClosing';
+import { AboutCubeGrid } from './AboutCubeGrid';
 
 export function AboutExperience() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -48,32 +50,35 @@ export function AboutExperience() {
 
   return (
     <div className="about-page-root" ref={rootRef}>
-      {/* Cinematic subtle background grid & ambient lighting */}
+      {/* Cinematic geometric cube-grid background & ambient lighting */}
+      <AboutCubeGrid />
       <div className="about-ambient-glow" aria-hidden="true" />
-      <div className="about-grid-overlay" aria-hidden="true" />
 
-      {/* 1. Cinematic Opening */}
+      {/* 1. Cinematic Opening: Enter the HWI Lab */}
       <AboutHero />
 
-      {/* 2. Who We Are */}
+      {/* 2. Who We Are: Genesis & Charter */}
       <AboutIdentity />
 
-      {/* 3. The HWI Manifesto */}
+      {/* 3. The HWI Manifesto: Architectural Principles */}
       <AboutManifesto />
 
-      {/* 4. The HWI Journey (Interactive Milestone Timeline) */}
+      {/* 4. The HWI Journey: Interactive Milestone Timeline */}
       <AboutJourney />
 
-      {/* 5. What HWI Does (Curated Activities Showcase) */}
+      {/* 5. STANDOUT FEATURE: Inside the HWI Lab Interactive Console */}
+      <AboutLabExperience />
+
+      {/* 6. What HWI Does: Operational Showcase Vectors */}
       <AboutWhatWeDo />
 
-      {/* 6. The People Behind HWI (Leadership & Departments) */}
+      {/* 7. The People Behind HWI: Leadership & Roster */}
       <AboutPeople />
 
-      {/* 7. Community & Verified Impact */}
+      {/* 8. Community & Verified Impact: Telemetry */}
       <AboutImpact />
 
-      {/* 8. Closing Statement & Call to Action */}
+      {/* 9. Closing Statement & Call to Action */}
       <AboutClosing />
     </div>
   );
