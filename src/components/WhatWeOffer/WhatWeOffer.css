@@ -40,18 +40,18 @@
 
 .wwo__bg-3d-glow {
   position: absolute;
-  width: clamp(340px, 50vw, 680px);
-  height: clamp(340px, 50vw, 680px);
+  width: clamp(360px, 52vw, 720px);
+  height: clamp(360px, 52vw, 720px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.03) 45%, transparent 70%);
-  filter: blur(40px);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.16) 0%, rgba(239, 68, 68, 0.04) 50%, transparent 72%);
+  filter: blur(50px);
   pointer-events: none;
 }
 
 .wwo__bg-3d-disc {
   position: relative;
-  width: clamp(260px, 34vw, 500px);
-  height: clamp(260px, 34vw, 500px);
+  width: clamp(280px, 36vw, 540px);
+  height: clamp(280px, 36vw, 540px);
   transform-style: preserve-3d;
   animation: wwoRotate3D 22s linear infinite;
   will-change: transform;
@@ -90,13 +90,18 @@
 .wwo__bg-3d-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 50%;
-  opacity: 0.22;
-  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 35px rgba(239, 68, 68, 0.18));
+  opacity: 0.32;
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 45px rgba(239, 68, 68, 0.3));
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.wwo--active .wwo__bg-3d-img {
+  opacity: 0.42;
 }
 
 @media (prefers-reduced-motion: reduce) {

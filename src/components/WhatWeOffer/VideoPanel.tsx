@@ -4,7 +4,7 @@ import { forwardRef, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import './VideoPanel.css';
 
-export const DEFAULT_OFFER_VIDEO_SRC = '/91562-629172467_medium.mp4';
+export const DEFAULT_OFFER_VIDEO_SRC = '/videos/homepage-showcase.mp4';
 
 export interface VideoPanelProps {
   src?: string;

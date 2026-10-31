@@ -6,7 +6,7 @@ import { VideoPanel, DEFAULT_OFFER_VIDEO_SRC } from './VideoPanel';
 import './WhatWeOffer.css';
 
 // Configurable video source - easily replaceable with real video asset
-export const WHAT_WE_OFFER_VIDEO_SRC = DEFAULT_OFFER_VIDEO_SRC;
+export const WHAT_WE_OFFER_VIDEO_SRC = '/videos/homepage-showcase.mp4';
 
 const OFFER_ITEMS = [
   {
@@ -129,8 +129,8 @@ export function WhatWeOffer() {
           <div className="wwo__bg-3d-disc">
             <div className="wwo__bg-3d-face wwo__bg-3d-face--front">
               <img
-                src="/images/events/rocketride_mentorship_lab.jpg"
-                alt=""
+                src="/hwi-bvudet-logo.png"
+                alt="Hack With India BVUDET Logo"
                 className="wwo__bg-3d-img"
                 draggable={false}
                 loading="lazy"
@@ -139,8 +139,8 @@ export function WhatWeOffer() {
             </div>
             <div className="wwo__bg-3d-face wwo__bg-3d-face--back">
               <img
-                src="/images/events/hack_with_mumbai_2_image13.jpeg"
-                alt=""
+                src="/hwi-bvudet-logo.png"
+                alt="Hack With India BVUDET Logo"
                 className="wwo__bg-3d-img"
                 draggable={false}
                 loading="lazy"
