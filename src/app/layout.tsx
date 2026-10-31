@@ -32,6 +32,7 @@ const playfairDisplay = Playfair_Display({
   style: ['italic'],
   variable: '--font-playfair-display',
   display: 'swap',
+  preload: false,
 });
 
 const syne = Syne({
@@ -39,11 +40,17 @@ const syne = Syne({
   weight: ['800'],
   variable: '--font-syne',
   display: 'swap',
+  preload: false,
 });
 
 export const metadata: Metadata = {
   title: 'HackWithIndia BVUDET-NM Chapter',
   description: 'Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.',
+  icons: {
+    icon: '/hwi-bvudet-logo.png',
+    shortcut: '/hwi-bvudet-logo.png',
+    apple: '/hwi-bvudet-logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -53,6 +60,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable} ${playfairDisplay.variable} ${syne.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined') {
+                if ('scrollRestoration' in history) {
+                  history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+              }
+            `,
+          }}
+        />
+      </head>
       <body>
         <SmoothScrollProvider>
           <GlobalBackground />

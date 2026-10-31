@@ -39,7 +39,7 @@ export function TeamMember({ name, role, photoUrl, socials, isLeadership = false
         <h3 className="type-heading-2 text-primary">{name}</h3>
         <p className="type-eyebrow text-accent">{role}</p>
         
-        {socials && (
+        {socials && (socials.linkedin || socials.github || socials.instagram) && (
           <div className="team-member__socials">
             {socials.linkedin && (
               <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${name}'s LinkedIn`}>

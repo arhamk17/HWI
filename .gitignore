@@ -46,3 +46,5 @@ public/*recording*.mp4
 public/*problems*.mp4
 public/reference_video.mp4
 prompt_extracted*.md
+scratch/
+*.csv

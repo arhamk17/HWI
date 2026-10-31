@@ -22,11 +22,11 @@ import {
   Award,
   ShieldCheck,
 } from 'lucide-react';
-import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
 import { eventsParticleStore, EventsSection } from '@/lib/eventsParticleStore';
 import { scrollBus } from '@/lib/scrollBus';
 import { EVENTS_DATA, EventItem } from '@/data/events';
+import { AuthenticMomentsArchive } from './AuthenticMomentsArchive';
 import './EventsExperience.css';
 
 // =========================================================================
@@ -49,11 +49,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-1',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'VALEDICTORY / 1ST PLACE',
-    title: 'CHAMPIONS PODIUM // 1ST PLACE AWARDS',
+    tag: 'Valedictory · 1st Place',
+    title: 'Champions Podium: 1st Place Awards',
     caption: 'Winning buildathon team presented with certificates and the 1st place cheque by RocketRide industry delegates and faculty.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
     src: '/images/events/rocketride_winner_1st.jpg',
@@ -61,11 +61,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-hwm2-1',
     eventId: 'hackwithmumbai-2',
-    eventTitle: 'HACKWITHMUMBAI 2.0',
+    eventTitle: 'HackWithMumbai 2.0',
     category: 'HACKWITHMUMBAI',
     year: '2026',
-    tag: 'MAIN ARENA / 30H FINALE',
-    title: '30-HOUR NONSTOP CELEBRATION',
+    tag: 'Main Arena · 30h Finale',
+    title: '30-Hour Nonstop Celebration',
     caption: 'Stage group photo with 70+ builders, faculty mentors, department HoDs and chapter organizers following 30 hours of continuous building.',
     cameraInfo: 'CAM-01 • 24mm F/1.8 • ISO 400 • 1/250s',
     src: '/images/events/hack_with_mumbai_2_image16.jpeg',
@@ -73,11 +73,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-2',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'AUDITORIUM / 183 BUILDERS',
-    title: 'AUDITORIUM ASSEMBLY // 47 TEAMS',
+    tag: 'Auditorium · 183 Builders',
+    title: 'Auditorium Assembly: 47 Teams',
     caption: '47 teams comprising 183 students from host and visiting engineering institutions gathered during opening orientation.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
     src: '/images/events/rocketride_auditorium.jpg',
@@ -85,11 +85,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-z2w-1',
     eventId: 'zero2web3-buildathon',
-    eventTitle: 'ZERO2WEB3 BUILD-A-THON',
+    eventTitle: 'Zero2Web3 Build-a-thon',
     category: 'ZERO2WEB3',
     year: '2026',
-    tag: 'CC LAB / GROUND FLOOR',
-    title: 'CC LAB // ACTIVE SOLIDITY SPRINT',
+    tag: 'CC Lab · Ground Floor',
+    title: 'CC Lab: Active Solidity Sprint',
     caption: 'Full house of student developers coding Solidity smart contracts in CC Lab Ground Floor during the mini challenge sprint.',
     cameraInfo: 'CAM-01 • 24mm F/2.8 • ISO 500 • 1/160s',
     src: '/images/events/web3_report_image5.jpeg',
@@ -97,11 +97,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-3',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'CC LAB / MENTORSHIP',
-    title: 'LAB MENTORSHIP // 6-HOUR SPRINT',
+    tag: 'CC Lab · Mentorship',
+    title: 'Lab Mentorship: 6-Hour Sprint',
     caption: 'Ryan Christensen reviewing codebases and providing hands-on architectural mentorship during the offline build sprint.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 4',
     src: '/images/events/rocketride_mentorship_lab.jpg',
@@ -109,11 +109,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-lit-1',
     eventId: 'learn-it-tour',
-    eventTitle: 'LEARN IT TOUR',
+    eventTitle: 'Learn IT Tour',
     category: 'COMMUNITY',
     year: '2025',
-    tag: 'AUDITORIUM / INAUGURATION',
-    title: 'COMMUNITY TECH TOUR // 220 BUILDERS',
+    tag: 'Auditorium · Inauguration',
+    title: 'Community Tech Tour: 220 Builders',
     caption: 'Over 220 students gathered in the central auditorium for the Learn IT Tour keynote organized with Devnovate.',
     cameraInfo: 'CAM-01 • 28mm F/2.8 • ISO 400 • 1/200s',
     src: '/images/events/learn_it_tour_image12.jpeg',
@@ -121,11 +121,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-rr-4',
     eventId: 'rocketride-buildathon',
-    eventTitle: 'ROCKETRIDE BUILDATHON',
+    eventTitle: 'RocketRide Buildathon',
     category: 'ROCKETRIDE',
     year: '2026',
-    tag: 'VALEDICTORY / PODIUM',
-    title: 'RUNNER-UP AWARDS // VALEDICTORY',
+    tag: 'Valedictory · Podium',
+    title: 'Runner-Up Awards: Valedictory',
     caption: 'Runner-up teams recognized for high-impact prototype solutions during the valedictory award presentation.',
     cameraInfo: 'PHOTO ARCHIVE • REPORT PAGE 5',
     src: '/images/events/rocketride_winner_2nd.jpg',
@@ -133,11 +133,11 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   {
     id: 'doc-hwm2-2',
     eventId: 'hackwithmumbai-2',
-    eventTitle: 'HACKWITHMUMBAI 2.0',
+    eventTitle: 'HackWithMumbai 2.0',
     category: 'HACKWITHMUMBAI',
     year: '2026',
-    tag: 'REGISTRATION / GATE',
-    title: 'REGISTRATION DESK // CAMPUS GATES',
+    tag: 'Registration · Campus Gate',
+    title: 'Registration Desk: Campus Gates',
     caption: 'Participants queuing up for entry scanning, ID badges, and official hackathon goodies kit.',
     cameraInfo: 'CAM-02 • 28mm F/2.8 • ISO 320 • 1/320s',
     src: '/images/events/hack_with_mumbai_2_image4.jpeg',
@@ -160,73 +160,78 @@ interface VerifiedAwardItem {
 
 const VERIFIED_AWARDS: VerifiedAwardItem[] = [
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '1ST PLACE OVERALL',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '1st Place Overall',
     team: 'PulseMesh',
     project: 'Decentralized mesh networking for disaster relief communication',
     prize: '₹25,000 + Cloud Grants',
-    accreditation: 'VERIFIED OVERALL CHAMPION',
+    accreditation: 'Verified Overall Champion',
   },
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '2ND PLACE',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '2nd Place',
     team: 'CivicSense',
     project: 'Computer-vision enabled municipal road defect tracker',
     prize: '₹15,000 Prize',
-    accreditation: 'RUNNER-UP ACCREDITATION',
+    accreditation: 'Runner-Up Accreditation',
   },
   {
-    edition: 'EDITION 02 // 2025',
-    eventTitle: 'HACKWITHMUMBAI 1.0',
-    date: '21 SEPTEMBER 2025',
-    place: '3RD PLACE',
+    edition: 'Edition 02 · 2025',
+    eventTitle: 'HackWithMumbai 1.0',
+    date: '21 September 2025',
+    place: '3rd Place',
     team: 'ZeroAudit',
     project: 'Static security scanner for Ethereum smart contracts',
     prize: '₹10,000 Prize',
-    accreditation: '3RD PLACE PODIUM',
+    accreditation: '3rd Place Podium',
   },
   {
-    edition: 'EDITION 04 // 2026',
-    eventTitle: 'HACKWITHMUMBAI 2.0 NATIONAL HACKATHON',
-    date: '7–8 FEBRUARY 2026',
-    place: 'NATIONAL PRIZE POOL',
+    edition: 'Edition 04 · 2026',
+    eventTitle: 'HackWithMumbai 2.0 National Hackathon',
+    date: '7–8 February 2026',
+    place: 'National Prize Pool',
     team: '80 Finalist Teams (280 Builders)',
     project: '5 Indian states and 40+ colleges competing across EdTech, HealthTech, CyberTech, AgriTech, and FinTech',
     prize: '₹64,000+ Prize Pool',
-    accreditation: 'SP JAIN GLOBAL SPONSORED',
+    accreditation: 'SP Jain Global Sponsored',
   },
   {
-    edition: 'EDITION 05 // 2026',
-    eventTitle: 'ZERO2WEB3 BUILD-A-THON',
-    date: '5 MARCH 2026',
-    place: 'CC LAB PODIUM',
+    edition: 'Edition 05 · 2026',
+    eventTitle: 'Zero2Web3 Build-a-thon',
+    date: '5 March 2026',
+    place: 'CC Lab Podium',
     team: 'Outstanding DApp Teams',
     project: 'Gas-optimized Solidity architectures and decentralized token contracts evaluated in CC Lab',
     prize: 'Winner Trophies & Physical Certificates',
-    accreditation: 'CHAPTER MERIT ACCREDITED',
+    accreditation: 'Chapter Merit Accredited',
   },
   {
-    edition: 'EDITION 06 // 2026',
-    eventTitle: 'ROCKETRIDE BUILDATHON MUMBAI EDITION',
-    date: '29 AUGUST 2026',
-    place: 'CHAMPIONS PODIUM',
+    edition: 'Edition 06 · 2026',
+    eventTitle: 'RocketRide Buildathon Mumbai Edition',
+    date: '29 August 2026',
+    place: 'Champions Podium',
     team: '1st Place Prototype Laureates',
     project: 'High-velocity 6-hour MVP evaluated on architectural ingenuity by San Francisco Chief Architect Rod Christensen',
     prize: '1st Place Cheque & Delegate Certifications',
-    accreditation: 'SAN FRANCISCO DELEGATION RECOGNIZED',
+    accreditation: 'San Francisco Delegation Recognized',
   },
 ];
 
 export function EventsExperience() {
-  // Requirement: All panels begin collapsed by default (no panel expanded on initial load)
+  // Edition Archive Hover-Only State:
+  // hoveredCardId: tracks which of the 7 cards is currently hovered / tapped (null by default)
+  // selectedId: tracks which event's full editorial dossier chronicle is open below (null = closed by default)
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activePhotoCategory, setActivePhotoCategory] = useState<string>('ALL');
 
   // DOM Refs for animation coordination
+  const pageRootRef = useRef<HTMLDivElement>(null);
+  const galleryBarRef = useRef<HTMLDivElement>(null);
   const heroKickerRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroDescRef = useRef<HTMLParagraphElement>(null);
@@ -245,7 +250,7 @@ export function EventsExperience() {
   const awardsRevealedRef = useRef<boolean>(false);
   const editorialStoryRef = useRef<HTMLElement>(null);
 
-  // Selected event object & index
+  // Selected event object & index for editorial chronicle dossier
   const selectedEvent = useMemo(() => {
     if (!selectedId) return null;
     return EVENTS_DATA.find((e) => e.id === selectedId) || null;
@@ -256,65 +261,118 @@ export function EventsExperience() {
     return EVENTS_DATA.findIndex((e) => e.id === selectedEvent.id);
   }, [selectedEvent]);
 
-  // Click active panel toggles back to null (compact row), click another switches to it
-  const handleSelectEvent = useCallback((id: string) => {
-    setSelectedId((prev) => (prev === id ? null : id));
+  // Smooth scroll gallery track left or right
+  const scrollGallery = useCallback((direction: 'left' | 'right') => {
+    if (!galleryTrackRef.current) return;
+    const scrollAmount = Math.max(280, galleryTrackRef.current.clientWidth * 0.45);
+    galleryTrackRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  }, []);
+
+  // Handle Gallery Header Prev / Next controls
+  // On desktop (where all 7 cards fit simultaneously in one view): cycles hovered card
+  // On mobile / tablet (where track scrolls): smoothly scrolls the track
+  const handleGalleryNav = useCallback(
+    (direction: 'left' | 'right') => {
+      if (
+        galleryTrackRef.current &&
+        galleryTrackRef.current.scrollWidth <= galleryTrackRef.current.clientWidth + 20
+      ) {
+        // Desktop single-view: cycle hovered card
+        const currentIdx = hoveredCardId
+          ? EVENTS_DATA.findIndex((e) => e.id === hoveredCardId)
+          : -1;
+        let nextIdx = 0;
+        if (direction === 'right') {
+          nextIdx = currentIdx === -1 || currentIdx >= EVENTS_DATA.length - 1 ? 0 : currentIdx + 1;
+        } else {
+          nextIdx = currentIdx <= 0 ? EVENTS_DATA.length - 1 : currentIdx - 1;
+        }
+        setHoveredCardId(EVENTS_DATA[nextIdx].id);
+      } else {
+        // Mobile / tablet scrollable view
+        scrollGallery(direction);
+      }
+    },
+    [hoveredCardId, scrollGallery]
+  );
+
+  // Open the complete chronicle for a specific edition and scroll smoothly to it
+  const handleOpenChronicle = useCallback((e: React.MouseEvent, eventId: string) => {
+    e.stopPropagation();
+    setSelectedId(eventId);
+    setTimeout(() => {
+      const storyEl = document.getElementById('editorial-story');
+      if (storyEl) {
+        storyEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+  }, []);
+
+  const handleOpenChronicleFromMoments = useCallback((eventId: string) => {
+    setSelectedId(eventId);
+    setTimeout(() => {
+      const storyEl = document.getElementById('editorial-story');
+      if (storyEl) {
+        storyEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
   }, []);
 
   const handlePrevEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
-      if (currentIndex <= 0) {
-        setSelectedId(EVENTS_DATA[EVENTS_DATA.length - 1].id);
-      } else {
-        setSelectedId(EVENTS_DATA[currentIndex - 1].id);
+      if (!selectedId) {
+        handleGalleryNav('left');
+        return;
       }
+      const prevIdx =
+        currentIndex <= 0
+          ? EVENTS_DATA.length - 1
+          : currentIndex - 1;
+      const targetId = EVENTS_DATA[prevIdx].id;
+      setSelectedId(targetId);
     },
-    [currentIndex]
+    [currentIndex, selectedId, handleGalleryNav]
   );
 
   const handleNextEvent = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
-      if (currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1) {
-        setSelectedId(EVENTS_DATA[0].id);
-      } else {
-        setSelectedId(EVENTS_DATA[currentIndex + 1].id);
+      if (!selectedId) {
+        handleGalleryNav('right');
+        return;
       }
+      const nextIdx =
+        currentIndex === -1 || currentIndex >= EVENTS_DATA.length - 1
+          ? 0
+          : currentIndex + 1;
+      const targetId = EVENTS_DATA[nextIdx].id;
+      setSelectedId(targetId);
     },
-    [currentIndex]
+    [currentIndex, selectedId, handleGalleryNav]
   );
 
-  // Global keyboard shortcuts: Esc to collapse, ArrowLeft/Right to cycle editions
+  // Global keyboard shortcuts: Esc to collapse chronicle, ArrowLeft/Right to scroll or cycle
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && selectedId) {
         setSelectedId(null);
-      } else if (e.key === 'ArrowRight' && selectedId) {
-        handleNextEvent();
-      } else if (e.key === 'ArrowLeft' && selectedId) {
-        handlePrevEvent();
+      } else if (e.key === 'ArrowRight') {
+        if (selectedId) handleNextEvent();
+        else handleGalleryNav('right');
+      } else if (e.key === 'ArrowLeft') {
+        if (selectedId) handlePrevEvent();
+        else handleGalleryNav('left');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedId, handleNextEvent, handlePrevEvent]);
+  }, [selectedId, handleNextEvent, handlePrevEvent, handleGalleryNav]);
 
-  // Scroll active panel into view smoothly when selected
-  useEffect(() => {
-    if (selectedId && galleryTrackRef.current) {
-      const activeEl = galleryTrackRef.current.querySelector<HTMLElement>('.hwi-panel--active');
-      if (activeEl) {
-        activeEl.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center',
-        });
-      }
-    }
-  }, [selectedId]);
-
-  // Staggered reveal of editorial dossier items when event changes
+  // Staggered reveal of editorial dossier items when event changes  // Staggered reveal of editorial dossier items when event changes
   useEffect(() => {
     if (!selectedEvent || !editorialStoryRef.current) return;
     const prefersReducedMotion =
@@ -334,7 +392,8 @@ export function EventsExperience() {
   }, [selectedEvent?.id]);
 
   // -----------------------------------------------------------------------
-  // 1. HERO: IGNITION ENTRANCE (Anime.js + Controlled Particle Convergence)
+  // -----------------------------------------------------------------------
+  // 1. COHESIVE EVENTS ENTRANCE (Hero Ignition + Editions Panel Track)
   // -----------------------------------------------------------------------
   useEffect(() => {
     if (heroAnimatedRef.current) return;
@@ -345,76 +404,140 @@ export function EventsExperience() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
+      if (pageRootRef.current) {
+        pageRootRef.current.classList.add('events-entered');
+      }
       eventsParticleStore.setHeroConvergence(0);
+      panelsRevealedRef.current = true;
       return;
     }
 
-    // Initialize subtle controlled convergence during hero entrance
-    eventsParticleStore.setHeroConvergence(1.0);
+    // Determine start delay: if client route transition veil is currently active, wait 360ms until it clears
+    const isVeiled = typeof document !== 'undefined' && !!document.querySelector('.page-transition-veil--active');
+    const startDelay = isVeiled ? 360 : 120;
 
-    const tl = anime.timeline({
-      easing: 'cubicBezier(0.16, 1, 0.3, 1)',
-      complete: () => {
-        // Once entrance finishes, gracefully ease hero convergence to 0
-        anime({
-          targets: { val: 1.0 },
-          val: 0,
-          duration: 900,
-          easing: 'easeOutQuad',
-          update: (anim) => {
-            const v = Number(anim.animations[0].currentValue);
-            eventsParticleStore.setHeroConvergence(v);
-          },
-        });
-      },
+    // Pre-hide all targets immediately to prevent any flicker or uncoordinated jump
+    const words = heroTitleRef.current ? heroTitleRef.current.querySelectorAll('.hero-word') : [];
+    const panels = galleryTrackRef.current ? galleryTrackRef.current.querySelectorAll('.hwi-panel') : [];
+
+    anime.set([heroKickerRef.current, heroDescRef.current, heroMetaRef.current, galleryBarRef.current].filter(Boolean), {
+      opacity: 0,
+      translateY: 14,
     });
+    if (words.length) {
+      anime.set(words, { opacity: 0, translateY: 18 });
+    }
+    if (panels.length) {
+      anime.set(panels, { opacity: 0, translateY: 24 });
+    }
 
-    if (heroKickerRef.current) {
-      tl.add({
-        targets: heroKickerRef.current,
-        opacity: [0, 1],
-        translateY: [16, 0],
-        duration: 650,
+    // Initialize subtle controlled convergence during hero entrance
+    eventsParticleStore.setHeroConvergence(0.6);
+
+    const timer = setTimeout(() => {
+      const tl = anime.timeline({
+        easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+        complete: () => {
+          if (pageRootRef.current) {
+            pageRootRef.current.classList.add('events-entered');
+          }
+          panelsRevealedRef.current = true;
+          // Clean up inline styles so CSS transitions have unhindered control
+          panels.forEach((p) => {
+            const el = p as HTMLElement;
+            el.style.opacity = '';
+            el.style.transform = '';
+          });
+          // Ease convergence softly to ambient state
+          anime({
+            targets: { val: 0.6 },
+            val: 0,
+            duration: 750,
+            easing: 'easeOutQuad',
+            update: (anim) => {
+              const v = Number(anim.animations[0].currentValue);
+              eventsParticleStore.setHeroConvergence(v);
+            },
+          });
+        },
       });
-    }
 
-    if (heroTitleRef.current) {
-      const words = heroTitleRef.current.querySelectorAll('.hero-word');
-      tl.add(
-        {
-          targets: words,
+      if (heroKickerRef.current) {
+        tl.add({
+          targets: heroKickerRef.current,
           opacity: [0, 1],
-          translateY: [32, 0],
-          duration: 850,
-          delay: anime.stagger(90),
-        },
-        '-=350'
-      );
-    }
+          translateY: [14, 0],
+          duration: 420,
+        });
+      }
 
-    if (heroDescRef.current) {
-      tl.add(
-        {
-          targets: heroDescRef.current,
-          opacity: [0, 1],
-          translateY: [20, 0],
-          duration: 700,
-        },
-        '-=450'
-      );
-    }
+      if (words.length) {
+        tl.add(
+          {
+            targets: words,
+            opacity: [0, 1],
+            translateY: [18, 0],
+            duration: 520,
+            delay: anime.stagger(55),
+          },
+          '-=260'
+        );
+      }
 
-    if (heroMetaRef.current) {
-      tl.add(
-        {
-          targets: heroMetaRef.current,
-          opacity: [0, 1],
-          translateY: [16, 0],
-          duration: 600,
-        },
-        '-=400'
-      );
-    }
+      if (heroDescRef.current) {
+        tl.add(
+          {
+            targets: heroDescRef.current,
+            opacity: [0, 1],
+            translateY: [14, 0],
+            duration: 460,
+          },
+          '-=300'
+        );
+      }
+
+      if (heroMetaRef.current) {
+        tl.add(
+          {
+            targets: heroMetaRef.current,
+            opacity: [0, 1],
+            translateY: [10, 0],
+            duration: 420,
+          },
+          '-=280'
+        );
+      }
+
+      if (galleryBarRef.current) {
+        tl.add(
+          {
+            targets: galleryBarRef.current,
+            opacity: [0, 1],
+            translateY: [12, 0],
+            duration: 440,
+          },
+          '-=240'
+        );
+      }
+
+      if (panels.length) {
+        tl.add(
+          {
+            targets: panels,
+            opacity: [0, 0.92],
+            translateY: [24, 0],
+            duration: 540,
+            delay: anime.stagger(45),
+          },
+          '-=260'
+        );
+      }
+    }, startDelay);
+
+    return () => {
+      clearTimeout(timer);
+      heroAnimatedRef.current = false;
+    };
   }, []);
 
   // -----------------------------------------------------------------------
@@ -487,7 +610,13 @@ export function EventsExperience() {
                 translateY: [32, 0],
                 duration: 700,
                 delay: anime.stagger(60),
-                easing: 'cubicBezier(0.16, 1, 0.3, 1)',
+                easing: 'cubicBezier(0.22, 1, 0.36, 1)',
+                complete: () => {
+                  galleryTrackRef.current?.querySelectorAll<HTMLElement>('.hwi-panel').forEach((panel) => {
+                    panel.style.opacity = '';
+                    panel.style.transform = '';
+                  });
+                },
               });
             }
           }
@@ -570,7 +699,7 @@ export function EventsExperience() {
   }, [activePhotoCategory]);
 
   return (
-    <div className="hwi-events-page chronicles-page">
+    <div className="hwi-events-page chronicles-page" ref={pageRootRef}>
       {/* ================================================================= */}
       {/* 1. HERO: IGNITION                                                 */}
       {/* Refined Anime.js entrance + particle convergence coordination     */}
@@ -578,13 +707,6 @@ export function EventsExperience() {
       <section id="hero-ignition" className="chronicles-hero-section">
         <div className="container">
           <div className="chronicles-hero__inner">
-            {/* Kicker */}
-            <div className="chronicles-hero__kicker" ref={heroKickerRef}>
-              <span className="hwi-pulse-beacon" />
-              <span className="type-eyebrow text-accent">PARTICLE CHRONICLES</span>
-              <span className="kicker-sep">•</span>
-              <span className="type-eyebrow text-tertiary">HACKWITHINDIA BVUDET-NM</span>
-            </div>
 
             {/* Main Headline: "Ideas don't stay ideas." */}
             <h1 className="chronicles-hero__title" ref={heroTitleRef}>
@@ -600,14 +722,27 @@ export function EventsExperience() {
               A chronological journey through our milestone hackathons, masterclasses, and builder assemblies.
             </p>
 
-            {/* Metric Accents & KokonutBadges */}
+            {/* Refined Clean Inline Hero Stats Bar */}
             <div className="chronicles-hero__meta" ref={heroMetaRef}>
-              <div className="meta-badges-cluster">
-                <KokonutBadge variant="accent" dot>
-                  07 MILESTONE EDITIONS
-                </KokonutBadge>
-                <KokonutBadge variant="outline">800+ BUILDERS ASSEMBLED</KokonutBadge>
-                <KokonutBadge variant="outline">₹1,00,000+ COMMITTED PRIZES</KokonutBadge>
+              <div className="hero-stats-row" role="region" aria-label="Milestone Statistics">
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num hero-stat-num--accent">07</span>
+                  <span className="hero-stat-label">Milestone Editions</span>
+                </div>
+
+                <span className="hero-stat-divider" aria-hidden="true" />
+
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num">800+</span>
+                  <span className="hero-stat-label">Builders Assembled</span>
+                </div>
+
+                <span className="hero-stat-divider" aria-hidden="true" />
+
+                <div className="hero-stat-item">
+                  <span className="hero-stat-num">₹1,00,000+</span>
+                  <span className="hero-stat-label">Committed Prizes</span>
+                </div>
               </div>
 
               <div className="meta-scroll-prompt">
@@ -639,54 +774,30 @@ export function EventsExperience() {
         aria-label="Year and Event Edition Gallery"
       >
         <div className="container">
-          {/* Gallery Subheader bar with indicator, edition pills, and navigation */}
-          <div className="hwi-gallery-bar">
+          {/* Gallery Subheader bar with indicator and navigation */}
+          <div className="hwi-gallery-bar" ref={galleryBarRef}>
             <div className="gallery-indicator">
-              <span className="gallery-indicator-kicker">EDITION ARCHIVE //</span>
-              <span className="gallery-indicator-value">
-                {selectedEvent
-                  ? `EDITION ${String(currentIndex + 1).padStart(2, '0')} // ${(selectedEvent.shortTitle || selectedEvent.title).toUpperCase()}`
-                  : 'ALL 07 EDITIONS'}
+              <span className="gallery-indicator-title">Edition Archive</span>
+              <span className="gallery-indicator-divider" aria-hidden="true" />
+              <span className="gallery-indicator-subtitle">
+                {(() => {
+                  if (hoveredCardId) {
+                    const hoveredEv = EVENTS_DATA.find((e) => e.id === hoveredCardId);
+                    const hoveredIdx = EVENTS_DATA.findIndex((e) => e.id === hoveredCardId);
+                    if (hoveredEv) {
+                      return `Edition ${String(hoveredIdx + 1).padStart(2, '0')} — ${hoveredEv.shortTitle || hoveredEv.title}`;
+                    }
+                  }
+                  return '7 Milestone Editions · 2025–2026';
+                })()}
               </span>
             </div>
 
-            {/* Quick Edition Selector Pills */}
-            <div className="gallery-edition-pills" role="tablist" aria-label="Select Edition">
-              {EVENTS_DATA.map((ev, i) => {
-                const isItemActive = selectedId === ev.id;
-                return (
-                  <button
-                    key={ev.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isItemActive}
-                    className={`gallery-pill-btn ${isItemActive ? 'is-active' : ''}`}
-                    onClick={() => handleSelectEvent(ev.id)}
-                    title={`Edition ${String(i + 1).padStart(2, '0')}: ${ev.title}`}
-                  >
-                    <span>{String(i + 1).padStart(2, '0')}</span>
-                  </button>
-                );
-              })}
-            </div>
-
             <div className="gallery-nav-controls">
-              {selectedId && (
-                <button
-                  type="button"
-                  className="gallery-restore-btn"
-                  onClick={() => setSelectedId(null)}
-                  title="Restore compact row (or press Esc)"
-                >
-                  <span>RESTORE OVERVIEW</span>
-                  <X size={14} />
-                </button>
-              )}
-
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--prev"
-                onClick={handlePrevEvent}
+                onClick={() => handleGalleryNav('left')}
                 aria-label="Previous edition"
               >
                 <ChevronLeft size={16} />
@@ -694,7 +805,7 @@ export function EventsExperience() {
               <button
                 type="button"
                 className="gallery-nav-btn gallery-nav-btn--next"
-                onClick={handleNextEvent}
+                onClick={() => handleGalleryNav('right')}
                 aria-label="Next edition"
               >
                 <ChevronRight size={16} />
@@ -702,225 +813,187 @@ export function EventsExperience() {
             </div>
           </div>
 
-          {/* Horizontal Gallery Wrapper */}
+          {/* Main Gallery Area: Full-Width Hover-Only Card Collection */}
           <div className="hwi-gallery-wrapper">
-            <button
-              type="button"
-              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
-              onClick={handlePrevEvent}
-              aria-label="Previous edition"
-              data-cursor="link"
-              data-cursor-label="PREV"
-            >
-              <ChevronLeft size={22} />
-            </button>
+            <div className="hwi-gallery-region">
+              <button
+                type="button"
+                className="hwi-palette-floating-arrow hwi-palette-floating-arrow--left"
+                onClick={() => scrollGallery('left')}
+                aria-label="Scroll left"
+                data-cursor="link"
+                data-cursor-label="PREV"
+              >
+                <ChevronLeft size={22} />
+              </button>
 
-            {/* Horizontal Flex Track: Compact row in default state, 100% full-width on click */}
-            <div
-              className={`hwi-gallery-track ${selectedId ? 'is-expanded' : ''}`}
-              ref={galleryTrackRef}
-            >
-              {EVENTS_DATA.map((event, idx) => {
-                const isActive = selectedId === event.id;
-                const isIdle = selectedId !== null && !isActive;
+              <div
+                className={`hwi-gallery-track ${hoveredCardId ? 'hwi-gallery-track--has-active' : ''}`}
+                ref={galleryTrackRef}
+                onPointerLeave={() => setHoveredCardId(null)}
+              >
+                {EVENTS_DATA.map((event, idx) => {
+                  const isHovered = hoveredCardId === event.id;
 
-                return (
-                  <div
-                    key={event.id}
-                    className={`hwi-panel ${
-                      isActive ? 'hwi-panel--active' : isIdle ? 'hwi-panel--idle' : 'hwi-panel--idle'
-                    }`}
-                    style={
-                      {
-                        '--panel-accent': event.accentColor || '#EF4444',
-                      } as React.CSSProperties
-                    }
-                    onClick={() => handleSelectEvent(event.id)}
-                    role="button"
-                    tabIndex={0}
-                    aria-expanded={isActive}
-                    aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
-                    data-cursor="link"
-                    data-cursor-label={isActive ? 'CLOSE' : 'OPEN'}
-                  >
-                    {/* Visual Background: Event Photo or Vector Art */}
-                    {event.cardImage ? (
-                      <div
-                        className="hwi-panel__bg-photo"
-                        style={{ backgroundImage: `url(${event.cardImage})` }}
-                      />
-                    ) : (
-                      <div className="hwi-panel__bg-art">
-                        <PanelArtwork
-                          graphicType={event.hudGraphicType || 'grid'}
-                          accent={event.accentColor || '#EF4444'}
+                  return (
+                    <article
+                      key={event.id}
+                      className={`hwi-panel ${isHovered ? 'hwi-panel--hovered' : 'hwi-panel--idle'}`}
+                      style={
+                        {
+                          '--panel-accent': event.accentColor || '#EF4444',
+                        } as React.CSSProperties
+                      }
+                      onPointerEnter={(e) => {
+                        if (e.pointerType !== 'touch') {
+                          setHoveredCardId(event.id);
+                        }
+                      }}
+                      onFocus={() => setHoveredCardId(event.id)}
+                      onClick={(e) => {
+                        const isTouch =
+                          (e.nativeEvent as PointerEvent)?.pointerType === 'touch' ||
+                          (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches);
+
+                        if (isTouch) {
+                          setHoveredCardId((prev) => (prev === event.id ? null : event.id));
+                        } else {
+                          // Desktop click solidifies selection without competing with hover
+                          setHoveredCardId(event.id);
+                        }
+                      }}
+                      tabIndex={0}
+                      aria-label={`Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
+                      data-cursor="link"
+                      data-cursor-label="EXPLORE"
+                    >
+                      {/* Background Visual Photo / Artwork */}
+                      {event.cardImage ? (
+                        <div
+                          className="hwi-panel__bg-photo"
+                          style={{ backgroundImage: `url(${event.cardImage})` }}
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <div className="hwi-panel__bg-art">
+                          <PanelArtwork
+                            graphicType={event.hudGraphicType || 'grid'}
+                            accent={event.accentColor || '#EF4444'}
+                          />
+                        </div>
+                      )}
 
-                    {/* Gradient Overlay Scrim */}
-                    <div className="hwi-panel__scrim" />
+                      {/* Subtle Rest Scrim */}
+                      <div className="hwi-panel__scrim" />
 
-                    {/* ── COLLAPSED STATE ELEMENTS (Fades out when panel expands) ── */}
-                    {/* Top-Left: TEDx Eyebrow + Bold Big Edition Number */}
-                    <div className="hwi-panel__tedx-header">
-                      <span className="hwi-panel__tedx-tag">EDITION</span>
-                      <span className="hwi-panel__tedx-num">
-                        {String(idx + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    {/* Right-Side: Vertical Rotated Theme / Title */}
-                    <div className="hwi-panel__tedx-vertical" aria-hidden="true">
-                      <span>{(event.shortTitle || event.title).toUpperCase()}</span>
-                    </div>
-
-                    {/* Bottom-Left: Event Date */}
-                    <div className="hwi-panel__tedx-footer">
-                      <span className="tedx-footer-date">{event.date}</span>
-                    </div>
-
-                    {/* ── EXPANDED STATE CONTENT (Revealed in the 100% full-width panel) ── */}
-                    {isActive && (
-                      <div className="hwi-panel__expanded-content" aria-hidden={false}>
-                        {/* Top Strip: Edition badge, category, and collapse chip */}
-                        <div className="expanded-top-strip">
-                          <div className="expanded-tag-cluster">
-                            <span className="expanded-edition-pill">
-                              EDITION {String(idx + 1).padStart(2, '0')} // {event.year}
-                            </span>
-                            <span className="expanded-category-pill">{event.category}</span>
-                            <span
-                              className={`expanded-status-pill ${
-                                event.status === 'upcoming' ? 'is-upcoming' : 'is-archived'
-                              }`}
-                            >
-                              {event.status === 'upcoming' ? 'REGISTRATION OPEN' : 'ARCHIVED DOSSIER'}
-                            </span>
-                          </div>
-
-                          <button
-                            type="button"
-                            className="expanded-collapse-chip"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedId(null);
-                            }}
-                            aria-label="Restore all panels"
-                            data-cursor="link"
-                            data-cursor-label="RESTORE"
-                          >
-                            <span>RESTORE OVERVIEW</span>
-                            <X size={14} />
-                          </button>
+                      {/* ── CARD DEFAULT REST APPEARANCE ── */}
+                      <div className="hwi-panel__rest-content" aria-hidden={isHovered}>
+                        <div className="hwi-panel__tedx-header">
+                          <span className="hwi-panel__tedx-tag">EDITION</span>
+                          <span className="hwi-panel__tedx-num">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
                         </div>
 
-                        {/* Main Middle Row: Heroic Typography & Asymmetric Editorial Context */}
-                        <div className="expanded-main-hero">
-                          <div className="expanded-main-left">
-                            <div className="expanded-theme-line">
-                              <span className="theme-line-rule" />
-                              <span className="theme-line-text">THEME // {event.theme.toUpperCase()}</span>
+                        <div className="hwi-panel__rest-badges">
+                          <span className="hwi-panel__category-badge">{event.category}</span>
+                          <span className="hwi-panel__year-badge">{event.year}</span>
+                        </div>
+
+                        <div className="hwi-panel__rest-footer">
+                          <h4 className="hwi-panel__rest-title">
+                            {event.shortTitle || event.title}
+                          </h4>
+                          <span className="tedx-footer-date">{event.date}</span>
+                        </div>
+                      </div>
+
+                      {/* ── CARD HOVER-REVEALED OVERLAY ── */}
+                      <div
+                        className="hwi-card-hover-overlay"
+                        aria-hidden={!isHovered}
+                      >
+                        <div className="card-hover-header">
+                          <div className="card-hover-tags">
+                            <span className="card-hover-edition-pill">
+                              EDITION {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span className="card-hover-category-pill">{event.category}</span>
+                            <span className="card-hover-year-pill">{event.year}</span>
+                          </div>
+                        </div>
+
+                        <div className="card-hover-body">
+                          {event.theme && (
+                            <div className="card-hover-theme-line">
+                              <span className="hover-theme-bullet" />
+                              <span className="hover-theme-text">Theme: {event.theme}</span>
                             </div>
+                          )}
 
-                            <h2 className="expanded-headline">{event.title}</h2>
+                          <h3 className="card-hover-title">{event.title}</h3>
 
-                            <p className="expanded-narrative">
-                              {event.shortDescription || event.desc}
-                            </p>
+                          <p className="card-hover-desc">
+                            {event.shortDescription || event.desc}
+                          </p>
 
-                            {/* Minimal Essential Context Strip */}
-                            <div className="expanded-meta-strip">
-                              <div className="meta-strip-item">
-                                <Calendar size={14} />
-                                <span>{event.date}</span>
+                          <div className="card-hover-meta">
+                            <div className="card-hover-meta-item">
+                              <Calendar size={12} className="card-hover-icon" />
+                              <span>{event.date}</span>
+                            </div>
+                            {event.venue && (
+                              <div className="card-hover-meta-item card-hover-meta-item--venue">
+                                <MapPin size={12} className="card-hover-icon" />
+                                <span className="hover-venue-text">{event.venue}</span>
                               </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <MapPin size={14} />
-                                <span>{event.venue}</span>
-                              </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <Clock size={14} />
-                                <span>{event.duration}</span>
-                              </div>
-                              <span className="meta-strip-sep">•</span>
-                              <div className="meta-strip-item">
-                                <Users size={14} />
+                            )}
+                            {event.participants && (
+                              <div className="card-hover-meta-item">
+                                <Users size={12} className="card-hover-icon" />
                                 <span>
                                   {typeof event.participants === 'string' &&
                                   (event.participants.includes('Builders') ||
-                                    event.participants.includes('Researchers'))
+                                    event.participants.includes('Researchers') ||
+                                    event.participants.includes('Students') ||
+                                    event.participants.includes('Participants'))
                                     ? event.participants
                                     : `${event.participants} Participants`}
                                 </span>
                               </div>
-                            </div>
-                          </div>
-
-                          {/* Right Side: Monumental Vertical Rotated Title (Echoing Reference Video) */}
-                          <div className="expanded-main-right" aria-hidden="true">
-                            <span className="monumental-vertical-title">
-                              {(event.shortTitle || event.title).toUpperCase()}
-                            </span>
+                            )}
                           </div>
                         </div>
 
-                        {/* Bottom Actions Row */}
-                        <div className="expanded-bottom-actions">
-                          {event.status === 'upcoming' ? (
-                            <Link
-                              href={event.ctaUrl || '/join'}
-                              className="expanded-cta-btn expanded-cta-btn--primary"
-                              onClick={(e) => e.stopPropagation()}
-                              data-cursor="link"
-                              data-cursor-label="APPLY"
-                            >
-                              <span>{event.ctaLabel || 'REGISTER FOR HACKATHON'}</span>
-                              <ArrowUpRight size={16} />
-                            </Link>
-                          ) : (
-                            <a
-                              href="#editorial-story"
-                              className="expanded-cta-btn expanded-cta-btn--primary"
-                              onClick={(e) => e.stopPropagation()}
-                              data-cursor="link"
-                              data-cursor-label="EXPLORE"
-                            >
-                              <span>EXPLORE COMPLETE EVENT CHRONICLE</span>
-                              <span className="action-arrow">↓</span>
-                            </a>
-                          )}
-
+                        <div className="card-hover-footer">
                           <button
                             type="button"
-                            className="expanded-hint-text"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedId(null);
-                            }}
+                            className="card-hover-chronicle-btn"
+                            onClick={(e) => handleOpenChronicle(e, event.id)}
+                            aria-label={`Explore complete chronicle for Edition ${String(idx + 1).padStart(2, '0')}: ${event.title}`}
+                            data-cursor="link"
+                            data-cursor-label="CHRONICLE"
                           >
-                            <span>Click anywhere on panel or press Esc to restore overview</span>
+                            <span>EXPLORE COMPLETE CHRONICLE</span>
+                            <ArrowUpRight size={14} className="chronicle-btn-arrow" />
                           </button>
                         </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                    </article>
+                  );
+                })}
+              </div>
 
-            <button
-              type="button"
-              className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
-              onClick={handleNextEvent}
-              aria-label="Next edition"
-              data-cursor="link"
-              data-cursor-label="NEXT"
-            >
-              <ChevronRight size={22} />
-            </button>
+              <button
+                type="button"
+                className="hwi-palette-floating-arrow hwi-palette-floating-arrow--right"
+                onClick={() => scrollGallery('right')}
+                aria-label="Scroll right"
+                data-cursor="link"
+                data-cursor-label="NEXT"
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -944,7 +1017,7 @@ export function EventsExperience() {
                   <div className="editorial-masthead__tags">
                     <span className="editorial-beacon" />
                     <span className="editorial-edition-tag">
-                      EDITION {String(currentIndex + 1).padStart(2, '0')} // {selectedEvent.year}
+                      Edition {String(currentIndex + 1).padStart(2, '0')} · {selectedEvent.year}
                     </span>
                     <span className="editorial-sep">•</span>
                     <span className="editorial-category-tag">{selectedEvent.category}</span>
@@ -970,7 +1043,7 @@ export function EventsExperience() {
                 <div className="editorial-masthead__content">
                   <div className="editorial-theme-kicker">
                     <span className="theme-kicker-dash" />
-                    <span className="theme-kicker-text">THEME // {selectedEvent.theme.toUpperCase()}</span>
+                    <span className="theme-kicker-text">Theme: {selectedEvent.theme}</span>
                   </div>
 
                   <h2 className="editorial-display-title">
@@ -989,7 +1062,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Calendar size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">01 // SCHEDULED DATE</span>
+                    <span className="meta-rail-label">01 · Scheduled Date</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.date}</div>
                   <div className="meta-rail-col__detail">{selectedEvent.year} Chapter Milestone</div>
@@ -998,7 +1071,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <MapPin size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">02 // HOST VENUE</span>
+                    <span className="meta-rail-label">02 · Host Venue</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.venue}</div>
                   <div className="meta-rail-col__detail">BVUDET Navi Mumbai</div>
@@ -1007,7 +1080,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Clock size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">03 // FORMAT & SPRINT</span>
+                    <span className="meta-rail-label">03 · Format & Sprint</span>
                   </div>
                   <div className="meta-rail-col__val">{selectedEvent.duration}</div>
                   <div className="meta-rail-col__detail">Intensive Execution Window</div>
@@ -1016,7 +1089,7 @@ export function EventsExperience() {
                 <div className="meta-rail-col">
                   <div className="meta-rail-col__header">
                     <Users size={13} className="meta-rail-icon" />
-                    <span className="meta-rail-label">04 // BUILDER COHORT</span>
+                    <span className="meta-rail-label">04 · Builder Cohort</span>
                   </div>
                   <div className="meta-rail-col__val">
                     {typeof selectedEvent.participants === 'string' &&
@@ -1062,7 +1135,7 @@ export function EventsExperience() {
                   <div className="chronicle-provenance">
                     <div className="provenance-indicator" />
                     <span className="provenance-text">
-                      DOCUMENTED ARCHIVE // HACKWITHINDIA STUDENT CHAPTER • BVUDET NAVI MUMBAI
+                      Documented Archive · HackWithIndia Student Chapter • BVUDET Navi Mumbai
                     </span>
                   </div>
                 </div>
@@ -1209,95 +1282,13 @@ export function EventsExperience() {
       )}
 
       {/* ================================================================= */}
-      {/* 3. PHOTOGRAPHY: DOCUMENTARY REVEAL                                */}
-      {/* Real event photographs as the visual centrepiece                  */}
+      {/* 3. AUTHENTIC MOMENTS — EVENT ARCHIVE (Cinematic 3D Scroll-Driven) */}
+      {/* Real event photographs dynamically expanding, shrinking, and     */}
+      {/* transitioning around central title synchronized with scroll       */}
       {/* ================================================================= */}
-      <section
-        id="documentary-photography"
-        ref={photosSectionRef}
-        className="chronicles-photography-section"
-      >
-        <div className="container">
-          <div className="chronicles-section-header">
-            <div className="section-header-kicker">
-              <span className="hwi-pulse-beacon" />
-              <span className="type-eyebrow text-accent">DOCUMENTARY ARCHIVE</span>
-              <span className="kicker-sep">•</span>
-              <span className="type-eyebrow text-tertiary">REAL EVENT PHOTOGRAPHS</span>
-            </div>
-            <h2 className="chronicles-section-title">
-              AUTHENTIC <span className="title-dim">MOMENTS.</span>
-            </h2>
-            <p className="chronicles-section-desc">
-              Real moments captured across hackathons, keynotes, lab mentorships, and student delegations.
-              No stock photography or generic renders.
-            </p>
-
-            {/* Photo Category Filter Tabs */}
-            <div className="docu-filter-tabs">
-              {[
-                { label: 'ALL DISPATCHES', key: 'ALL' },
-                { label: 'ROCKETRIDE BUILDATHON', key: 'ROCKETRIDE' },
-                { label: 'HACKWITHMUMBAI 2.0', key: 'HACKWITHMUMBAI' },
-                { label: 'ZERO2WEB3', key: 'ZERO2WEB3' },
-                { label: 'COMMUNITY TOURS', key: 'COMMUNITY' },
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  type="button"
-                  className={`docu-filter-tab ${activePhotoCategory === tab.key ? 'is-active' : ''}`}
-                  onClick={() => setActivePhotoCategory(tab.key)}
-                >
-                  <span>{tab.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Documentary Photo Grid */}
-          <div className="docu-photos-grid" ref={photosGridRef}>
-            {filteredPhotos.map((photo, pIdx) => {
-              const isHeroFeatured = pIdx === 0 && activePhotoCategory === 'ALL';
-
-              return (
-                <div
-                  key={photo.id}
-                  className={`docu-photo-card ${isHeroFeatured ? 'docu-photo-card--featured' : ''}`}
-                >
-                  <div className="docu-photo-frame">
-                    <img
-                      src={photo.src}
-                      alt={photo.title}
-                      className="docu-photo-img"
-                      loading="lazy"
-                    />
-                    <div className="docu-photo-overlay" />
-                    <span className="docu-photo-badge">{photo.tag}</span>
-                    <div className="docu-scanline" />
-                  </div>
-
-                  <div className="docu-photo-content">
-                    <div className="docu-meta-top">
-                      <span className="docu-event-tag">{photo.eventTitle}</span>
-                      <span className="docu-year-tag">{photo.year}</span>
-                    </div>
-
-                    <h3 className="docu-photo-title">{photo.title}</h3>
-                    <p className="docu-photo-caption">{photo.caption}</p>
-
-                    {photo.cameraInfo && (
-                      <div className="docu-photo-footer">
-                        <Camera size={13} />
-                        <span>{photo.cameraInfo}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <AuthenticMomentsArchive
+        onOpenChronicle={handleOpenChronicleFromMoments}
+      />
 
       {/* ================================================================= */}
       {/* 4. AWARDS: THE IMPACT                                             */}
@@ -1310,12 +1301,7 @@ export function EventsExperience() {
       >
         <div className="container">
           <div className="chronicles-section-header">
-            <div className="section-header-kicker">
-              <span className="hwi-pulse-beacon" />
-              <span className="type-eyebrow text-accent">VERIFIED IMPACT</span>
-              <span className="kicker-sep">•</span>
-              <span className="type-eyebrow text-tertiary">PODIUM & ACCREDITATIONS</span>
-            </div>
+
             <h2 className="chronicles-section-title">
               THE <span className="title-dim">IMPACT.</span>
             </h2>
@@ -1701,7 +1687,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
       list.unshift({
         id: `${event.id}-hero`,
         src: hero,
-        title: `${event.shortTitle || event.title} // CENTRAL ASSEMBLY`,
+        title: `${event.shortTitle || event.title}: Central Assembly`,
         caption: event.shortDescription || event.desc,
         tag: 'KEYNOTE & ASSEMBLY',
         cameraInfo: 'PHOTO ARCHIVE • BVUDET-NM',
@@ -1737,7 +1723,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
         <div className="editorial-blueprint-grid">
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-01 // AIR-GAPPED LAN</span>
+              <span className="blueprint-code">Spec 01 · Air-Gapped LAN</span>
               <span className="blueprint-tag">LOCAL PHYSICAL NET</span>
             </div>
             <h4 className="blueprint-title">Isolated CC Labs 4–6 Physical Topology</h4>
@@ -1755,7 +1741,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-02 // SCORING ENGINE</span>
+              <span className="blueprint-code">Spec 02 · Scoring Engine</span>
               <span className="blueprint-tag">DYNAMIC DECAY</span>
             </div>
             <h4 className="blueprint-title">Dynamic Point Decay & First Blood</h4>
@@ -1773,7 +1759,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-03 // ENFORCEMENT</span>
+              <span className="blueprint-code">Spec 03 · Enforcement</span>
               <span className="blueprint-tag">ANTI-AI PROTOCOL</span>
             </div>
             <h4 className="blueprint-title">Hardware-Enforced Anti-AI Integrity</h4>
@@ -1791,7 +1777,7 @@ function EventPhotoMarquee({ event }: { event: EventItem }) {
 
           <div className="blueprint-card">
             <div className="blueprint-card__top">
-              <span className="blueprint-code">SPEC-04 // DOMAINS</span>
+              <span className="blueprint-code">Spec 04 · Domains</span>
               <span className="blueprint-tag">7 VULN CLASSES</span>
             </div>
             <h4 className="blueprint-title">Multi-Domain Security Matrix</h4>
@@ -1893,8 +1879,8 @@ function PanelArtwork({
             <circle cx="250" cy="420" r="5" fill={accent} />
           </g>
           <rect x="230" y="270" width="140" height="90" rx="8" fill="rgba(18, 16, 22, 0.85)" stroke={accent} strokeWidth="1.5" />
-          <text x="300" y="320" fill={accent} fontSize="14" fontFamily="monospace" textAnchor="middle" letterSpacing="2">
-            IC // SYNAPSE
+          <text x="300" y="320" fill={accent} fontSize="14" fontFamily="var(--font-primary)" textAnchor="middle" letterSpacing="2">
+            IC · SYNAPSE
           </text>
         </svg>
       );
@@ -1907,10 +1893,10 @@ function PanelArtwork({
           <circle cx="85" cy="205" r="5" fill={accent} />
           <circle cx="102" cy="205" r="5" fill="rgba(255,255,255,0.3)" />
           <circle cx="119" cy="205" r="5" fill="rgba(255,255,255,0.3)" />
-          <text x="85" y="275" fill={accent} fontSize="14" fontFamily="monospace">$ hwi agent run --autonomous</text>
-          <text x="85" y="315" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="monospace">[+] Initializing distributed cluster...</text>
-          <text x="85" y="355" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="monospace">[+] GPU tensor stream active: 8x H100</text>
-          <text x="85" y="395" fill={accent} fontSize="13" fontFamily="monospace">[✔] 18 Agentic prototypes running</text>
+          <text x="85" y="275" fill={accent} fontSize="14" fontFamily="var(--font-primary)">$ hwi agent run --autonomous</text>
+          <text x="85" y="315" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="var(--font-primary)">[+] Initializing distributed cluster...</text>
+          <text x="85" y="355" fill="rgba(255,255,255,0.7)" fontSize="13" fontFamily="var(--font-primary)">[+] GPU tensor stream active: 8x H100</text>
+          <text x="85" y="395" fill={accent} fontSize="13" fontFamily="var(--font-primary)">[✔] 18 Agentic prototypes running</text>
         </svg>
       );
 

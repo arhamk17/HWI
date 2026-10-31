@@ -84,7 +84,7 @@ export function HeroChapter() {
       animateIn();
     } else {
       const unsubscribe = introStore.subscribe(animateIn);
-      const fallbackTimer = setTimeout(animateIn, 1800);
+      const fallbackTimer = setTimeout(animateIn, 5000);
       return () => {
         unsubscribe();
         clearTimeout(fallbackTimer);

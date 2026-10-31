@@ -188,6 +188,14 @@ export function StoryChapter() {
     let rafId: number;
     let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
 
+    let groupWidth = 800;
+    const updateGroupWidth = () => {
+      const firstGroup = track.firstElementChild as HTMLElement | null;
+      if (firstGroup) groupWidth = firstGroup.offsetWidth || 800;
+    };
+    updateGroupWidth();
+    window.addEventListener('resize', updateGroupWidth, { passive: true });
+
     const onScroll = () => {
       const sy = window.scrollY;
       const delta = sy - lastScrollY;
@@ -204,14 +212,13 @@ export function StoryChapter() {
 
     const tick = () => {
       // Smooth interpolation towards target position
-      smoothedX += (currentX - smoothedX) * 0.18;
-
-      const firstGroup = track.firstElementChild as HTMLElement | null;
-      const groupWidth = firstGroup ? firstGroup.offsetWidth : 800;
-
-      if (groupWidth > 0) {
-        const wrappedX = ((smoothedX % groupWidth) - groupWidth) % groupWidth;
-        track.style.transform = `translate3d(${wrappedX}px, 0, 0)`;
+      const diff = currentX - smoothedX;
+      if (Math.abs(diff) > 0.01) {
+        smoothedX += diff * 0.18;
+        if (groupWidth > 0) {
+          const wrappedX = ((smoothedX % groupWidth) - groupWidth) % groupWidth;
+          track.style.transform = `translate3d(${wrappedX.toFixed(1)}px, 0, 0)`;
+        }
       }
 
       rafId = requestAnimationFrame(tick);
@@ -222,6 +229,7 @@ export function StoryChapter() {
     return () => {
       unsubScroll();
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateGroupWidth);
       cancelAnimationFrame(rafId);
     };
   }, []);
@@ -424,10 +432,6 @@ export function StoryChapter() {
               transition: 'opacity 0.3s ease',
             }}
           >
-            <div className="story-chapter__eyebrow" ref={hwiEyebrowRef}>
-              <span className="story-chapter__pulse-dot" />
-              <span>CHAPTER 02 // HACKWITHINDIA</span>
-            </div>
             <h2 className="story-chapter__hwi-title" ref={hwiTitleRef}>
               <span className="story-chapter__hwi-title-line">
                 <span className="story-chapter__hwi-word animated-word">Empowering</span>{' '}

@@ -50,6 +50,7 @@ export function WhatWeOffer() {
 
       const rect = container.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      if (rect.bottom < -100 || rect.top > viewportHeight + 100) return;
       const totalScrollable = container.offsetHeight - viewportHeight;
 
       if (totalScrollable <= 0) {
@@ -128,18 +129,22 @@ export function WhatWeOffer() {
           <div className="wwo__bg-3d-disc">
             <div className="wwo__bg-3d-face wwo__bg-3d-face--front">
               <img
-                src="/hwi-bvudet-logo.png"
+                src="/images/events/rocketride_mentorship_lab.jpg"
                 alt=""
                 className="wwo__bg-3d-img"
                 draggable={false}
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="wwo__bg-3d-face wwo__bg-3d-face--back">
               <img
-                src="/hwi-bvudet-logo.png"
+                src="/images/events/hack_with_mumbai_2_image13.jpeg"
                 alt=""
                 className="wwo__bg-3d-img"
                 draggable={false}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
@@ -150,10 +155,6 @@ export function WhatWeOffer() {
             {/* LEFT COLUMN: Four Numbered Information Points with Obys Masked Reveals */}
             <div className="wwo__left-col">
               <div className="wwo__header">
-                <div className="wwo__kicker-wrap">
-                  <span className="wwo__dot" />
-                  <span className="wwo__kicker">CHAPTER 03 // WHAT WE OFFER</span>
-                </div>
                 <div className="wwo__title-wrap">
                   <h2 className="wwo__title">CURRICULUM & INITIATIVES</h2>
                 </div>
@@ -248,4 +249,3 @@ export function WhatWeOffer() {
     </section>
   );
 }
-

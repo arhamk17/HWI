@@ -50,6 +50,7 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
     const internalVideoRef = useRef<HTMLVideoElement | null>(null);
     const progressFillRef = useRef<HTMLDivElement>(null);
     const timerTextRef = useRef<HTMLSpanElement>(null);
+    const isNearViewportRef = useRef(false);
 
     const setRefs = (el: HTMLVideoElement | null) => {
       internalVideoRef.current = el;
@@ -60,26 +61,37 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
       }
     };
 
-    // Guarantee independent autoplay on mount
     useEffect(() => {
       const vid = internalVideoRef.current;
-      if (!vid) return;
+      if (!vid || !autoPlay) return;
+
       vid.muted = true;
       vid.playsInline = true;
-      if (autoPlay) {
-        const playPromise = vid.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            const onFirstInteraction = () => {
-              vid.play().catch(() => {});
-              window.removeEventListener('click', onFirstInteraction);
-              window.removeEventListener('touchstart', onFirstInteraction);
-            };
-            window.addEventListener('click', onFirstInteraction, { once: true });
-            window.addEventListener('touchstart', onFirstInteraction, { once: true });
-          });
+
+      const syncPlayback = () => {
+        if (isNearViewportRef.current && document.visibilityState === 'visible') {
+          vid.play().catch(() => {});
+        } else if (!vid.paused) {
+          vid.pause();
         }
-      }
+      };
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          isNearViewportRef.current = entry.isIntersecting;
+          syncPlayback();
+        },
+        { rootMargin: '300px 0px' }
+      );
+      observer.observe(vid);
+      document.addEventListener('visibilitychange', syncPlayback);
+
+      return () => {
+        observer.disconnect();
+        document.removeEventListener('visibilitychange', syncPlayback);
+        isNearViewportRef.current = false;
+        vid.pause();
+      };
     }, [autoPlay]);
 
     const handleTimeUpdate = () => {
@@ -128,7 +140,7 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
               <span className="video-panel__dot video-panel__dot--gray" />
             </div>
             <div className="video-panel__badge-group">
-              <span className="video-panel__badge">HWI PREVIEW // CHAPTER 03</span>
+              <span className="video-panel__badge">HWI PREVIEW</span>
               {href && (
                 <span className="video-panel__cta-badge">
                   <span>ABOUT HWI</span>
@@ -149,9 +161,9 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
               poster={poster}
               playsInline
               muted
-              autoPlay={autoPlay}
+              autoPlay={false}
               loop={loop}
-              preload="auto"
+              preload="none"
               className="video-panel__video"
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleLoadedMetadata}

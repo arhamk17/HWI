@@ -15,7 +15,16 @@ export function FooterChapter() {
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-48)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-            <h3 className="type-heading-2 text-primary">HACK WITH INDIA</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)', marginBottom: 'var(--space-8)' }}>
+              <img
+                src="/hwi-bvudet-logo.png"
+                alt="HackWithIndia BVUDET-NM Chapter logo"
+                style={{ width: '52px', height: '52px', objectFit: 'contain', borderRadius: '50%' }}
+                loading="lazy"
+                decoding="async"
+              />
+              <h3 className="type-heading-2 text-primary">HACK WITH INDIA</h3>
+            </div>
             <p className="type-body-small text-tertiary">BVUDET-NM Chapter</p>
             <p className="type-body-small text-tertiary" style={{ marginTop: 'var(--space-8)' }}>A chapter of HackWithIndia</p>
           </div>

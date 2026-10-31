@@ -1,0 +1,1404 @@
+/* =========================================================================
+   HWI EVENT TICKET SYSTEM — THERMAL RECEIPT PASS & PRINT STYLES
+   ========================================================================= */
+
+.hwi-ticket-page {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+
+/* ─── Hero Section ──────────────────────────────────────────────────────── */
+.hwi-ticket-hero {
+  position: relative;
+  padding: 140px 0 60px;
+  text-align: center;
+}
+
+.ticket-hero-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ticket-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: var(--color-accent, #EF4444);
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.ticket-hero-beacon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent, #EF4444);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+  animation: pulseBeacon 2s infinite ease-in-out;
+}
+
+@keyframes pulseBeacon {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.ticket-hero-secondary-badge {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.74rem;
+  color: #64748B;
+  letter-spacing: 0.02em;
+}
+
+.ticket-hero-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  color: #FFFFFF;
+  margin: 0 auto 20px;
+  letter-spacing: -0.03em;
+  max-width: 820px;
+}
+
+.ticket-hero-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  line-height: 1.65;
+  color: #94A3B8;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ─── Upcoming Events Run / Empty State ─────────────────────────────────── */
+.hwi-upcoming-section {
+  padding: 40px 0 60px;
+}
+
+.ticket-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ticket-section-kicker {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-accent, #EF4444);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.ticket-section-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.ticket-system-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.74rem;
+  color: #94A3B8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.system-status-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+/* Upcoming Events Grid */
+.upcoming-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.upcoming-event-card {
+  background: rgba(18, 16, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.upcoming-event-card:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.upcoming-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upcoming-badge {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-accent, #EF4444);
+  background: rgba(239, 68, 68, 0.12);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.upcoming-edition {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.7rem;
+  color: #64748B;
+}
+
+.upcoming-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.upcoming-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.78rem;
+  color: #94A3B8;
+}
+
+.upcoming-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upcoming-claim-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: all 0.2s ease;
+}
+
+.upcoming-claim-btn:hover {
+  background: var(--color-accent, #EF4444);
+  border-color: var(--color-accent, #EF4444);
+}
+
+/* ─── Thermal Empty State ───────────────────────────────────────────────── */
+.thermal-empty-state {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 20px;
+}
+
+.thermal-empty-ticket {
+  width: 100%;
+  max-width: 580px;
+  background: #FAF9F5;
+  color: #18151D;
+  border-radius: 4px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.thermal-tear-top {
+  width: 100%;
+  height: 12px;
+  background-image: radial-gradient(circle at 10px 0px, transparent 6px, #FAF9F5 6.5px);
+  background-size: 20px 12px;
+  background-repeat: repeat-x;
+}
+
+.thermal-tear-bottom {
+  width: 100%;
+  height: 12px;
+  background-image: radial-gradient(circle at 10px 12px, transparent 6px, #FAF9F5 6.5px);
+  background-size: 20px 12px;
+  background-repeat: repeat-x;
+}
+
+.thermal-empty-body {
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.receipt-brand-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.receipt-brand-name {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #18151D;
+}
+
+.receipt-brand-sub {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #64748B;
+}
+
+.receipt-divider-line {
+  width: 100%;
+  border-bottom: 1.5px dashed rgba(24, 21, 29, 0.25);
+}
+
+.receipt-alert-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.receipt-alert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #DC2626;
+  letter-spacing: 0.03em;
+}
+
+.receipt-empty-headline {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #18151D;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.receipt-empty-text {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #475569;
+  margin: 0;
+}
+
+.receipt-notify-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.receipt-notify-label {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #18151D;
+}
+
+.receipt-notify-form {
+  display: flex;
+  gap: 10px;
+}
+
+.notify-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.notify-mail-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748B;
+  pointer-events: none;
+}
+
+.notify-input-wrap input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border-radius: 6px;
+  border: 1px solid rgba(24, 21, 29, 0.25);
+  background: #FFFFFF;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.85rem;
+  color: #18151D;
+  outline: none;
+}
+
+.notify-input-wrap input:focus {
+  border-color: #DC2626;
+}
+
+.receipt-notify-btn {
+  padding: 9px 18px;
+  border-radius: 6px;
+  background: #18151D;
+  color: #FFFFFF;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.receipt-notify-btn:hover {
+  opacity: 0.9;
+}
+
+.receipt-notify-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.84rem;
+  color: #059669;
+  font-weight: 500;
+}
+
+.receipt-notify-err {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  color: #DC2626;
+}
+
+.receipt-footer-stamp {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.64rem;
+  color: #94A3B8;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ─── Personalize Section & Split Grid ──────────────────────────────────── */
+.hwi-personalize-section {
+  padding: 40px 0 80px;
+}
+
+.ticket-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Form Card */
+.ticket-form-card {
+  background: rgba(18, 16, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 36px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.ticket-form-header {
+  margin-bottom: 28px;
+}
+
+.form-step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-accent, #EF4444);
+  background: rgba(239, 68, 68, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.ticket-form-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.ticket-form-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #94A3B8;
+  margin: 0;
+}
+
+.ticket-personalize-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ticket-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ticket-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #CBD5E1;
+}
+
+.required-star {
+  color: var(--color-accent, #EF4444);
+}
+
+.optional-tag {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.7rem;
+  color: #64748B;
+  font-weight: 400;
+}
+
+.ticket-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 14px;
+  color: #64748B;
+  pointer-events: none;
+}
+
+.ticket-input-wrap input,
+.ticket-input-wrap select {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.92rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.ticket-input-wrap select {
+  padding-left: 14px;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.ticket-input-wrap option {
+  background-color: #0D0C13;
+  color: #FFFFFF;
+}
+
+.ticket-input-wrap input:focus,
+.ticket-input-wrap select:focus {
+  border-color: var(--color-accent, #EF4444);
+  background: rgba(0, 0, 0, 0.65);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.ticket-input-wrap.is-invalid input {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.field-error-msg {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  color: #EF4444;
+  margin-top: 3px;
+}
+
+.ticket-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.ticket-generate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 9px;
+  background: var(--color-accent, #EF4444);
+  color: #FFFFFF;
+  border: none;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+}
+
+.ticket-generate-btn:hover:not(:disabled) {
+  background: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.45);
+}
+
+.ticket-generate-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spin-icon {
+  animation: spinSlow 1s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ticket-privacy-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #64748B;
+  margin: 0;
+}
+
+/* ─── Live Thermal Ticket Preview Pane ──────────────────────────────────── */
+.ticket-preview-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: sticky;
+  top: 100px;
+}
+
+.preview-header-bar {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-kicker {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.04em;
+}
+
+.preview-mode-tag {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ─── Unified Thermal & Dot Matrix Printer Stage ────────────────────────── */
+.stage {
+  --r-paper: #FAF9F5;
+  --r-ink: #16181A;
+  position: relative;
+  width: min(100%, 31rem);
+  margin-inline: auto;
+}
+
+/* ─── Control Bar: Printer Mode Toggle & Reprint Button ──────────────────── */
+.printer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.printer-pick {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.printer-pick button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #94A3B8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.printer-pick button:hover {
+  color: #FFFFFF;
+}
+
+.printer-pick button[aria-pressed="true"] {
+  background: #FFFFFF;
+  color: #0A0B0D;
+}
+
+.printer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.printer-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.printer-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.printer-btn:active:not(:disabled),
+.printer-pick button:active {
+  transform: translateY(1px);
+}
+
+/* ─── Hardware Printer Chassis ─────────────────────────────────────────── */
+.printer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.printer-led {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FFBF7F;
+  box-shadow: 0 0 10px #FFBF7F;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.printer-led.is-live {
+  background: #7EE0B5;
+  box-shadow: 0 0 10px #7EE0B5;
+}
+
+.printer.is-busy .printer-led {
+  animation: led 0.24s steps(2) infinite;
+}
+
+@keyframes led {
+  50% { opacity: 0.3; }
+}
+
+/* Mechanical motor buzz vibration during printing */
+.printer.is-busy {
+  animation: buzz 0.1s steps(2) infinite;
+}
+
+@keyframes buzz {
+  50% { transform: translateY(0.6px); }
+}
+
+.printer-slot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 7px;
+  height: 6px;
+  border-radius: 3px;
+  background: #040506;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* ─── Thermal Printer Housing (Black POS Printer) ───────────────────────── */
+[data-printer="thermal"] .printer {
+  height: 64px;
+  padding: 0 16px 14px;
+  border-radius: 18px 18px 10px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(120% 90% at 50% 0%, #2D353D, transparent 60%), linear-gradient(180deg, #232A31, #12161A);
+  box-shadow: 0 18px 30px -18px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 0 -10px 18px -12px rgba(0, 0, 0, 0.8);
+}
+
+[data-printer="thermal"] .printer::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 22px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.printer-label {
+  flex: 1;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94A3B8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.printer-cutter {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 2px;
+  height: 5px;
+  background: linear-gradient(180deg, #D5DBE0, #7F8890);
+  -webkit-mask: conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
+  mask: conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 50% / 6px 100%;
+}
+
+/* ─── Dot Matrix Printer Housing (Vintage Beige Tractor-Feed) ──────────── */
+[data-printer="matrix"] .printer {
+  height: 78px;
+  padding: 0 14px 16px;
+  justify-content: space-between;
+  border-radius: 12px 12px 6px 6px;
+  border: 1px solid #A69F8E;
+  background: linear-gradient(180deg, #E3DDCF, #C9C2B1);
+  box-shadow: 0 18px 30px -16px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -8px 14px -10px rgba(60, 50, 30, 0.5);
+}
+
+[data-printer="matrix"] .printer::before,
+[data-printer="matrix"] .printer::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  width: 10px;
+  height: 26px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #8D8676, #B8B09D, #8D8676);
+}
+
+[data-printer="matrix"] .printer::before { left: -9px; }
+[data-printer="matrix"] .printer::after { right: -9px; }
+
+.matrix-panel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5D5646;
+}
+
+.matrix-window {
+  position: relative;
+  flex: 1;
+  height: 26px;
+  margin: 0 6px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: linear-gradient(180deg, rgba(20, 22, 26, 0.85), rgba(40, 44, 50, 0.7));
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.matrix-window::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 12px;
+  height: 2px;
+  background: #6A7178;
+}
+
+.matrix-head {
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 18px;
+  height: 16px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #A8ADB3, #6C7278);
+}
+
+.printer.is-busy .matrix-head {
+  animation: head 0.34s ease-in-out infinite alternate;
+}
+
+@keyframes head {
+  to { left: calc(100% - 22px); }
+}
+
+[data-printer="matrix"] .printer-slot {
+  left: 10px;
+  right: 10px;
+  background: #2A2620;
+}
+
+/* ─── Paper Hang Container, Tear Fall & Feed Animation ──────────────────── */
+.receipt-hang {
+  position: relative;
+  z-index: 1;
+  margin: -9px 24px 0;
+  transform-origin: 50% 0;
+  clip-path: inset(0 -48px -160px -48px);
+}
+
+.receipt-hang::before {
+  content: "";
+  position: absolute;
+  inset: 14px 8px 4px;
+  box-shadow: 0 34px 50px -24px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.receipt-hang.is-feeding::before {
+  opacity: 0;
+  transition: none;
+}
+
+.receipt-hang.is-torn {
+  animation: r-tear 0.65s cubic-bezier(0.55, 0, 0.75, 0.2) forwards;
+}
+
+@keyframes r-tear {
+  15% { transform: translateY(8px) rotate(-1.5deg); }
+  100% { transform: translateY(160px) rotate(-9deg); opacity: 0; }
+}
+
+/* ─── Authentic Thermal Receipt ─────────────────────────────────────────── */
+.receipt {
+  position: relative;
+  padding: 26px 22px 36px;
+  color: var(--r-ink, #16181A);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.035), transparent 10%, transparent 90%, rgba(0, 0, 0, 0.035)), var(--r-paper, #FAF9F5);
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+  will-change: transform;
+}
+
+.receipt hr {
+  margin: 16px 0;
+  border: 0;
+  border-top: 1.5px dashed rgba(22, 24, 26, 0.28);
+}
+
+.r-head {
+  text-align: center;
+}
+
+.r-brand {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem !important;
+  line-height: 1.1;
+  letter-spacing: -0.02em !important;
+  color: var(--r-ink, #16181A);
+  margin: 0;
+}
+
+.r-sub {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+
+.r-doc {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 2px 10px;
+  background: var(--r-ink, #16181A);
+  color: var(--r-paper, #FAF9F5);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+}
+
+.r-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+}
+
+.r-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  text-transform: uppercase;
+}
+
+.r-title h3 {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--r-ink, #16181A);
+  margin: 0;
+}
+
+.r-tag {
+  padding: 1px 8px;
+  background: var(--r-ink, #16181A);
+  color: var(--r-paper, #FAF9F5);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+}
+
+.r-next {
+  margin-top: 10px;
+}
+
+.r-big {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--r-ink, #16181A);
+  margin: 0 0 6px 0;
+}
+
+.r-sum {
+  margin: 6px 0 12px;
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #3A4046;
+}
+
+.r-lines {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.r-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.r-line span:first-child {
+  color: #64748B;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.r-line span:last-child {
+  color: var(--r-ink, #16181A);
+  font-weight: 600;
+}
+
+.r-line i {
+  flex: 1;
+  min-width: 12px;
+  transform: translateY(-4px);
+  border-bottom: 1.5px dotted rgba(22, 24, 26, 0.35);
+}
+
+.r-foot {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.r-barcode {
+  display: block;
+  width: 100%;
+  height: 42px;
+  margin-bottom: 6px;
+  fill: var(--r-ink, #16181A);
+}
+
+.r-foot-note {
+  margin: 6px 0 2px;
+  font-weight: 600;
+  color: var(--r-ink, #16181A);
+}
+
+.r-foot-sub {
+  margin: 0;
+  font-size: 10px;
+  color: #64748B;
+}
+
+/* ─── Dot Matrix Paper (Green-bar fanfold & Tractor Holes) ─────────────── */
+[data-printer="matrix"] .receipt-hang {
+  margin-inline: 12px;
+}
+
+[data-printer="matrix"] .receipt {
+  --r-paper: #FBFBF6;
+  --r-ink: #262A52;
+  padding: 24px 42px 30px;
+  background: repeating-linear-gradient(180deg, transparent 0 58px, rgba(126, 196, 150, 0.2) 58px 116px), var(--r-paper);
+  -webkit-mask: radial-gradient(circle at 12px 9px, #0000 4px, #000 4.6px) 0 0 / 24px 18px repeat-y, radial-gradient(circle at 12px 9px, #0000 4px, #000 4.6px) 100% 0 / 24px 18px repeat-y, linear-gradient(#000 0 0) 50% 0 / calc(100% - 48px) 100% no-repeat;
+  mask: radial-gradient(circle at 12px 9px, #0000 4px, #000 4.6px) 0 0 / 24px 18px repeat-y, radial-gradient(circle at 12px 9px, #0000 4px, #000 4.6px) 100% 0 / 24px 18px repeat-y, linear-gradient(#000 0 0) 50% 0 / calc(100% - 48px) 100% no-repeat;
+}
+
+[data-printer="matrix"] .receipt::before,
+[data-printer="matrix"] .receipt::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed rgba(38, 42, 82, 0.28);
+}
+
+[data-printer="matrix"] .receipt::before { left: 24px; }
+[data-printer="matrix"] .receipt::after { right: 24px; }
+
+[data-printer="matrix"] .receipt hr {
+  border-top-style: dotted;
+  border-top-color: rgba(38, 42, 82, 0.35);
+}
+
+[data-printer="matrix"] .r-brand {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 1.25rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+[data-printer="matrix"] .r-big {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+[data-printer="matrix"] :is(.r-doc, .r-tag) {
+  background: none;
+  color: var(--r-ink);
+  box-shadow: inset 0 0 0 1.5px var(--r-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .printer.is-busy,
+  .printer.is-busy .printer-led,
+  .printer.is-busy .matrix-head {
+    animation: none !important;
+  }
+  .receipt-hang.is-torn {
+    animation: none !important;
+  }
+}
+
+/* ─── Action Controls: Print & Download ─────────────────────────────────── */
+.ticket-output-controls {
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ticket-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-radius: 8px;
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ticket-action-btn--print {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+}
+
+.ticket-action-btn--print:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.ticket-action-btn--download {
+  background: #10B981;
+  border: 1px solid #10B981;
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.ticket-action-btn--download:hover:not(:disabled) {
+  background: #059669;
+  border-color: #059669;
+  transform: translateY(-1px);
+}
+
+.ticket-action-btn--download:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ticket-print-guidance {
+  font-family: var(--font-jetbrains-mono), sans-serif;
+  font-size: 0.72rem;
+  color: #64748B;
+  text-align: center;
+  max-width: 420px;
+}
+
+/* ─── Responsive Styles ─────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .ticket-split-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .ticket-preview-pane {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .ticket-form-card {
+    padding: 24px 18px;
+  }
+
+  .thermal-ticket-container {
+    max-width: 100%;
+  }
+
+  .thermal-ticket {
+    max-width: 100%;
+  }
+
+  .ticket-field-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ticket-output-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================================
+   DEDICATED PRINT STYLESHEET
+   Print ONLY the thermal ticket, clean margins, pure white background,
+   hiding all header, navigation, form, buttons, and background elements.
+   ========================================================================= */
+@media print {
+  @page {
+    margin: 10mm;
+    size: auto;
+  }
+
+  html, body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide all surrounding layout, navbar, footers, forms, particles, canvas */
+  canvas,
+  .star-field,
+  .stars,
+  [class*="particle"],
+  header,
+  footer,
+  nav,
+  .hwi-ticket-hero,
+  .hwi-upcoming-section,
+  .ticket-form-card,
+  .preview-header-bar,
+  .printer-bar,
+  .printer,
+  .ticket-output-controls,
+  .ticket-print-guidance,
+  .ticket-hero-badges {
+    display: none !important;
+  }
+
+  .hwi-ticket-page {
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+
+  .hwi-personalize-section {
+    padding: 0 !important;
+  }
+
+  .ticket-split-grid {
+    display: block !important;
+  }
+
+  .ticket-preview-pane {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .stage {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .receipt-hang {
+    margin: 0 !important;
+    clip-path: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .receipt-hang::before {
+    display: none !important;
+  }
+
+  .receipt {
+    width: 90mm !important;
+    max-width: 90mm !important;
+    box-shadow: none !important;
+    border: 1px solid #CCCCCC !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    margin: 0 auto !important;
+    page-break-inside: avoid !important;
+    transform: none !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    padding: 20px !important;
+  }
+
+  .r-brand,
+  .r-big,
+  .r-title h3,
+  .r-line span:last-child {
+    color: #000000 !important;
+  }
+
+  .r-doc,
+  .r-tag {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .r-barcode {
+    fill: #000000 !important;
+  }
+}

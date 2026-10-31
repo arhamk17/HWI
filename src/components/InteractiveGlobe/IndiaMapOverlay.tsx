@@ -95,10 +95,6 @@ export function IndiaMapOverlay() {
           pointerEvents: headerOpacity > 0.4 ? 'auto' : 'none',
         }}
       >
-        <div className="india-header__eyebrow">
-          <span className="india-header__pulse" />
-          <span>HWI ALLIANCE // CHAPTER 02</span>
-        </div>
         <h3 className="india-header__title">Pan-India Developer Ecosystem</h3>
         <p className="india-header__subtitle">
           From our flagship student chapter in Mumbai to builders across the nation.

@@ -1,0 +1,527 @@
+/* ==========================================================================
+   HWI SCROLL MORPH HERO
+   Scatter -> Line -> Circle -> Arc Morph Sequence
+   3D Card Flips, Mouse Parallax, Native Natural Scroll Tracking
+   Black, Red (#EF4444), and White Aesthetic
+   ========================================================================== */
+
+.about-scroll-morph {
+  position: relative;
+  width: 100%;
+  min-height: 340vh;
+  background: #0A0A0C;
+  color: #FFFFFF;
+  user-select: none;
+}
+
+/* Sticky Canvas Viewport (100vh pinned) */
+.about-scroll-morph__sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.08) 0%, rgba(10, 10, 12, 0.95) 70%, #0A0A0C 100%);
+  perspective: 1200px;
+}
+
+/* Cybernetic grid overlay */
+.about-scroll-morph__grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center center;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Ambient glows */
+.about-scroll-morph__ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(350px, 60vw, 850px);
+  height: clamp(350px, 60vw, 850px);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.16) 0%, rgba(239, 68, 68, 0.04) 45%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(40px);
+  transition: opacity 0.8s ease;
+}
+
+/* 3D Parallax Stage */
+.about-scroll-morph__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   CENTER CONTENT SECTIONS:
+   1. "WHAT HWI DOES" (Scatter / Line / Circle phase)
+   2. "NEXT COHORT OPEN" (Arc phase)
+   ========================================================================== */
+.about-scroll-morph__content-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 900px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-scroll-morph__content-layer > * {
+  pointer-events: auto;
+}
+
+/* What HWI Does Center Block */
+.about-scroll-morph__what-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 720px;
+}
+
+.about-scroll-morph__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #EF4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 6px 14px;
+  border-radius: 9999px;
+}
+
+.about-scroll-morph__title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 4.5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.about-scroll-morph__desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(14px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: #CBD5E1;
+  max-width: 580px;
+  margin: 0;
+}
+
+/* Interactive Initiative Filter / Preview Pills */
+.about-scroll-morph__pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.about-scroll-morph__pill {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.about-scroll-morph__pill:hover,
+.about-scroll-morph__pill.is-active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+/* Scroll indicator hint */
+.about-scroll-morph__hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 14px;
+  animation: scrollPulse 2s infinite ease-in-out;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(4px); }
+}
+
+/* Next Cohort Center Block (Revealed in Arc phase) */
+.about-scroll-morph__cohort-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 820px;
+}
+
+.about-scroll-morph__cohort-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2rem, 4.4vw, 3.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.about-scroll-morph__cohort-title span {
+  color: #EF4444;
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+.about-scroll-morph__cohort-subtext {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(14px, 1.25vw, 17px);
+  line-height: 1.6;
+  color: #CBD5E1;
+  max-width: 600px;
+  margin: 0;
+}
+
+.about-scroll-morph__cohort-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   CARDS CONTAINER & 3D CARDS
+   ========================================================================== */
+.about-scroll-morph__cards-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/* Individual Morph Card Wrapper */
+.about-scroll-morph__card-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  cursor: pointer;
+  will-change: transform;
+  transition: z-index 0.3s;
+}
+
+.about-scroll-morph__card-wrapper:hover {
+  z-index: 60 !important;
+}
+
+/* 3D Flip Card Container */
+.about-scroll-morph__card-inner {
+  position: relative;
+  width: clamp(96px, 11vw, 145px);
+  height: clamp(134px, 15vw, 200px);
+  border-radius: 16px;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  box-shadow: 
+    0 12px 32px -8px rgba(0, 0, 0, 0.8),
+    0 4px 14px -2px rgba(0, 0, 0, 0.6);
+}
+
+.about-scroll-morph__card-wrapper:hover .about-scroll-morph__card-inner {
+  transform: scale(1.16) translateZ(40px);
+  box-shadow: 
+    0 24px 48px -10px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(239, 68, 68, 0.5);
+}
+
+.about-scroll-morph__card-inner.is-flipped {
+  transform: rotateY(180deg) scale(1.14) translateZ(40px);
+}
+
+/* Front & Back Faces */
+.about-scroll-morph__card-front,
+.about-scroll-morph__card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Front Face (Photo) */
+.about-scroll-morph__card-front {
+  background: #110F18;
+  transition: border-color 0.4s ease;
+}
+
+.about-scroll-morph__card-wrapper:hover .about-scroll-morph__card-front {
+  border-color: #EF4444;
+}
+
+.about-scroll-morph__card-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.about-scroll-morph__card-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 14, 0.2) 0%, transparent 40%, rgba(10, 10, 14, 0.85) 100%);
+  z-index: 1;
+}
+
+.about-scroll-morph__card-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 2;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: rgba(10, 10, 14, 0.75);
+  backdrop-filter: blur(6px);
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Top Accent Line */
+.about-scroll-morph__card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #EF4444;
+  z-index: 3;
+}
+
+/* Back Face (Details on 3D Flip) */
+.about-scroll-morph__card-back {
+  background: rgba(16, 14, 24, 0.96);
+  backdrop-filter: blur(14px);
+  border: 1px solid #EF4444;
+  transform: rotateY(180deg);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.about-scroll-morph__back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.about-scroll-morph__back-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #EF4444;
+  box-shadow: 0 0 8px #EF4444;
+}
+
+.about-scroll-morph__back-category {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #EF4444;
+}
+
+.about-scroll-morph__back-title {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin: 6px 0 4px;
+  text-transform: uppercase;
+}
+
+.about-scroll-morph__back-desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 9px;
+  line-height: 1.45;
+  color: #CBD5E1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.about-scroll-morph__back-footer {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 6px;
+}
+
+.about-scroll-morph__back-footer span {
+  color: #EF4444;
+}
+
+/* ==========================================================================
+   PROGRESS INDICATOR HUD (Subtle bottom-right / bottom-left HUD)
+   ========================================================================== */
+.about-scroll-morph__hud {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 20;
+}
+
+.about-scroll-morph__progress-bar {
+  width: 80px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.about-scroll-morph__progress-fill {
+  height: 100%;
+  background: #EF4444;
+  box-shadow: 0 0 10px #EF4444;
+  transition: width 0.1s linear;
+}
+
+.about-scroll-morph__phase-label {
+  color: #EF4444;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   RESPONSIVENESS & BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .about-scroll-morph__card-inner {
+    width: clamp(84px, 12vw, 120px);
+    height: clamp(118px, 16vw, 165px);
+  }
+
+  .about-scroll-morph__content-layer {
+    width: 92%;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-scroll-morph {
+    min-height: 280vh;
+  }
+
+  .about-scroll-morph__card-inner {
+    width: clamp(72px, 19vw, 96px);
+    height: clamp(100px, 25vw, 130px);
+    border-radius: 12px;
+  }
+
+  .about-scroll-morph__card-tag {
+    font-size: 7px;
+    padding: 2px 4px;
+  }
+
+  .about-scroll-morph__title {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+  }
+
+  .about-scroll-morph__cohort-title {
+    font-size: clamp(1.7rem, 5.5vw, 2.4rem);
+  }
+
+  .about-scroll-morph__cohort-actions {
+    gap: 10px;
+  }
+
+  .about-scroll-morph__hud {
+    bottom: 14px;
+    right: 16px;
+    font-size: 9px;
+  }
+
+  .about-scroll-morph__progress-bar {
+    width: 50px;
+  }
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .about-scroll-morph__card-wrapper,
+  .about-scroll-morph__card-inner,
+  .about-scroll-morph__stage,
+  .about-scroll-morph__content-layer {
+    transition: none !important;
+    animation: none !important;
+  }
+}

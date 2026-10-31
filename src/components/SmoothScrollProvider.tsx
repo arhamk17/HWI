@@ -1,9 +1,21 @@
 'use client';
 
 import { ReactLenis, useLenis } from 'lenis/react';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 import { scrollBus } from '@/lib/scrollBus';
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
+function subscribeToReducedMotion(callback: () => void) {
+  const mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+  mediaQuery.addEventListener('change', callback);
+  return () => mediaQuery.removeEventListener('change', callback);
+}
+
+function getReducedMotionPreference() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
 
 function LenisDispatcher() {
   useLenis((lenis) => {
@@ -28,24 +40,19 @@ function LenisRouteHandler() {
 }
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+  const reducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotionPreference,
+    () => false
+  );
 
   return (
     <ReactLenis
       root
       options={{
-        duration: reducedMotion ? 0.1 : 1.1,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        lerp: reducedMotion ? 1 : 0.075,
         smoothWheel: !reducedMotion,
-        wheelMultiplier: 1.0,
+        wheelMultiplier: 0.9,
         touchMultiplier: 1.5,
       }}
     >

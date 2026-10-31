@@ -1,0 +1,27 @@
+/* ==========================================================================
+   HWI ABOUT PAGE: ISOMETRIC CUBE-GRID BACKGROUND
+   Subtle technical depth, dark cinematic atmosphere, zero event blocking
+   ========================================================================== */
+
+.about-cube-grid-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  pointer-events: none !important;
+  user-select: none;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #050508;
+}
+
+.about-cube-grid-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none !important;
+}

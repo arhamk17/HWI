@@ -90,7 +90,8 @@
 .wwo__bg-3d-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 50%;
   opacity: 0.22;
   filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 35px rgba(239, 68, 68, 0.18));
   user-select: none;

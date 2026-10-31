@@ -117,7 +117,13 @@ export function InteractiveTeamCard({
           data-team-face="true"
         >
           {member.image ? (
-            <img src={member.image} alt={member.name} className="team-face-img" />
+            <img
+              src={member.image}
+              alt={member.name}
+              className="team-face-img"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <span className="team-face-initials">{member.initials}</span>
           )}
@@ -172,7 +178,12 @@ export function TeamProfileModal({
           <div className="team-modal-top">
             <div className="team-modal-avatar">
               {member.image ? (
-                <img src={member.image} alt={member.name} />
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
                 <span>{member.initials}</span>
               )}
@@ -196,7 +207,7 @@ export function TeamProfileModal({
             </div>
           )}
 
-          {member.socials && (
+          {member.socials && (member.socials.github || member.socials.linkedin || member.socials.instagram) && (
             <div className="team-modal-socials">
               {member.socials.github && (
                 <a
@@ -216,6 +227,16 @@ export function TeamProfileModal({
                   className="team-modal-social-btn"
                 >
                   LinkedIn ↗
+                </a>
+              )}
+              {member.socials.instagram && (
+                <a
+                  href={member.socials.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="team-modal-social-btn"
+                >
+                  Instagram ↗
                 </a>
               )}
             </div>

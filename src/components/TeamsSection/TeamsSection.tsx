@@ -151,10 +151,11 @@ export function getLeadershipPalette(member: DepartmentMember, deptId?: string):
 }
 
 function MemberSocialLinks({ member }: { member: DepartmentMember }) {
-  if (!member.socials) return null;
+  const hasSocials = !!(member.socials?.github || member.socials?.linkedin || member.socials?.instagram);
+  if (!hasSocials) return null;
   return (
     <div className="teams-card-socials" onClick={(e) => e.stopPropagation()}>
-      {member.socials.github && (
+      {member.socials?.github && (
         <a
           href={member.socials.github}
           target="_blank"
@@ -165,7 +166,7 @@ function MemberSocialLinks({ member }: { member: DepartmentMember }) {
           <GithubIcon size={12} />
         </a>
       )}
-      {member.socials.linkedin && (
+      {member.socials?.linkedin && (
         <a
           href={member.socials.linkedin}
           target="_blank"
@@ -176,7 +177,7 @@ function MemberSocialLinks({ member }: { member: DepartmentMember }) {
           <LinkedinIcon size={12} />
         </a>
       )}
-      {member.socials.instagram && (
+      {member.socials?.instagram && (
         <a
           href={member.socials.instagram}
           target="_blank"
@@ -345,6 +346,8 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
                               src={leader.image}
                               alt={leader.name}
                               className="apex-card__img"
+                              loading="lazy"
+                              decoding="async"
                               onError={(e) => {
                                 (e.currentTarget as HTMLElement).style.display = 'none';
                               }}
@@ -424,6 +427,8 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
                                     src={member.image}
                                     alt={member.name}
                                     className="core-card__img"
+                                    loading="lazy"
+                                    decoding="async"
                                     onError={(e) => {
                                       (e.currentTarget as HTMLElement).style.display = 'none';
                                     }}

@@ -9,7 +9,7 @@ export function CTAChapter() {
         <p className="type-body text-secondary" style={{ maxWidth: '450px' }}>
           Join HackWithIndia at BVUDET Navi Mumbai. Be part of the movement.
         </p>
-        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" className="btn btn--primary" style={{ marginTop: 'var(--space-32)' }}>
+        <a href="/join" className="btn btn--primary" style={{ marginTop: 'var(--space-32)' }}>
           JOIN THE CHAPTER
         </a>
       </div>

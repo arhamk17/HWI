@@ -613,7 +613,9 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
           >
             <span>
               {totalMembers > 0
-                ? `MEET THE TEAM (${totalMembers + 1})`
+                ? dept.id === 'core-leadership'
+                  ? 'MEET THE TEAM'
+                  : `MEET THE TEAM (${totalMembers + 1})`
                 : isLastDept
                 ? "THAT'S EVERYONE"
                 : 'NEXT TEAM'}
@@ -734,9 +736,11 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
             <div className="head-intro-layout__content">
               <div className="head-intro-layout__badge-row">
                 <span className="head-intro-layout__role-badge">{head.role}</span>
-                <span className="head-intro-layout__count-badge">
-                  {dept.members.length} {dept.members.length === 1 ? 'MEMBER' : 'MEMBERS IN TEAM'}
-                </span>
+                {dept.id !== 'core-leadership' && (
+                  <span className="head-intro-layout__count-badge">
+                    {dept.members.length} {dept.members.length === 1 ? 'MEMBER' : 'MEMBERS IN TEAM'}
+                  </span>
+                )}
               </div>
 
               <h2 className="head-intro-layout__name">{head.name}</h2>
@@ -768,7 +772,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 </div>
               )}
 
-              {(head.socials || head.email) && (
+              {(head.socials?.github || head.socials?.linkedin || head.socials?.instagram || head.email) && (
                 <div className="head-intro-layout__socials">
                   {head.socials?.github && (
                     <a
@@ -845,7 +849,9 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         <>
                           <span className="roll-control-or">OR CLICK</span>{' '}
                           <strong className="roll-control-highlight">
-                            MEET THE TEAM ({totalMembers + 1})
+                            {dept.id === 'core-leadership'
+                              ? 'MEET THE TEAM'
+                              : `MEET THE TEAM (${totalMembers + 1})`}
                           </strong>
                           <ArrowUpRight size={13} className="roll-control-arrow" />
                         </>
@@ -923,7 +929,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         <p className="showcase-active-card__bio">{activeMember.bio}</p>
                       )}
 
-                      {(activeMember.socials || activeMember.email) && (
+                      {(activeMember.socials?.github || activeMember.socials?.linkedin || activeMember.socials?.instagram || activeMember.email) && (
                         <div className="showcase-active-card__socials">
                           {activeMember.socials?.github && (
                             <a
@@ -999,6 +1005,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                                 src={m.image}
                                 alt={m.name}
                                 className="showcase-rail-item__img"
+                                loading="lazy"
+                                decoding="async"
                                 onError={(e) => {
                                   (e.currentTarget as HTMLElement).style.display = 'none';
                                 }}
@@ -1025,7 +1033,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                       <span className="showcase-grid-view__head-role">{head.role}</span>
                       <h3 className="showcase-grid-view__head-name">{head.name}</h3>
                       {head.bio && <p className="showcase-grid-view__head-bio">{head.bio}</p>}
-                      {(head.socials || head.email) && (
+                      {(head.socials?.github || head.socials?.linkedin || head.socials?.instagram || head.email) && (
                         <div className="showcase-grid-view__head-socials" onClick={(e) => e.stopPropagation()}>
                           {head.socials?.github && (
                             <a
@@ -1097,6 +1105,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                               src={m.image}
                               alt={m.name}
                               className="showcase-grid-card__img"
+                              loading="lazy"
+                              decoding="async"
                               onError={(e) => {
                                 (e.currentTarget as HTMLElement).style.display = 'none';
                               }}
@@ -1111,7 +1121,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                               {m.academicYear} • {m.branch}
                             </span>
                           )}
-                          {(m.socials || m.email) && (
+                          {(m.socials?.github || m.socials?.linkedin || m.socials?.instagram || m.email) && (
                             <div className="showcase-grid-card__socials" onClick={(e) => e.stopPropagation()}>
                               {m.socials?.github && (
                                 <a

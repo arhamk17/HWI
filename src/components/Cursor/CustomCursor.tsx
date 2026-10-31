@@ -130,11 +130,16 @@ export function CustomCursor() {
     // 60FPS fluid physics loop with subtle lag/inertia
     const loop = () => {
       const pos = posRef.current;
-      pos.x += (pos.targetX - pos.x) * 0.22;
-      pos.y += (pos.targetY - pos.y) * 0.22;
+      const dx = pos.targetX - pos.x;
+      const dy = pos.targetY - pos.y;
 
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${pos.x.toFixed(1)}px, ${pos.y.toFixed(1)}px, 0)`;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        pos.x += dx * 0.22;
+        pos.y += dy * 0.22;
+
+        if (cursorRef.current) {
+          cursorRef.current.style.transform = `translate3d(${pos.x.toFixed(1)}px, ${pos.y.toFixed(1)}px, 0)`;
+        }
       }
 
       rafRef.current = requestAnimationFrame(loop);

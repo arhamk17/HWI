@@ -30,6 +30,8 @@ const QUALITY_CONFIG = {
   low: { particleCount: 700, glow: false },
 };
 
+const TARGET_FRAME_INTERVAL = 1000 / 30;
+
 function detectQuality(): keyof typeof QUALITY_CONFIG {
   if (typeof window === 'undefined') return 'medium';
   const w = window.innerWidth;
@@ -55,13 +57,6 @@ export function GlobalBackground() {
   useEffect(() => {
     pathnameRef.current = pathname;
   }, [pathname]);
-
-  // Ensure instant seamless autoplay of Sukuna background video on mount
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
-    }
-  }, []);
 
   useEffect(() => {
     if (!canvasRef.current || !containerRef.current) return;
@@ -226,6 +221,7 @@ export function GlobalBackground() {
     // Simulation states
     let time = 0;
     let rafId = 0;
+    let lastFrameTime = 0;
     let smoothScrollY = 0;
     let currentOfferBright = 0;
 
@@ -293,13 +289,19 @@ export function GlobalBackground() {
     // 4. UNIFIED CONTINUOUS ANIMATION LOOP
     // Single animation pipeline driven by scrollBus & Lenis
     // ========================================================
-    const render = () => {
+    const render = (timestamp: number) => {
       if (!ctx) return;
-      time += 0.016;
+      if (timestamp - lastFrameTime < TARGET_FRAME_INTERVAL) {
+        rafId = requestAnimationFrame(render);
+        return;
+      }
+      const elapsed = lastFrameTime === 0 ? TARGET_FRAME_INTERVAL : timestamp - lastFrameTime;
+      lastFrameTime = timestamp;
+      time += elapsed / 1000;
 
       const currentPath = pathnameRef.current;
       const targetScrollY = scrollBus.scrollY || window.scrollY || 0;
-      smoothScrollY += (targetScrollY - smoothScrollY) * 0.1;
+      smoothScrollY += (targetScrollY - smoothScrollY) * (1 - Math.pow(0.9, elapsed / (1000 / 60)));
       const scrollY = smoothScrollY;
       const vh = height;
       const centerX = width / 2;
@@ -1009,12 +1011,27 @@ export function GlobalBackground() {
       rafId = requestAnimationFrame(render);
     };
 
-    rafId = requestAnimationFrame(render);
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = 0;
+        videoRef.current?.pause();
+      } else if (!rafId) {
+        lastFrameTime = 0;
+        rafId = requestAnimationFrame(render);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    if (!document.hidden) {
+      rafId = requestAnimationFrame(render);
+    }
 
     return () => {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearTimeout(resizeTimer);
       if (rafId) cancelAnimationFrame(rafId);
       unsubscribeTeam();
@@ -1034,11 +1051,10 @@ export function GlobalBackground() {
         <video
           ref={videoRef}
           src="/videos/sukuna-hero.mp4"
-          autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           className="gbg__video"
         />
         <div className="gbg__video-overlay" />

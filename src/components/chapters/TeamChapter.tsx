@@ -88,7 +88,11 @@ export function TeamChapter() {
     const unsubscribe = scrollBus.subscribe(() => {
       if (!containerRef.current || !stickyRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
+      const winH = window.innerHeight;
+      // Skip updates when section is offscreen
+      if (rect.bottom < -100 || rect.top > winH + 100) return;
+
+      const totalScrollable = containerRef.current.offsetHeight - winH;
       if (totalScrollable <= 0) return;
 
       const rawP = -rect.top / totalScrollable;
@@ -198,7 +202,13 @@ export function TeamChapter() {
                   {/* Image Hero Section of Card */}
                   <div className="team-card__image-wrap team-member-face">
                     {card.image ? (
-                      <img src={card.image} alt={card.title} className="team-card__image" />
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        className="team-card__image"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <Placeholder className="team-card__image" />
                     )}

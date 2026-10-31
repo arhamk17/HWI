@@ -1,4 +1,9 @@
 :root {
+  /* HWI FONT SYSTEM FALLBACKS */
+  --font-primary: var(--font-satoshi), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-display: var(--font-satoshi), sans-serif;
+
   /* HWI COLOR SYSTEM */
   
   /* SURFACES */
