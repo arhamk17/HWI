@@ -1,0 +1,379 @@
+/* ========================================================
+   HWI TENURE 2025–26 EXPERIENCE - MINIMALIST STYLING
+   Photo-First · Cybernetic HUD · Obsidian Aesthetic
+   ======================================================== */
+
+.tenure-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--surface-primary, #070709);
+  color: var(--text-primary, #FFFFFF);
+  overflow-x: hidden;
+  padding-bottom: clamp(48px, 8vh, 80px);
+}
+
+/* Ambient Radial Glows */
+.tenure-ambient-glow {
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, rgba(127, 29, 29, 0.04) 50%, transparent 75%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tenure-ambient-glow-secondary {
+  position: fixed;
+  bottom: 10%;
+  right: 5%;
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Container */
+.tenure-container {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+  box-sizing: border-box;
+}
+
+/* Navigation Bar */
+.tenure-nav-bar {
+  padding-top: clamp(80px, 10vh, 104px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: clamp(20px, 3vh, 32px);
+}
+
+.tenure-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary, #CBD5E1);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(18, 16, 22, 0.6);
+  backdrop-filter: blur(14px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tenure-back-btn:hover {
+  color: #FFFFFF;
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.15);
+  transform: translateX(-3px);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.tenure-code-badge {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--accent, #EF4444);
+  letter-spacing: 0.16em;
+  font-weight: 600;
+}
+
+/* Minimal Hero Section */
+.tenure-hero--minimal {
+  padding-bottom: clamp(16px, 2vh, 24px);
+  margin-bottom: clamp(24px, 3.5vh, 36px);
+  text-align: center;
+}
+
+.tenure-hero__title {
+  font-family: var(--font-display, var(--font-geist-sans)), sans-serif;
+  font-size: clamp(32px, 5.5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #FFFFFF;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.tenure-hero__title span {
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 60%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================================================
+   THE MAIN SHOWCASE: BIG TEAM PHOTO FRAME
+   ======================================================== */
+.tenure-showcase-section--minimal {
+  margin-bottom: clamp(40px, 6vh, 60px);
+}
+
+.tenure-photo-frame-wrap {
+  background: rgba(14, 12, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(239, 68, 68, 0.08);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tenure-photo-frame-wrap:hover {
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 50px rgba(239, 68, 68, 0.15);
+}
+
+.tenure-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1422 / 1016;
+  max-height: 760px;
+  background: #09090C;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tenure-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tenure-photo-frame:hover .tenure-main-img {
+  transform: scale(1.02);
+}
+
+/* Corner HUD Brackets */
+.tenure-hud-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.tenure-hud-corner--tl {
+  top: 14px;
+  left: 14px;
+  border-top: 2px solid var(--accent, #EF4444);
+  border-left: 2px solid var(--accent, #EF4444);
+}
+
+.tenure-hud-corner--tr {
+  top: 14px;
+  right: 14px;
+  border-top: 2px solid var(--accent, #EF4444);
+  border-right: 2px solid var(--accent, #EF4444);
+}
+
+.tenure-hud-corner--bl {
+  bottom: 14px;
+  left: 14px;
+  border-bottom: 2px solid var(--accent, #EF4444);
+  border-left: 2px solid var(--accent, #EF4444);
+}
+
+.tenure-hud-corner--br {
+  bottom: 14px;
+  right: 14px;
+  border-bottom: 2px solid var(--accent, #EF4444);
+  border-right: 2px solid var(--accent, #EF4444);
+}
+
+/* Hover hint overlay */
+.tenure-frame-hover-hint {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  background: rgba(10, 10, 14, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill, 999px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.tenure-photo-frame:hover .tenure-frame-hover-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Minimal Caption Bar Below Image - Strictly Just "HWI TENURE 2025–26" */
+.tenure-minimal-caption-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: clamp(16px, 2.5vw, 24px);
+  background: rgba(10, 9, 14, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tenure-live-beacon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, #EF4444);
+  box-shadow: 0 0 12px var(--accent, #EF4444);
+  animation: tenureBeaconPulse 2s infinite ease-in-out;
+}
+
+@keyframes tenureBeaconPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.tenure-minimal-title {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(15px, 2vw, 19px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #FFFFFF;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Bottom CTA */
+.tenure-bottom-action {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+/* ========================================================
+   FULLSCREEN LIGHTBOX MODAL
+   ======================================================== */
+.tenure-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 8, 0.95);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 36px);
+  animation: tenureFadeIn 0.2s ease-out;
+}
+
+@keyframes tenureFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tenure-lightbox-content {
+  position: relative;
+  max-width: 1400px;
+  width: 100%;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  background: #0B0A0E;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 60px rgba(239, 68, 68, 0.2);
+}
+
+.tenure-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(18, 16, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.tenure-lightbox-close:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.8);
+  transform: scale(1.08);
+}
+
+.tenure-lightbox-img-wrap {
+  position: relative;
+  width: 100%;
+  overflow: auto;
+  max-height: calc(94vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+}
+
+.tenure-lightbox-img {
+  max-width: 100%;
+  max-height: calc(94vh - 72px);
+  object-fit: contain;
+  display: block;
+}
+
+.tenure-lightbox-caption-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #0A090D;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tenure-lightbox-title {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #FFFFFF;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.tenure-lightbox-badge {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 999px);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #FCA5A5;
+}

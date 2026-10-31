@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import { scrollBus } from '@/lib/scrollBus';
 import { teamStore } from '@/lib/teamStore';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
@@ -26,6 +28,7 @@ export interface LeadershipCardData {
   description: string;
   badge: string;
   tag: string;
+  href: string;
   image?: string; // Optional real image path
   PlaceholderComponent: React.ComponentType<{ className?: string }>;
 }
@@ -39,7 +42,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     description: 'Leadership & Core Team',
     badge: 'ANNUAL TENURE',
     tag: 'FOUNDING CHAPTER',
-    image: '', // Insert image path here when available
+    href: '/tenure-2025',
+    image: '/images/events/learn_it_tour_image12.jpeg',
     PlaceholderComponent: Tenure2025Placeholder,
   },
   {
@@ -50,6 +54,7 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     description: 'Incoming Chapter Vision',
     badge: 'NEXT GENERATION',
     tag: 'FORWARD VISION',
+    href: '/team',
     image: '', // Insert image path here when available
     PlaceholderComponent: Tenure2026Placeholder,
   },
@@ -60,7 +65,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     description: 'Faculty Coordination & Chapter Mentorship',
     badge: 'ACADEMIC ADVISOR',
     tag: 'CHAPTER MENTOR',
-    image: '', // Insert image path here when available
+    href: '/faculty-mentors#coordinator',
+    image: '/images/team/2026frt_Ahmer-Usmani.jpg',
     PlaceholderComponent: TeacherCoordinatorPlaceholder,
   },
   {
@@ -69,7 +75,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     title: 'FACULTY & MENTORS',
     description: 'Faculty & Mentorship • Advisory Council',
     badge: 'ADVISORY BOARD',
-    tag: 'INDUSTRY ADVISORS',
+    tag: 'CHAPTER MENTORS',
+    href: '/faculty-mentors#mentors',
     image: '', // Insert image path here when available
     PlaceholderComponent: FacultyMentorsPlaceholder,
   },
@@ -78,7 +85,7 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
 export function TeamChapter() {
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const counterRef = useRef<HTMLSpanElement>(null);
   const indicatorDotsRef = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -159,6 +166,7 @@ export function TeamChapter() {
         card.style.transform = `translate3d(${translateX.toFixed(2)}%, 0, 0) scale(${scale.toFixed(3)})`;
         card.style.opacity = opacity.toFixed(3);
         card.style.zIndex = zIndex.toString();
+        card.style.pointerEvents = Math.abs(diff) < 0.6 ? 'auto' : 'none';
       });
     });
 
@@ -190,14 +198,15 @@ export function TeamChapter() {
               const Placeholder = card.PlaceholderComponent;
 
               return (
-                <div
+                <Link
                   key={card.id}
+                  href={card.href}
                   className="team-card"
                   ref={(el) => {
                     cardsRef.current[idx] = el;
                   }}
                   data-cursor="team"
-                  data-cursor-label="VIEW"
+                  data-cursor-label="EXPLORE"
                 >
                   {/* Image Hero Section of Card */}
                   <div className="team-card__image-wrap team-member-face">
@@ -235,10 +244,12 @@ export function TeamChapter() {
 
                     <div className="team-card__bottom">
                       <span className="team-card__tag">{card.tag}</span>
-                      <span className="team-card__tag">HWI CHAPTER</span>
+                      <span className="team-card__action">
+                        EXPLORE <ArrowUpRight size={13} className="team-card__action-icon" />
+                      </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
