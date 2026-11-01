@@ -49,6 +49,14 @@ export function FooterChapter() {
               >
                 LINKEDIN
               </a>
+              <a
+                href="https://chat.whatsapp.com/KZ43GI9u32kLV6Gt24FQN4?mode=hq2tswa"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-label text-secondary hover-accent"
+              >
+                WHATSAPP
+              </a>
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
               {[

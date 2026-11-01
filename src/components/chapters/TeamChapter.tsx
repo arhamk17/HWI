@@ -56,7 +56,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     badge: 'NEXT GENERATION',
     tag: 'FORWARD VISION',
     href: '/team',
-    image: '', // Insert image path here when available
+    image: '/images/team/tenure-2026-27-group.jpg',
+    imagePosition: 'center 30%',
     PlaceholderComponent: Tenure2026Placeholder,
   },
   {
