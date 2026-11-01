@@ -6,7 +6,27 @@ import { ArrowRight, ArrowLeft, ArrowUpRight, LayoutGrid, Layers, Users, Sparkle
 import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
 import { getLeadershipPalette } from '@/components/TeamsSection/TeamsSection';
 import { CinematicTitle } from '@/components/ui/CinematicTitle';
+import { TextRoll } from '@/components/ui/TextRoll';
 import './TeamCinematic.css';
+
+/**
+ * Filter to verify whether a member qualifies for the motion-primitives name roll reveal.
+ * Strictly includes: President, Vice-President, and Department Heads.
+ * Strictly EXCLUDES: Co-Heads and Executive members.
+ */
+function isLeadershipOrHead(member?: DepartmentMember | null): boolean {
+  if (!member) return false;
+  const roleLower = (member.role || '').toLowerCase();
+  // Chapter Leadership: President and Vice-President
+  if (roleLower.includes('president')) {
+    return true;
+  }
+  // All Department Heads (strictly excluding co-heads or co-managers)
+  if (member.rank === 'head' && !roleLower.includes('co-head') && !roleLower.includes('co-manager')) {
+    return true;
+  }
+  return false;
+}
 
 type PhaseType = 'head-intro' | 'showcase' | 'complete';
 type ViewDisplayMode = 'carousel' | 'grid';
@@ -567,10 +587,10 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         style={
           isLeadership && palette
             ? ({
-                ['--lead-primary' as string]: palette.primary,
-                ['--lead-secondary' as string]: palette.secondary,
-                ['--lead-gradient' as string]: palette.gradient,
-              } as React.CSSProperties)
+              ['--lead-primary' as string]: palette.primary,
+              ['--lead-secondary' as string]: palette.secondary,
+              ['--lead-gradient' as string]: palette.gradient,
+            } as React.CSSProperties)
             : undefined
         }
       >
@@ -615,8 +635,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               totalMembers > 0
                 ? `Meet all ${totalMembers + 1} members of ${dept.name}`
                 : isLastDept
-                ? 'View complete roster'
-                : 'Meet next team'
+                  ? 'View complete roster'
+                  : 'Meet next team'
             }
           >
             <span>
@@ -625,8 +645,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                   ? 'MEET THE TEAM'
                   : `MEET THE TEAM (${totalMembers + 1})`
                 : isLastDept
-                ? "THAT'S EVERYONE"
-                : 'NEXT TEAM'}
+                  ? "THAT'S EVERYONE"
+                  : 'NEXT TEAM'}
             </span>
             <ArrowUpRight className="team-portrait-card__meet-icon" size={14} />
           </button>
@@ -662,7 +682,16 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 <div className="final-dept-card__members">
                   {d.members.map((m) => (
                     <div key={m.id} className="final-member-row">
-                      <span className="final-member-row__name">{m.name}</span>
+                      {isLeadershipOrHead(m) ? (
+                        <TextRoll
+                          key={`final-member-${m.id}`}
+                          text={m.name}
+                          as="span"
+                          className="final-member-row__name"
+                        />
+                      ) : (
+                        <span className="final-member-row__name">{m.name}</span>
+                      )}
                       <span className="final-member-row__role">
                         {m.role}
                         {m.academicYear ? ` (${m.academicYear} ${m.branch})` : ''}
@@ -761,7 +790,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                 )}
               </div>
 
-              <h2 className="head-intro-layout__name">{head.name}</h2>
+              <TextRoll
+                key={`head-intro-${head.id}`}
+                text={head.name}
+                as="h2"
+                className="head-intro-layout__name"
+              />
               {head.bio && <p className="head-intro-layout__bio">{head.bio}</p>}
 
               {/* Preview of team members in this department */}
@@ -911,7 +945,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                   </div>
                   {renderPortraitCard(head, 'compact', false)}
                   <div className="showcase-layout__anchor-info">
-                    <span className="showcase-layout__anchor-name">{head.name}</span>
+                    <TextRoll
+                      key={`showcase-anchor-${head.id}`}
+                      text={head.name}
+                      as="span"
+                      className="showcase-layout__anchor-name"
+                    />
                     <span className="showcase-layout__anchor-role">{head.role}</span>
                   </div>
                 </aside>
@@ -940,7 +979,16 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         )}
                       </div>
 
-                      <h2 className="showcase-active-card__name">{activeMember.name}</h2>
+                      {isLeadershipOrHead(activeMember) ? (
+                        <TextRoll
+                          key={`showcase-active-${activeMember.id}`}
+                          text={activeMember.name}
+                          as="h2"
+                          className="showcase-active-card__name"
+                        />
+                      ) : (
+                        <h2 className="showcase-active-card__name">{activeMember.name}</h2>
+                      )}
                       <span className="showcase-active-card__dept-name">{dept.name}</span>
 
                       {activeMember.bio && (
@@ -1010,9 +1058,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         return (
                           <button
                             key={m.id}
-                            className={`showcase-rail-item ${
-                              isItemActive ? 'showcase-rail-item--active' : ''
-                            }`}
+                            className={`showcase-rail-item ${isItemActive ? 'showcase-rail-item--active' : ''
+                              }`}
                             onClick={() => goToMember(itemIdx)}
                             title={`${m.name} — ${m.role} ${m.academicYear ? `(${m.academicYear} ${m.branch})` : ''}`}
                             aria-label={`View ${m.name}`}
@@ -1049,7 +1096,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                     {renderPortraitCard(head, 'compact', false)}
                     <div className="showcase-grid-view__head-info">
                       <span className="showcase-grid-view__head-role">{head.role}</span>
-                      <h3 className="showcase-grid-view__head-name">{head.name}</h3>
+                      <TextRoll
+                        key={`grid-head-${head.id}`}
+                        text={head.name}
+                        as="h3"
+                        className="showcase-grid-view__head-name"
+                      />
                       {head.bio && <p className="showcase-grid-view__head-bio">{head.bio}</p>}
                       {(head.socials?.github || head.socials?.linkedin || head.socials?.instagram || head.email) && (
                         <div className="showcase-grid-view__head-socials" onClick={(e) => e.stopPropagation()}>
@@ -1133,7 +1185,16 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
                         </div>
                         <div className="showcase-grid-card__details">
                           <span className="showcase-grid-card__role">{m.role}</span>
-                          <h4 className="showcase-grid-card__name">{m.name}</h4>
+                          {isLeadershipOrHead(m) ? (
+                            <TextRoll
+                              key={`grid-member-${m.id}`}
+                              text={m.name}
+                              as="h4"
+                              className="showcase-grid-card__name"
+                            />
+                          ) : (
+                            <h4 className="showcase-grid-card__name">{m.name}</h4>
+                          )}
                           {m.academicYear && (
                             <span className="showcase-grid-card__academic">
                               {m.academicYear} • {m.branch}

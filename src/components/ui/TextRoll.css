@@ -1,0 +1,107 @@
+/* ==========================================================================
+   TEXT ROLL COMPONENT
+   Motion-primitives character roll animation.
+   Each character rolls up vertically in a staggered ripple transition.
+   ========================================================================== */
+
+.text-roll {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  position: relative;
+  line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: default;
+  margin: 0;
+  padding: 0;
+}
+
+.text-roll__word {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: inherit;
+}
+
+.text-roll__ghost {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+  line-height: inherit;
+}
+
+.text-roll__layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  line-height: inherit;
+}
+
+.text-roll__char {
+  display: inline-block;
+  white-space: pre;
+  line-height: inherit;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.text-roll__char--outgoing {
+  animation-name: textRollOut;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+}
+
+.text-roll__char--incoming {
+  animation-name: textRollIn;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes textRollOut {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0.2;
+  }
+}
+
+@keyframes textRollIn {
+  0% {
+    transform: translateY(100%);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+.text-roll__spacer {
+  display: inline-block;
+  user-select: none;
+  white-space: pre;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-roll__char--outgoing {
+    display: none !important;
+  }
+  .text-roll__char--incoming {
+    animation: none !important;
+    transform: translateY(0%) !important;
+    opacity: 1 !important;
+  }
+}
