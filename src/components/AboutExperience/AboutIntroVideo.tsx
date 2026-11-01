@@ -40,14 +40,39 @@ export function AboutIntroVideo() {
   const [isTheaterOpen, setIsTheaterOpen] = useState<boolean>(false);
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(false);
+  const [isNearViewport, setIsNearViewport] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // 1. Proximity observer: lazy-load video metadata only when within ~450px of viewport
+  useEffect(() => {
+    const el = sectionRef.current || stageRef.current;
+    if (!el) return;
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsNearViewport(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '450px 0px 450px 0px',
+      }
+    );
 
-  // 1. Smooth Scroll-Triggered Entrance & Scale-Up Reveal
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // 2. Smooth Scroll-Triggered Entrance & Scale-Up Reveal
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -71,6 +96,63 @@ export function AboutIntroVideo() {
 
     return () => {
       observer.disconnect();
+    };
+  }, []);
+
+  // 3. Auto-pause video when scrolled completely out of viewport to save CPU/GPU cycles
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            const video = videoRef.current;
+            if (video && !video.paused) {
+              video.pause();
+              setIsPlaying(false);
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+              }
+            }
+          }
+        });
+      },
+      {
+        threshold: 0,
+      }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // 4. Auto-pause when tab/window is hidden to preserve battery and memory
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        const video = videoRef.current;
+        if (video && !video.paused) {
+          video.pause();
+          setIsPlaying(false);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+          }
+        }
+        const theaterVideo = theaterVideoRef.current;
+        if (theaterVideo && !theaterVideo.paused) {
+          theaterVideo.pause();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
@@ -106,8 +188,14 @@ export function AboutIntroVideo() {
   const togglePlay = useCallback(
     (e?: React.MouseEvent) => {
       if (e) e.stopPropagation();
+      setIsNearViewport(true);
       const video = videoRef.current;
       if (!video) return;
+
+      if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
+        video.src = INTRO_VIDEO.src;
+        video.load();
+      }
 
       if (video.paused) {
         setHasPlayed(true);
@@ -144,20 +232,33 @@ export function AboutIntroVideo() {
   // Restart Video
   const restartVideo = useCallback((e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    setIsNearViewport(true);
     const video = videoRef.current;
     if (!video) return;
+    if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
+      video.src = INTRO_VIDEO.src;
+      video.load();
+    }
     setHasPlayed(true);
     video.currentTime = 0;
     video.play().catch(() => {});
     setIsPlaying(true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hwi:pause-bg-music'));
+    }
   }, []);
 
   // Timeline scrubber click
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+    setIsNearViewport(true);
     const timeline = timelineRef.current;
     const video = videoRef.current;
     if (!timeline || !video) return;
+    if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
+      video.src = INTRO_VIDEO.src;
+      video.load();
+    }
 
     setHasPlayed(true);
     const rect = timeline.getBoundingClientRect();
@@ -312,12 +413,12 @@ export function AboutIntroVideo() {
             {/* The HTML5 Video Element */}
             <video
               ref={videoRef}
-              src={INTRO_VIDEO.src}
+              src={isNearViewport || isPlaying ? INTRO_VIDEO.src : undefined}
               poster={INTRO_VIDEO.poster}
               className="about-video-element"
               playsInline
               loop
-              preload="auto"
+              preload={isPlaying ? 'auto' : isNearViewport ? 'metadata' : 'none'}
               muted={isMuted}
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleLoadedMetadata}
@@ -476,7 +577,7 @@ export function AboutIntroVideo() {
               controls
               autoPlay
               playsInline
-              preload="auto"
+              preload="metadata"
               data-presentation="true"
               onEnded={() => {
                 if (typeof window !== 'undefined') {
