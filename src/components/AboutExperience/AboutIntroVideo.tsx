@@ -57,7 +57,7 @@ export function AboutIntroVideo() {
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
   const [currentTimeStr, setCurrentTimeStr] = useState<string>('0:00');
-  const [durationStr, setDurationStr] = useState<string>('0:04');
+  const [durationStr, setDurationStr] = useState<string>('01:02');
   const [isTheaterOpen, setIsTheaterOpen] = useState<boolean>(false);
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -101,6 +101,15 @@ export function AboutIntroVideo() {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  // Video metadata loaded listener (ensures accurate duration & buffering)
+  const handleLoadedMetadata = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.duration && !isNaN(video.duration) && video.duration > 0) {
+      setDurationStr(formatTime(video.duration));
+    }
   };
 
   // Video time update listener
@@ -352,9 +361,10 @@ export function AboutIntroVideo() {
               className="about-video-element"
               playsInline
               loop
-              preload="none"
+              preload="auto"
               muted={isMuted}
               onTimeUpdate={handleTimeUpdate}
+              onLoadedMetadata={handleLoadedMetadata}
               onEnded={() => {
                 setIsPlaying(false);
                 if (typeof window !== 'undefined') {
@@ -498,7 +508,7 @@ export function AboutIntroVideo() {
               controls
               autoPlay
               playsInline
-              preload="none"
+              preload="auto"
               data-presentation="true"
               onEnded={() => {
                 if (typeof window !== 'undefined') {

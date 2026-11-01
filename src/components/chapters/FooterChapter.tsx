@@ -1,8 +1,10 @@
+'use client';
+
 import Link from 'next/link';
+import { ScrollFurtherTrigger } from '@/components/ScrollFurther/ScrollFurtherTrigger';
 
 export function FooterChapter() {
   const currentYear = new Date().getFullYear();
-
 
   return (
     <footer id="footer" style={{
@@ -10,7 +12,7 @@ export function FooterChapter() {
       zIndex: 2,
       width: '100%',
       borderTop: '1px solid var(--border-default)',
-      padding: 'var(--space-64) 0 var(--space-32)',
+      padding: 'var(--space-64) 0 0',
     }}>
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-48)' }}>
@@ -61,16 +63,20 @@ export function FooterChapter() {
                 </Link>
               ))}
             </div>
-
           </div>
         </div>
 
         <div style={{ width: '100%', height: '1px', background: 'var(--border-default)', margin: 'var(--space-48) 0 var(--space-24)' }} />
 
-        <p className="type-body-small text-tertiary">
-          © {currentYear} Hack With India. All rights reserved.
-        </p>
+        <div style={{ paddingBottom: 'var(--space-32)' }}>
+          <p className="type-body-small text-tertiary">
+            © {currentYear} Hack With India. All rights reserved.
+          </p>
+        </div>
       </div>
+
+      {/* ── Scroll Further to Next Chapter Gesture Portal ── */}
+      <ScrollFurtherTrigger />
     </footer>
   );
 }

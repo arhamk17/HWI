@@ -1,4 +1,4 @@
-import { Footer } from '@/components/Footer/Footer';
+import { FooterChapter } from '@/components/chapters/FooterChapter';
 
 export default function GalleryPage() {
   return (
@@ -50,7 +50,7 @@ export default function GalleryPage() {
         </div>
       </div>
       
-      <Footer />
+      <FooterChapter />
     </main>
   );
 }
