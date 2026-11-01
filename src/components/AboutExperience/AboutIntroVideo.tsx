@@ -54,6 +54,7 @@ export function AboutIntroVideo() {
   const [mounted, setMounted] = useState<boolean>(false);
   const [activeVideoId, setActiveVideoId] = useState<'intro' | 'anthem'>('intro');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [hasPlayed, setHasPlayed] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
   const [currentTimeStr, setCurrentTimeStr] = useState<string>('0:00');
@@ -131,6 +132,7 @@ export function AboutIntroVideo() {
       if (!video) return;
 
       if (video.paused) {
+        setHasPlayed(true);
         // First user interaction: unmute for auditory experience
         if (isMuted) {
           video.muted = false;
@@ -166,6 +168,7 @@ export function AboutIntroVideo() {
     if (e) e.stopPropagation();
     const video = videoRef.current;
     if (!video) return;
+    setHasPlayed(true);
     video.currentTime = 0;
     video.play().catch(() => {});
     setIsPlaying(true);
@@ -178,6 +181,7 @@ export function AboutIntroVideo() {
     const video = videoRef.current;
     if (!timeline || !video) return;
 
+    setHasPlayed(true);
     const rect = timeline.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const pct = Math.max(0, Math.min(1, clickX / rect.width));
@@ -189,6 +193,7 @@ export function AboutIntroVideo() {
     if (activeVideoId === optionId) return;
     setActiveVideoId(optionId);
     setIsPlaying(false);
+    setHasPlayed(false);
     setProgress(0);
     const video = videoRef.current;
     if (video) {
@@ -367,11 +372,23 @@ export function AboutIntroVideo() {
               onLoadedMetadata={handleLoadedMetadata}
               onEnded={() => {
                 setIsPlaying(false);
+                setHasPlayed(false);
                 if (typeof window !== 'undefined') {
                   window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
                 }
               }}
             />
+
+            {/* High-Resolution Introducing Poster Overlay */}
+            {activeOption.poster && (
+              <img
+                src={activeOption.poster}
+                alt={`${activeOption.title} Poster Thumbnail`}
+                className={`about-video-poster-overlay ${hasPlayed ? 'is-hidden' : ''}`}
+                loading="eager"
+                decoding="async"
+              />
+            )}
 
             {/* Light Reflection Sheen on Hover */}
             <div className="about-video-sheen" aria-hidden="true" />
