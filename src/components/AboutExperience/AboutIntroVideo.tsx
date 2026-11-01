@@ -10,39 +10,18 @@ import {
   Maximize2,
   X,
   Sparkles,
-  Film,
   RotateCcw,
 } from 'lucide-react';
 import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
 import { ScrambleMotionHeading } from './ScrambleMotionHeading';
 import './AboutIntroVideo.css';
 
-interface VideoOption {
-  id: 'intro' | 'anthem';
-  title: string;
-  badge: string;
-  src: string;
-  durationLabel: string;
-  poster?: string;
-}
-
-const VIDEO_OPTIONS: VideoOption[] = [
-  {
-    id: 'intro',
-    title: 'HWI OFFICIAL INTRODUCTION',
-    badge: 'CINEMATIC EXPERIENCE',
-    src: '/videos/hwi-intro.mp4',
-    durationLabel: '01:02 • 1080P FULL HD',
-    poster: '/images/hwi-introducing-thumbnail.jpeg',
-  },
-  {
-    id: 'anthem',
-    title: 'SUKUNA CINEMATIC ANTHEM',
-    badge: 'ORIGIN TEASER',
-    src: '/videos/sukuna-hero.mp4',
-    durationLabel: '13:20 • 4K ULTRA-HD',
-  },
-];
+const INTRO_VIDEO = {
+  title: 'HWI OFFICIAL INTRODUCTION',
+  src: '/videos/hwi-intro.mp4',
+  durationLabel: '01:02 • 1080P FULL HD',
+  poster: '/images/hwi-introducing-thumbnail.jpeg',
+};
 
 export function AboutIntroVideo() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -52,7 +31,6 @@ export function AboutIntroVideo() {
   const timelineRef = useRef<HTMLDivElement>(null);
 
   const [mounted, setMounted] = useState<boolean>(false);
-  const [activeVideoId, setActiveVideoId] = useState<'intro' | 'anthem'>('intro');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [hasPlayed, setHasPlayed] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -67,7 +45,7 @@ export function AboutIntroVideo() {
     setMounted(true);
   }, []);
 
-  const activeOption = VIDEO_OPTIONS.find((v) => v.id === activeVideoId) || VIDEO_OPTIONS[0];
+
 
   // 1. Smooth Scroll-Triggered Entrance & Scale-Up Reveal
   useEffect(() => {
@@ -188,19 +166,7 @@ export function AboutIntroVideo() {
     video.currentTime = pct * (video.duration || 0);
   };
 
-  // Switch video source
-  const handleSelectVideo = (optionId: 'intro' | 'anthem') => {
-    if (activeVideoId === optionId) return;
-    setActiveVideoId(optionId);
-    setIsPlaying(false);
-    setHasPlayed(false);
-    setProgress(0);
-    const video = videoRef.current;
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-  };
+
 
   const theaterModalRef = useRef<HTMLDivElement>(null);
 
@@ -326,21 +292,6 @@ export function AboutIntroVideo() {
             student developer community at Bharati Vidyapeeth, Navi Mumbai.
           </p>
 
-          {/* Video Selector Tabs */}
-          <div className="about-video-tabs" role="tablist" aria-label="Select Video Reel">
-            {VIDEO_OPTIONS.map((opt) => (
-              <button
-                key={opt.id}
-                role="tab"
-                aria-selected={activeVideoId === opt.id}
-                className={`about-video-tab-btn ${activeVideoId === opt.id ? 'is-active' : ''}`}
-                onClick={() => handleSelectVideo(opt.id)}
-              >
-                <Film size={13} />
-                <span>{opt.badge}</span>
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* ==========================================================
@@ -356,13 +307,13 @@ export function AboutIntroVideo() {
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => setShowControls(false)}
             role="region"
-            aria-label={`${activeOption.title} Video Player`}
+            aria-label={`${INTRO_VIDEO.title} Video Player`}
           >
             {/* The HTML5 Video Element */}
             <video
               ref={videoRef}
-              src={activeOption.src}
-              poster={activeOption.poster}
+              src={INTRO_VIDEO.src}
+              poster={INTRO_VIDEO.poster}
               className="about-video-element"
               playsInline
               loop
@@ -380,10 +331,10 @@ export function AboutIntroVideo() {
             />
 
             {/* High-Resolution Introducing Poster Overlay */}
-            {activeOption.poster && (
+            {INTRO_VIDEO.poster && (
               <img
-                src={activeOption.poster}
-                alt={`${activeOption.title} Poster Thumbnail`}
+                src={INTRO_VIDEO.poster}
+                alt={`${INTRO_VIDEO.title} Poster Thumbnail`}
                 className={`about-video-poster-overlay ${hasPlayed ? 'is-hidden' : ''}`}
                 loading="eager"
                 decoding="async"
@@ -519,8 +470,8 @@ export function AboutIntroVideo() {
           >
             <video
               ref={theaterVideoRef}
-              src={activeOption.src}
-              poster={activeOption.poster}
+              src={INTRO_VIDEO.src}
+              poster={INTRO_VIDEO.poster}
               className="about-theater-video"
               controls
               autoPlay
