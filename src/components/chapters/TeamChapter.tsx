@@ -68,8 +68,8 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     badge: 'ACADEMIC & MENTORS',
     tag: 'CHAPTER MENTORS',
     href: '/faculty-mentors',
-    image: '/images/team/2026frt_Ahmer-Usmani.jpg',
-    imagePosition: 'center top',
+    image: '/images/team/faculty-mentor-chapter.jpg',
+    imagePosition: 'center 20%',
     PlaceholderComponent: FacultyMentorsPlaceholder,
   },
 ];
