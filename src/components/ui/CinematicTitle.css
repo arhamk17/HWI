@@ -1,0 +1,65 @@
+/* ==========================================================================
+   CINEMATIC SECTION TITLE REVEAL
+   Fast-paced cinematic text reveal with smooth upward motion, blur-to-sharp
+   transition, and staggered word reveals (0.4–0.7s total duration).
+   ========================================================================== */
+
+@keyframes cinematicTitleWordReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 110%, 0) skewY(3deg);
+    filter: blur(14px);
+  }
+  45% {
+    opacity: 0.85;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) skewY(0deg);
+    filter: blur(0px);
+  }
+}
+
+.cinematic-title {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  overflow: visible;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.cinematic-title__mask {
+  display: inline-flex;
+  align-items: baseline;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+  line-height: inherit;
+}
+
+.cinematic-title__word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  animation: cinematicTitleWordReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: left bottom;
+}
+
+.cinematic-title__spacer {
+  display: inline-block;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-title__word {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

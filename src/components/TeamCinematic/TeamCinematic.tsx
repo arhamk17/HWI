@@ -5,6 +5,7 @@ import anime from 'animejs';
 import { ArrowRight, ArrowLeft, ArrowUpRight, LayoutGrid, Layers, Users, Sparkles } from 'lucide-react';
 import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
 import { getLeadershipPalette } from '@/components/TeamsSection/TeamsSection';
+import { CinematicTitle } from '@/components/ui/CinematicTitle';
 import './TeamCinematic.css';
 
 type PhaseType = 'head-intro' | 'showcase' | 'complete';
@@ -147,6 +148,7 @@ function Particles({ theme }: { theme: 'dark' | 'light' }) {
 // ─── Main TeamCinematic Component ────────────────────────────────────────
 export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
   const [deptIndex, setDeptIndex] = useState(0);
+  const [titleAnimKey, setTitleAnimKey] = useState(0);
   const [phase, setPhase] = useState<PhaseType>('head-intro');
   const [activeMemberIdx, setActiveMemberIdx] = useState(1); // 1-indexed for membersAfterHead
   const [displayMode, setDisplayMode] = useState<ViewDisplayMode>('carousel');
@@ -207,10 +209,15 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
   // ─── Direct Department Jump ───────────────────────────────────
   const jumpToDept = useCallback(
     (newIdx: number) => {
-      if (isAnimating || newIdx === deptIndex) return;
+      if (isAnimating) return;
+      if (newIdx === deptIndex) {
+        setTitleAnimKey((k) => k + 1);
+        return;
+      }
       setIsAnimating(true);
       setTheme('dark');
       setDisplayMode('carousel');
+      setTitleAnimKey((k) => k + 1);
 
       setTimeout(() => {
         setDeptIndex(newIdx);
@@ -235,6 +242,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
     setIsAnimating(true);
     setTheme('dark');
     setDisplayMode('carousel');
+    setTitleAnimKey((k) => k + 1);
 
     setTimeout(() => {
       setDeptIndex((prev) => prev + 1);
@@ -645,7 +653,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
           <div className="final-depts-summary">
             {DEPARTMENTS.map((d) => (
               <div key={d.id} className="final-dept-card">
-                <h4 className="final-dept-card__title">{d.name}</h4>
+                <CinematicTitle
+                  key={`final-card-${d.id}`}
+                  text={d.name}
+                  as="h4"
+                  className="final-dept-card__title"
+                />
                 <div className="final-dept-card__members">
                   {d.members.map((m) => (
                     <div key={m.id} className="final-member-row">
@@ -691,7 +704,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
       <header className="dept-header">
         <div className="dept-header__left">
           <span className="dept-header__eyebrow">HWI // 2026–27 INTERACTIVE SHOWCASE</span>
-          <h1 className="dept-header__title">{dept.name}</h1>
+          <CinematicTitle
+            key={`dept-title-${dept.id}-${titleAnimKey}`}
+            text={dept.name}
+            as="h1"
+            className="dept-header__title"
+          />
           <p className="dept-header__tagline">{dept.tagline}</p>
         </div>
 
@@ -1259,7 +1277,12 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         {phase === 'complete' && (
           <div className="dept-complete-layout">
             <span className="dept-complete-layout__eyebrow">DEPARTMENT COMPLETE</span>
-            <h2 className="dept-complete-layout__title">{dept.name}</h2>
+            <CinematicTitle
+              key={`complete-title-${dept.id}-${titleAnimKey}`}
+              text={dept.name}
+              as="h2"
+              className="dept-complete-layout__title"
+            />
             <p className="dept-complete-layout__desc">
               All {dept.members.length} leaders and members explored for {dept.name}.
             </p>

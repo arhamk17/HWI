@@ -8,6 +8,7 @@ import {
   EXECUTIVE_MEMBERS,
 } from '@/data/teamDepartments';
 import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
+import { CinematicTitle } from '@/components/ui/CinematicTitle';
 import { Users, Award, Shield, Film, ChevronRight } from 'lucide-react';
 import './TeamsSection.css';
 
@@ -396,7 +397,7 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
                   return (
                     <div key={dept.id} className="core-dept-group">
                       <div className="core-dept-group__header">
-                        <h3 className="core-dept-group__title">{dept.name}</h3>
+                        <CinematicTitle key={`core-dept-${dept.id}`} text={dept.name} as="h3" className="core-dept-group__title" />
                         <p className="core-dept-group__tagline">{dept.tagline}</p>
                       </div>
 
@@ -487,7 +488,7 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
                         <span className="exec-dept-block__idx">
                           {String(deptIdx + 1).padStart(2, '0')}
                         </span>
-                        <h3 className="exec-dept-block__title">{dept.name}</h3>
+                        <CinematicTitle key={`exec-dept-${dept.id}`} text={dept.name} as="h3" className="exec-dept-block__title" />
                       </div>
 
                       <div className="exec-dept-block__meta">
