@@ -7,6 +7,7 @@ import { CustomCursor } from '@/components/Cursor/CustomCursor';
 import { InteractiveEffects } from '@/components/InteractiveEffects/InteractiveEffects';
 import { EasterEgg } from '@/components/EasterEgg/EasterEgg';
 import { PageTransitionProvider } from '@/components/Transitions/PageTransition';
+import { ScrollPreviousTrigger } from '@/components/ScrollFurther/ScrollPreviousTrigger';
 import './globals.css';
 
 const outfit = Outfit({
@@ -80,6 +81,7 @@ export default function RootLayout({
           <CustomCursor />
           <InteractiveEffects />
           <EasterEgg />
+          <ScrollPreviousTrigger />
           <Navigation />
           <PageTransitionProvider>
             {children}
