@@ -31,9 +31,22 @@ export function FooterChapter() {
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 'var(--space-24)' }}>
             <div style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
-              <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="type-label text-secondary hover-accent">DISCORD</a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="type-label text-secondary hover-accent">X</a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="type-label text-secondary hover-accent">GITHUB</a>
+              <a
+                href="https://www.instagram.com/hwi.bvudet_nm?exln=MTk5NDVrMDJtZ2d2Nw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-label text-secondary hover-accent"
+              >
+                INSTAGRAM
+              </a>
+              <a
+                href="https://www.linkedin.com/company/hackwithindia-bvudet-nm-chapter/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-label text-secondary hover-accent"
+              >
+                LINKEDIN
+              </a>
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
               {[

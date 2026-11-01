@@ -58,6 +58,11 @@ export function TypographicIntro() {
     anime.set(finalEl, { opacity: 0, translateY: 24, scale: 0.96 });
     if (trackerBar) anime.set(trackerBar, { width: '0%' });
 
+    // Start soundtrack synchronously with the website intro sequence
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hwi:start-bg-music'));
+    }
+
     const tl = anime.timeline({
       easing: 'easeOutExpo',
       complete: handleFinish,
@@ -142,7 +147,16 @@ export function TypographicIntro() {
   if (isDone) return null;
 
   return (
-    <section className="intro" ref={containerRef} aria-label="Loading sequence">
+    <section
+      className="intro"
+      ref={containerRef}
+      aria-label="Loading sequence"
+      onPointerDown={() => {
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('hwi:start-bg-music'));
+        }
+      }}
+    >
       <h1 className="sr-only">Hack With India</h1>
 
       <div className="intro__stage" aria-hidden="true">

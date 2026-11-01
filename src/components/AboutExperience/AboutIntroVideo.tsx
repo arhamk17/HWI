@@ -129,9 +129,15 @@ export function AboutIntroVideo() {
         }
         video.play().catch(() => {});
         setIsPlaying(true);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('hwi:pause-bg-music'));
+        }
       } else {
         video.pause();
         setIsPlaying(false);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+        }
       }
     },
     [isMuted]
@@ -198,6 +204,9 @@ export function AboutIntroVideo() {
 
     setIsTheaterOpen(true);
     document.body.style.overflow = 'hidden';
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hwi:pause-bg-music'));
+    }
 
     // Request native OS/browser fullscreen for maximum cinematic immersion
     const modalEl = theaterModalRef.current;
@@ -234,6 +243,9 @@ export function AboutIntroVideo() {
   const closeTheaterModal = useCallback(() => {
     setIsTheaterOpen(false);
     document.body.style.overflow = '';
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+    }
     
     if (theaterVideoRef.current) {
       theaterVideoRef.current.pause();
@@ -343,7 +355,12 @@ export function AboutIntroVideo() {
               preload="none"
               muted={isMuted}
               onTimeUpdate={handleTimeUpdate}
-              onEnded={() => setIsPlaying(false)}
+              onEnded={() => {
+                setIsPlaying(false);
+                if (typeof window !== 'undefined') {
+                  window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+                }
+              }}
             />
 
             {/* Light Reflection Sheen on Hover */}
@@ -482,6 +499,12 @@ export function AboutIntroVideo() {
               autoPlay
               playsInline
               preload="none"
+              data-presentation="true"
+              onEnded={() => {
+                if (typeof window !== 'undefined') {
+                  window.dispatchEvent(new CustomEvent('hwi:resume-bg-music'));
+                }
+              }}
             />
           </div>
         </div>,

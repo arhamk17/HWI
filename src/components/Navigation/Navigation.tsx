@@ -272,28 +272,20 @@ export function Navigation() {
 
           <div className="nav-overlay__social">
             <a
-              href="https://discord.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon"
-            >
-              Discord
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="social-icon"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/hwi.bvudet_nm?exln=MTk5NDVrMDJtZ2d2Nw=="
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon"
             >
               Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/company/hackwithindia-bvudet-nm-chapter/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon"
+            >
+              LinkedIn
             </a>
           </div>
         </div>

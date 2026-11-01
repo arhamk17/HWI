@@ -499,6 +499,17 @@ export function GlobalBackground() {
       docStyle.setProperty('--navbar-pill-bg', currentOfferBright > 0.4 ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)');
       docStyle.setProperty('--navbar-pill-border', currentOfferBright > 0.4 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.08)');
 
+      // Adaptive What We Do (WWD) navigation styles
+      docStyle.setProperty('--wwd-nav-bg', currentOfferBright > 0.3 ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.03)');
+      docStyle.setProperty('--wwd-nav-border', currentOfferBright > 0.3 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.12)');
+      docStyle.setProperty('--wwd-nav-subdued-border', currentOfferBright > 0.3 ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.08)');
+      docStyle.setProperty('--wwd-nav-active-bg', currentOfferBright > 0.3 ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.12)');
+      docStyle.setProperty('--wwd-number', currentOfferBright > 0.3 ? '#64748B' : '#9A9A9A');
+      docStyle.setProperty('--wwd-title', currentOfferBright > 0.3 ? '#334155' : '#B8B8B8');
+      docStyle.setProperty('--wwd-title-active', currentOfferBright > 0.3 ? '#0A0A0C' : '#FFFFFF');
+      docStyle.setProperty('--wwd-arrow', currentOfferBright > 0.3 ? '#64748B' : '#9A9A9A');
+      docStyle.setProperty('--wwd-card-shadow', currentOfferBright > 0.3 ? '0 4px 16px rgba(0, 0, 0, 0.04)' : 'none');
+
       // Adaptive HWI watermark SVG colors
       if (currentOfferBright > 0.05) {
         const dotA = (0.7 * (1 - currentOfferBright) + 0.4 * currentOfferBright).toFixed(2);

@@ -7,6 +7,7 @@ import { CustomCursor } from '@/components/Cursor/CustomCursor';
 import { InteractiveEffects } from '@/components/InteractiveEffects/InteractiveEffects';
 import { EasterEgg } from '@/components/EasterEgg/EasterEgg';
 import { PageTransitionProvider } from '@/components/Transitions/PageTransition';
+import { BackgroundSoundtrack } from '@/components/Soundtrack/BackgroundSoundtrack';
 import './globals.css';
 
 const outfit = Outfit({
@@ -84,6 +85,7 @@ export default function RootLayout({
           <PageTransitionProvider>
             {children}
           </PageTransitionProvider>
+          <BackgroundSoundtrack />
         </SmoothScrollProvider>
       </body>
     </html>

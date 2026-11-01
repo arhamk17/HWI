@@ -32,6 +32,17 @@
   --env-bg: #02010A;
   --env-accent: #E83B3B;
   --env-text: #FFFFFF;
+
+  /* WHAT WE DO (WWD) SECTION ADAPTIVE DEFAULTS */
+  --wwd-nav-bg: rgba(255, 255, 255, 0.03);
+  --wwd-nav-border: rgba(255, 255, 255, 0.12);
+  --wwd-nav-subdued-border: rgba(255, 255, 255, 0.08);
+  --wwd-nav-active-bg: rgba(239, 68, 68, 0.12);
+  --wwd-number: #9A9A9A;
+  --wwd-title: #B8B8B8;
+  --wwd-title-active: #FFFFFF;
+  --wwd-arrow: #9A9A9A;
+  --wwd-card-shadow: none;
   
   /* SPACING */
   --space-4: 4px;
@@ -323,4 +334,13 @@ html.lenis, html.lenis body {
   --text-tertiary: #666666;
   --border-default: rgba(0, 0, 0, 0.1);
   --border-hover: rgba(0, 0, 0, 0.2);
+  --wwd-nav-bg: rgba(255, 255, 255, 0.75);
+  --wwd-nav-border: rgba(0, 0, 0, 0.1);
+  --wwd-nav-subdued-border: rgba(0, 0, 0, 0.06);
+  --wwd-nav-active-bg: rgba(239, 68, 68, 0.08);
+  --wwd-number: #64748B;
+  --wwd-title: #334155;
+  --wwd-title-active: #0A0A0C;
+  --wwd-arrow: #64748B;
+  --wwd-card-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
