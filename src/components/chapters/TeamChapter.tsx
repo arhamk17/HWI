@@ -10,7 +10,6 @@ import { KokonutBadge } from '@/components/KokonutUI/KokonutBadge';
 import {
   Tenure2025Placeholder,
   Tenure2026Placeholder,
-  TeacherCoordinatorPlaceholder,
   FacultyMentorsPlaceholder,
 } from './TeamPlaceholders';
 import './TeamChapter.css';
@@ -61,26 +60,15 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     PlaceholderComponent: Tenure2026Placeholder,
   },
   {
-    id: 'teacher-coordinator',
+    id: 'faculty-mentors',
     number: '03',
-    title: 'TEACHER COORDINATOR',
+    title: 'FACULTY & MENTORS',
     description: 'Faculty Coordination & Chapter Mentorship',
-    badge: 'ACADEMIC ADVISOR',
-    tag: 'CHAPTER MENTOR',
-    href: '/faculty-mentors#coordinator',
+    badge: 'ACADEMIC & MENTORS',
+    tag: 'CHAPTER MENTORS',
+    href: '/faculty-mentors',
     image: '/images/team/2026frt_Ahmer-Usmani.jpg',
     imagePosition: 'center top',
-    PlaceholderComponent: TeacherCoordinatorPlaceholder,
-  },
-  {
-    id: 'faculty-mentors',
-    number: '04',
-    title: 'FACULTY & MENTORS',
-    description: 'Faculty & Mentorship • Advisory Council',
-    badge: 'ADVISORY BOARD',
-    tag: 'CHAPTER MENTORS',
-    href: '/faculty-mentors#mentors',
-    image: '', // Insert image path here when available
     PlaceholderComponent: FacultyMentorsPlaceholder,
   },
 ];
@@ -108,7 +96,7 @@ export function TeamChapter() {
       const rawP = -rect.top / totalScrollable;
       const p = Math.max(0, Math.min(1, rawP));
 
-      // 4 cards -> 3 intervals
+      // 3 cards -> 2 intervals
       const cardProgress = p * (LEADERSHIP_CARDS.length - 1);
       const activeIdx = Math.min(LEADERSHIP_CARDS.length - 1, Math.max(0, Math.round(cardProgress)));
 
@@ -189,7 +177,7 @@ export function TeamChapter() {
               <h2 className="type-display text-primary">MEET THE CORE</h2>
             </div>
             <span className="team-showcase__counter" ref={counterRef}>
-              01 / 04
+              01 / 03
             </span>
           </div>
         </div>
