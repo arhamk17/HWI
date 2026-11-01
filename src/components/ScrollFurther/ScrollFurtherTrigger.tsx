@@ -296,6 +296,7 @@ export function ScrollFurtherTrigger() {
       <Link
         ref={linkRef}
         href={nextChapter.href}
+        prefetch={true}
         tabIndex={-1}
         aria-hidden="true"
         className="scroll-further-hidden-link"

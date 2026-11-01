@@ -150,6 +150,7 @@ export function Navigation() {
           {/* Logo badge with ambient crimson halo */}
           <Link
             href="/"
+            prefetch={true}
             className="navbar__logo"
             onClick={closeMenu}
             onMouseEnter={handleLogoEnter}
@@ -196,6 +197,7 @@ export function Navigation() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  prefetch={true}
                   ref={(el) => {
                     itemRefs.current[index] = el;
                   }}
@@ -219,6 +221,7 @@ export function Navigation() {
           <div className="navbar__actions">
             <Link
               href="/join"
+              prefetch={true}
               className="navbar__cta-btn magnetic-btn"
               data-cursor="link"
               data-cursor-label="REGISTER"
@@ -255,6 +258,7 @@ export function Navigation() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  prefetch={true}
                   className={`nav-overlay__link ${
                     isActive ? 'nav-overlay__link--active' : ''
                   }`}

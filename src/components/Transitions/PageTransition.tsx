@@ -13,8 +13,8 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
   const [stage, setStage] = useState<TransitionStage>('idle');
   const [destTitle, setDestTitle] = useState<string>('CONVERGENCE');
   const [destSector, setDestSector] = useState<string>('01');
-  const [dispScale, setDispScale] = useState<number>(0);
 
+  const feDispRef = useRef<SVGFEDisplacementMapElement | null>(null);
   const isTransitioningRef = useRef<boolean>(false);
   const routeReadyRef = useRef<boolean>(false);
   const arrivalStartedRef = useRef<boolean>(false);
@@ -49,8 +49,9 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
     return { title: clean, sector: '00' };
   }, []);
 
-  // Smoothly animate the SVG filter feDisplacementMap scale
+  // Smoothly animate the SVG filter feDisplacementMap scale without React re-renders
   const animateDisplacement = useCallback((startVal: number, endVal: number, durationMs: number, onDone?: () => void) => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     const startTime = performance.now();
     const step = (currentTime: number) => {
       const elapsed = currentTime - startTime;
@@ -58,11 +59,14 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
       // Quad ease out
       const eased = 1 - Math.pow(1 - progress, 2);
       const currentScale = startVal + (endVal - startVal) * eased;
-      setDispScale(Math.round(currentScale * 10) / 10);
+      if (feDispRef.current) {
+        feDispRef.current.setAttribute('scale', String(Math.round(currentScale * 10) / 10));
+      }
 
       if (progress < 1) {
         animFrameRef.current = requestAnimationFrame(step);
       } else {
+        animFrameRef.current = null;
         if (onDone) onDone();
       }
     };
@@ -79,15 +83,18 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
     }
 
     setStage('arrival');
-    animateDisplacement(45, 0, 210);
+    animateDisplacement(36, 0, 140);
     arrivalTimerRef.current = setTimeout(() => {
       setStage('idle');
       isTransitioningRef.current = false;
       arrivalStartedRef.current = false;
-    }, 230);
+      if (feDispRef.current) {
+        feDispRef.current.setAttribute('scale', '0');
+      }
+    }, 150);
   }, [animateDisplacement]);
 
-  // Coordinated 3-stage fluid distortion navigation
+  // Fast, coordinated fluid distortion navigation
   const triggerTransition = useCallback((href: string) => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
@@ -104,9 +111,9 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
     setDestTitle(title);
     setDestSector(sector);
 
-    // Start loading the destination while the departure animation plays.
+    // Start loading destination simultaneously while the departure wave sweeps across
     setStage('departure');
-    animateDisplacement(0, 52, 210);
+    animateDisplacement(0, 42, 130);
     router.push(href);
 
     departureTimerRef.current = setTimeout(() => {
@@ -114,12 +121,59 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
       setStage('covered');
 
       if (routeReadyRef.current) {
-        startArrival();
+        // Route is already loaded & rendered; proceed immediately with brief 25ms flash
+        setTimeout(startArrival, 25);
       } else {
-        coveredSafetyTimerRef.current = setTimeout(startArrival, 550);
+        // Fast safety fallback in case route takes a moment
+        coveredSafetyTimerRef.current = setTimeout(startArrival, 180);
       }
-    }, 230);
+    }, 130);
   }, [router, clearTimers, getDestinationMeta, animateDisplacement, startArrival]);
+
+  // Proactive prefetching on hover & pointerdown, plus idle cache warming
+  useEffect(() => {
+    const handlePointerOver = (e: MouseEvent | PointerEvent) => {
+      const anchor = (e.target as HTMLElement)?.closest('a');
+      if (!anchor) return;
+      const rawHref = anchor.getAttribute('href');
+      if (!rawHref) return;
+
+      if (
+        rawHref.startsWith('http://') ||
+        rawHref.startsWith('https://') ||
+        rawHref.startsWith('mailto:') ||
+        rawHref.startsWith('tel:') ||
+        rawHref.startsWith('#')
+      ) {
+        return;
+      }
+
+      try {
+        const targetUrl = new URL(rawHref, window.location.href);
+        if (targetUrl.origin === window.location.origin) {
+          router.prefetch(targetUrl.pathname);
+        }
+      } catch {
+        // ignore malformed URLs
+      }
+    };
+
+    document.addEventListener('mouseover', handlePointerOver, { passive: true });
+    document.addEventListener('pointerdown', handlePointerOver, { passive: true });
+
+    // Preload top primary routes on idle
+    const idleTimer = setTimeout(() => {
+      ['/', '/about', '/events', '/team', '/join'].forEach((route) => {
+        router.prefetch(route);
+      });
+    }, 300);
+
+    return () => {
+      document.removeEventListener('mouseover', handlePointerOver);
+      document.removeEventListener('pointerdown', handlePointerOver);
+      clearTimeout(idleTimer);
+    };
+  }, [router]);
 
   // Global capture click listener for internal navigation links
   useEffect(() => {
@@ -195,11 +249,11 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
             setDestSector(sector);
             setStage('arrival');
           });
-          animateDisplacement(35, 0, 210);
+          animateDisplacement(28, 0, 140);
 
           const popTimer = setTimeout(() => {
             setStage('idle');
-          }, 230);
+          }, 150);
           return () => clearTimeout(popTimer);
         }
       }
@@ -230,9 +284,10 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
               />
             </feTurbulence>
             <feDisplacementMap
+              ref={feDispRef}
               in="SourceGraphic"
               in2="noise"
-              scale={dispScale}
+              scale="0"
               xChannelSelector="R"
               yChannelSelector="G"
               result="displaced"
@@ -303,7 +358,6 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
 
       {/* ─── Outgoing / Incoming Page Content ─── */}
       <div
-        key={pathname}
         className={`page-transition-content stage-${stage}`}
       >
         {children}

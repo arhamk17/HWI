@@ -58,7 +58,7 @@ export function FooterChapter() {
                 { label: 'TEAMS', href: '/team' },
                 { label: 'JOIN', href: '/join' },
               ].map((item) => (
-                <Link key={item.label} href={item.href} className="type-label text-tertiary hover-accent">
+                <Link key={item.label} href={item.href} prefetch={true} className="type-label text-tertiary hover-accent">
                   {item.label}
                 </Link>
               ))}

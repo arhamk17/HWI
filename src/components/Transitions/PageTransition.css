@@ -78,17 +78,17 @@
 /* ─── Stage A: DEPARTURE (Liquid Surges Upwards Across Viewport) ──────────── */
 .fluid-transition-overlay.stage-departure .fluid-wave--accent {
   transform: translate3d(0, 0, 0);
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1) 0ms;
+  transition: transform 0.11s cubic-bezier(0.16, 1, 0.3, 1) 0ms;
 }
 
 .fluid-transition-overlay.stage-departure .fluid-wave--body {
   transform: translate3d(0, 0, 0);
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1) 15ms;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1) 10ms;
 }
 
 .fluid-transition-overlay.stage-departure .fluid-wave--main {
   transform: translate3d(0, 0, 0);
-  transition: transform 0.20s cubic-bezier(0.16, 1, 0.3, 1) 30ms;
+  transition: transform 0.13s cubic-bezier(0.16, 1, 0.3, 1) 20ms;
 }
 
 /* ─── Stage B: COVERED (Screen Fully Concealed by Obsidian Fluid) ────────── */
@@ -101,17 +101,17 @@
 /* ─── Stage C: ARRIVAL (Liquid Deforms and Recedes Upwards Offscreen) ─────── */
 .fluid-transition-overlay.stage-arrival .fluid-wave--accent {
   transform: translate3d(0, -105%, 0);
-  transition: transform 0.20s cubic-bezier(0.7, 0, 0.84, 0) 30ms;
+  transition: transform 0.13s cubic-bezier(0.7, 0, 0.84, 0) 20ms;
 }
 
 .fluid-transition-overlay.stage-arrival .fluid-wave--body {
   transform: translate3d(0, -105%, 0);
-  transition: transform 0.18s cubic-bezier(0.7, 0, 0.84, 0) 15ms;
+  transition: transform 0.12s cubic-bezier(0.7, 0, 0.84, 0) 10ms;
 }
 
 .fluid-transition-overlay.stage-arrival .fluid-wave--main {
   transform: translate3d(0, -105%, 0);
-  transition: transform 0.16s cubic-bezier(0.7, 0, 0.84, 0) 0ms;
+  transition: transform 0.11s cubic-bezier(0.7, 0, 0.84, 0) 0ms;
 }
 
 /* ─── Liquified Center Typography & HUD Module ──────────────────────────── */
@@ -130,13 +130,13 @@
   padding: 0 var(--space-24, 24px);
   box-sizing: border-box;
   opacity: 0;
-  transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.14s ease, transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .fluid-transition-overlay.stage-departure .fluid-hud-container {
   opacity: 0.95;
   transform: translate(-50%, -50%) scale(1);
-  transition-delay: 120ms;
+  transition-delay: 45ms;
 }
 
 .fluid-transition-overlay.stage-covered .fluid-hud-container {
@@ -147,7 +147,7 @@
 .fluid-transition-overlay.stage-arrival .fluid-hud-container {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.96);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.12s ease, transform 0.12s ease;
 }
 
 /* Distorted Typography Wrapper */
@@ -271,17 +271,17 @@
 /* In departure: stays in existing layout without shifting, receives liquid ripple */
 .page-transition-content.stage-departure {
   opacity: 0.85;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.12s ease;
 }
 
 .page-transition-content.stage-covered {
   opacity: 0;
-  transition: opacity 0.1s ease;
+  transition: opacity 0.08s ease;
 }
 
 /* When incoming page arrives: reveals smoothly from behind receding liquid */
 .page-transition-content.stage-arrival {
-  animation: pageFluidReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageFluidReveal 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .page-transition-content.stage-idle {
@@ -291,8 +291,8 @@
 
 @keyframes pageFluidReveal {
   0% {
-    opacity: 0.5;
-    transform: translateY(14px);
+    opacity: 0.7;
+    transform: translateY(8px);
   }
   100% {
     opacity: 1;
