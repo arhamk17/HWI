@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import Hls from 'hls.js';
 import {
   Play,
   Pause,
@@ -19,7 +20,8 @@ import './AboutIntroVideo.css';
 const INTRO_VIDEO = {
   title: 'HWI OFFICIAL INTRODUCTION',
   src: '/videos/hwi-intro.mp4',
-  durationLabel: '01:02 • 1080P FULL HD',
+  hlsSrc: '/videos/intro-hls/master.m3u8',
+  durationLabel: '01:02 • 1080P 60FPS',
   poster: '/images/hwi-introducing-thumbnail.jpeg',
 };
 
@@ -29,6 +31,8 @@ export function AboutIntroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const theaterVideoRef = useRef<HTMLVideoElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
+  const theaterHlsRef = useRef<Hls | null>(null);
 
   const [mounted, setMounted] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -41,6 +45,8 @@ export function AboutIntroVideo() {
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(false);
   const [isNearViewport, setIsNearViewport] = useState<boolean>(false);
+  const [qualityLabel, setQualityLabel] = useState<string>('1080P');
+  const [isBuffering, setIsBuffering] = useState<boolean>(false);
 
   useEffect(() => {
     setMounted(true);
@@ -184,6 +190,100 @@ export function AboutIntroVideo() {
     setDurationStr(formatTime(dur));
   };
 
+  // Initialize Adaptive HLS Stream for a video element
+  const initHlsPlayer = useCallback(
+    (videoEl: HTMLVideoElement | null, isTheater: boolean = false): Hls | null => {
+      if (!videoEl) return null;
+
+      // 1. Native Safari HLS support
+      if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+        if (!videoEl.src || !videoEl.src.includes(INTRO_VIDEO.hlsSrc)) {
+          videoEl.src = INTRO_VIDEO.hlsSrc;
+        }
+        return null;
+      }
+
+      // 2. Adaptive Hls.js engine
+      if (Hls.isSupported()) {
+        const activeRef = isTheater ? theaterHlsRef : hlsRef;
+        if (activeRef.current) {
+          return activeRef.current;
+        }
+
+        const hls = new Hls({
+          autoStartLoad: true,
+          startLevel: -1, // automatic ABR: prioritizes 1080p when bandwidth allows
+          capLevelToPlayerSize: false, // Prevents capping resolution to CSS player dimensions
+          maxBufferLength: 30, // 30s forward buffer prevents micro-stutters
+          maxMaxBufferLength: 60,
+          backBufferLength: 15, // Prune old chunks to keep memory light
+          lowLatencyMode: false, // Standard VOD profile for highest bitrate stability
+          enableWorker: true,
+        });
+
+        hls.loadSource(INTRO_VIDEO.hlsSrc);
+        hls.attachMedia(videoEl);
+
+        hls.on(Hls.Events.LEVEL_SWITCHED, (_event, data) => {
+          const level = hls.levels[data.level];
+          if (level && !isTheater) {
+            setQualityLabel(`${level.height}P`);
+          }
+        });
+
+        hls.on(Hls.Events.ERROR, (_event, data) => {
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                hls.recoverMediaError();
+                break;
+              default:
+                hls.destroy();
+                activeRef.current = null;
+                // Fallback to high-definition progressive MP4
+                videoEl.src = INTRO_VIDEO.src;
+                break;
+            }
+          }
+        });
+
+        activeRef.current = hls;
+        return hls;
+      }
+
+      // 3. Universal MP4 fallback
+      if (!videoEl.src || !videoEl.src.includes(INTRO_VIDEO.src)) {
+        videoEl.src = INTRO_VIDEO.src;
+      }
+      return null;
+    },
+    []
+  );
+
+  // Attach HLS stream when near viewport
+  useEffect(() => {
+    if (isNearViewport && videoRef.current) {
+      initHlsPlayer(videoRef.current, false);
+    }
+  }, [isNearViewport, initHlsPlayer]);
+
+  // Clean up HLS instances on unmount
+  useEffect(() => {
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      if (theaterHlsRef.current) {
+        theaterHlsRef.current.destroy();
+        theaterHlsRef.current = null;
+      }
+    };
+  }, []);
+
   // Toggle Play / Pause
   const togglePlay = useCallback(
     (e?: React.MouseEvent) => {
@@ -192,10 +292,7 @@ export function AboutIntroVideo() {
       const video = videoRef.current;
       if (!video) return;
 
-      if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
-        video.src = INTRO_VIDEO.src;
-        video.load();
-      }
+      initHlsPlayer(video, false);
 
       if (video.paused) {
         setHasPlayed(true);
@@ -217,7 +314,7 @@ export function AboutIntroVideo() {
         }
       }
     },
-    [isMuted]
+    [isMuted, initHlsPlayer]
   );
 
   // Toggle Mute
@@ -235,10 +332,7 @@ export function AboutIntroVideo() {
     setIsNearViewport(true);
     const video = videoRef.current;
     if (!video) return;
-    if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
-      video.src = INTRO_VIDEO.src;
-      video.load();
-    }
+    initHlsPlayer(video, false);
     setHasPlayed(true);
     video.currentTime = 0;
     video.play().catch(() => {});
@@ -246,7 +340,7 @@ export function AboutIntroVideo() {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('hwi:pause-bg-music'));
     }
-  }, []);
+  }, [initHlsPlayer]);
 
   // Timeline scrubber click
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -255,10 +349,7 @@ export function AboutIntroVideo() {
     const timeline = timelineRef.current;
     const video = videoRef.current;
     if (!timeline || !video) return;
-    if (!video.src || !video.src.includes(INTRO_VIDEO.src)) {
-      video.src = INTRO_VIDEO.src;
-      video.load();
-    }
+    initHlsPlayer(video, false);
 
     setHasPlayed(true);
     const rect = timeline.getBoundingClientRect();
@@ -305,6 +396,7 @@ export function AboutIntroVideo() {
     setTimeout(() => {
       const tv = theaterVideoRef.current;
       if (tv) {
+        initHlsPlayer(tv, true);
         if (startTime > 0 && Math.abs(tv.currentTime - startTime) > 1) {
           tv.currentTime = startTime;
         }
@@ -318,7 +410,7 @@ export function AboutIntroVideo() {
         });
       }
     }, 120);
-  }, []);
+  }, [initHlsPlayer]);
 
   // Close Pop-up Cinematic Modal & Exit Fullscreen
   const closeTheaterModal = useCallback(() => {
@@ -334,6 +426,11 @@ export function AboutIntroVideo() {
       if (videoRef.current) {
         videoRef.current.currentTime = theaterVideoRef.current.currentTime;
       }
+    }
+
+    if (theaterHlsRef.current) {
+      theaterHlsRef.current.destroy();
+      theaterHlsRef.current = null;
     }
 
     // Exit native fullscreen if active
@@ -410,10 +507,9 @@ export function AboutIntroVideo() {
             role="region"
             aria-label={`${INTRO_VIDEO.title} Video Player`}
           >
-            {/* The HTML5 Video Element */}
+            {/* The HTML5 Video Element with Adaptive HLS Engine */}
             <video
               ref={videoRef}
-              src={isNearViewport || isPlaying ? INTRO_VIDEO.src : undefined}
               poster={INTRO_VIDEO.poster}
               className="about-video-element"
               playsInline
@@ -422,6 +518,13 @@ export function AboutIntroVideo() {
               muted={isMuted}
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleLoadedMetadata}
+              onWaiting={() => setIsBuffering(true)}
+              onPlaying={() => {
+                setIsBuffering(false);
+                setIsPlaying(true);
+              }}
+              onCanPlay={() => setIsBuffering(false)}
+              onPause={() => setIsPlaying(false)}
               onEnded={() => {
                 setIsPlaying(false);
                 setHasPlayed(false);
@@ -465,6 +568,14 @@ export function AboutIntroVideo() {
                 {isPlaying ? 'PAUSE STREAM' : 'PLAY CINEMATIC REEL'}
               </span>
             </div>
+
+            {/* Adaptive Stream Buffering Indicator */}
+            {isBuffering && isPlaying && (
+              <div className="about-video-buffering-indicator">
+                <div className="about-video-buffering-spinner" />
+                <span className="about-video-buffering-text">OPTIMIZING STREAM</span>
+              </div>
+            )}
 
             {/* Custom Cinematic Playback Controls Overlay */}
             <div
@@ -521,6 +632,11 @@ export function AboutIntroVideo() {
                 </div>
 
                 <div className="about-video-controls-right">
+                  <span className="about-video-quality-tag" title="Adaptive HLS Stream Rendition">
+                    <span className="about-video-quality-dot" />
+                    {qualityLabel}
+                  </span>
+
                   <button
                     className="about-video-theater-btn"
                     onClick={openTheaterModal}
@@ -571,7 +687,6 @@ export function AboutIntroVideo() {
           >
             <video
               ref={theaterVideoRef}
-              src={INTRO_VIDEO.src}
               poster={INTRO_VIDEO.poster}
               className="about-theater-video"
               controls
