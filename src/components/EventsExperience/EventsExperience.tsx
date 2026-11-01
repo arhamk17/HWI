@@ -12,15 +12,12 @@ import {
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
-  Trophy,
   Code2,
   Sparkles,
   ExternalLink,
   CheckCircle2,
   X,
   Camera,
-  Award,
-  ShieldCheck,
 } from 'lucide-react';
 import { KokonutButton } from '@/components/KokonutUI/KokonutButton';
 import { eventsParticleStore, EventsSection } from '@/lib/eventsParticleStore';
@@ -144,82 +141,6 @@ const CURATED_DOCUMENTARY_PHOTOS: CuratedPhotoItem[] = [
   },
 ];
 
-// =========================================================================
-// VERIFIED REAL ACCREDITATIONS & AWARDS (Drawn from repository records)
-// =========================================================================
-interface VerifiedAwardItem {
-  edition: string;
-  eventTitle: string;
-  date: string;
-  place: string;
-  team: string;
-  project: string;
-  prize: string;
-  accreditation: string;
-}
-
-const VERIFIED_AWARDS: VerifiedAwardItem[] = [
-  {
-    edition: 'Edition 02 · 2025',
-    eventTitle: 'HackWithMumbai 1.0',
-    date: '21 September 2025',
-    place: '1st Place Overall',
-    team: 'PulseMesh',
-    project: 'Decentralized mesh networking for disaster relief communication',
-    prize: '₹25,000 + Cloud Grants',
-    accreditation: 'Verified Overall Champion',
-  },
-  {
-    edition: 'Edition 02 · 2025',
-    eventTitle: 'HackWithMumbai 1.0',
-    date: '21 September 2025',
-    place: '2nd Place',
-    team: 'CivicSense',
-    project: 'Computer-vision enabled municipal road defect tracker',
-    prize: '₹15,000 Prize',
-    accreditation: 'Runner-Up Accreditation',
-  },
-  {
-    edition: 'Edition 02 · 2025',
-    eventTitle: 'HackWithMumbai 1.0',
-    date: '21 September 2025',
-    place: '3rd Place',
-    team: 'ZeroAudit',
-    project: 'Static security scanner for Ethereum smart contracts',
-    prize: '₹10,000 Prize',
-    accreditation: '3rd Place Podium',
-  },
-  {
-    edition: 'Edition 04 · 2026',
-    eventTitle: 'HackWithMumbai 2.0 National Hackathon',
-    date: '7–8 February 2026',
-    place: 'National Prize Pool',
-    team: '80 Finalist Teams (280 Builders)',
-    project: '5 Indian states and 40+ colleges competing across EdTech, HealthTech, CyberTech, AgriTech, and FinTech',
-    prize: '₹64,000+ Prize Pool',
-    accreditation: 'SP Jain Global Sponsored',
-  },
-  {
-    edition: 'Edition 05 · 2026',
-    eventTitle: 'Zero2Web3 Build-a-thon',
-    date: '5 March 2026',
-    place: 'CC Lab Podium',
-    team: 'Outstanding DApp Teams',
-    project: 'Gas-optimized Solidity architectures and decentralized token contracts evaluated in CC Lab',
-    prize: 'Winner Trophies & Physical Certificates',
-    accreditation: 'Chapter Merit Accredited',
-  },
-  {
-    edition: 'Edition 06 · 2026',
-    eventTitle: 'RocketRide Buildathon Mumbai Edition',
-    date: '29 August 2026',
-    place: 'Champions Podium',
-    team: '1st Place Prototype Laureates',
-    project: 'High-velocity 6-hour MVP evaluated on architectural ingenuity by San Francisco Chief Architect Rod Christensen',
-    prize: '1st Place Cheque & Delegate Certifications',
-    accreditation: 'San Francisco Delegation Recognized',
-  },
-];
 
 export function EventsExperience() {
   // Edition Archive Hover-Only State:
@@ -241,13 +162,10 @@ export function EventsExperience() {
   const galleryTrackRef = useRef<HTMLDivElement>(null);
   const photosSectionRef = useRef<HTMLElement>(null);
   const photosGridRef = useRef<HTMLDivElement>(null);
-  const awardsSectionRef = useRef<HTMLElement>(null);
-  const awardsGridRef = useRef<HTMLDivElement>(null);
 
   const heroAnimatedRef = useRef<boolean>(false);
   const panelsRevealedRef = useRef<boolean>(false);
   const photosRevealedRef = useRef<boolean>(false);
-  const awardsRevealedRef = useRef<boolean>(false);
   const editorialStoryRef = useRef<HTMLElement>(null);
 
   // Selected event object & index for editorial chronicle dossier
@@ -559,12 +477,9 @@ export function EventsExperience() {
 
         const panelsEl = gallerySectionRef.current;
         const photosEl = photosSectionRef.current;
-        const awardsEl = awardsSectionRef.current;
 
         let currentSection: EventsSection = 'hero';
-        if (awardsEl && scrollY >= awardsEl.offsetTop - vh * 0.45) {
-          currentSection = 'awards';
-        } else if (photosEl && scrollY >= photosEl.offsetTop - vh * 0.45) {
+        if (photosEl && scrollY >= photosEl.offsetTop - vh * 0.45) {
           currentSection = 'photos';
         } else if (panelsEl && scrollY >= panelsEl.offsetTop - vh * 0.45) {
           currentSection = 'panels';
@@ -655,40 +570,9 @@ export function EventsExperience() {
       photosObserver.observe(photosSectionRef.current);
     }
 
-    // C. Awards Section Reveal + Single Particle Pulse Trigger
-    const awardsObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !awardsRevealedRef.current) {
-            awardsRevealedRef.current = true;
-
-            // Trigger brief, elegant particle pulse in GlobalBackground
-            eventsParticleStore.triggerPulse();
-
-            if (awardsGridRef.current && !prefersReducedMotion) {
-              anime({
-                targets: awardsGridRef.current.querySelectorAll('.chronicles-award-card'),
-                opacity: [0, 1],
-                translateY: [28, 0],
-                duration: 750,
-                delay: anime.stagger(80),
-                easing: 'cubicBezier(0.16, 1, 0.3, 1)',
-              });
-            }
-          }
-        });
-      },
-      { threshold: 0.14 }
-    );
-
-    if (awardsSectionRef.current) {
-      awardsObserver.observe(awardsSectionRef.current);
-    }
-
     return () => {
       panelsObserver.disconnect();
       photosObserver.disconnect();
-      awardsObserver.disconnect();
     };
   }, []);
 
@@ -1290,80 +1174,8 @@ export function EventsExperience() {
         onOpenChronicle={handleOpenChronicleFromMoments}
       />
 
-      {/* ================================================================= */}
-      {/* 4. AWARDS: THE IMPACT                                             */}
-      {/* Verified winning projects, results, and accreditations            */}
-      {/* ================================================================= */}
-      <section
-        id="verified-awards"
-        ref={awardsSectionRef}
-        className="chronicles-awards-section"
-      >
-        <div className="container">
-          <div className="chronicles-section-header">
-
-            <h2 className="chronicles-section-title">
-              THE <span className="title-dim">IMPACT.</span>
-            </h2>
-            <p className="chronicles-section-desc">
-              Proven results, winning prototypes, and recognized student cohorts across milestone editions.
-              Authentic merit evaluated by industry delegates, faculty coordinators, and institutional sponsors.
-            </p>
-          </div>
-
-          {/* Awards Editorial Stack */}
-          <div className="chronicles-awards-grid" ref={awardsGridRef}>
-            {VERIFIED_AWARDS.map((award, aIdx) => (
-              <div key={aIdx} className="chronicles-award-card">
-                <div className="award-card-header">
-                  <div className="award-edition-meta">
-                    <span className="award-edition-pill">{award.edition}</span>
-                    <span className="award-date-text">{award.date}</span>
-                  </div>
-                  <span className="award-accreditation-badge">
-                    <ShieldCheck size={14} />
-                    <span>{award.accreditation}</span>
-                  </span>
-                </div>
-
-                <div className="award-card-body">
-                  <div className="award-place-badge">
-                    <Trophy size={16} />
-                    <span>{award.place}</span>
-                  </div>
-
-                  <div className="award-details">
-                    <h3 className="award-team-name">{award.team}</h3>
-                    <p className="award-project-desc">{award.project}</p>
-                    <span className="award-event-ref">{award.eventTitle}</span>
-                  </div>
-
-                  <div className="award-prize-container">
-                    <span className="prize-label">RECOGNITION</span>
-                    <span className="prize-value">{award.prize}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Impact Banner */}
-          <div className="chronicles-impact-banner">
-            <div className="impact-banner-content">
-              <span className="impact-banner-kicker">JOIN THE NEXT COHORT</span>
-              <h3 className="impact-banner-title">Build with India&apos;s most active student chapter.</h3>
-              <p className="impact-banner-desc">
-                From pioneering air-gapped security competitions to shipping full-stack products,
-                HackWithIndia BVUDET-NM provides the arena, mentors, and hardware.
-              </p>
-            </div>
-            <Link href="/join" className="impact-banner-btn">
-              <span>REGISTER FOR ENTRY</span>
-              <ArrowUpRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Clean intentional vacant space buffer transitioning into footer */}
+      <div className="chronicles-bottom-spacer" aria-hidden="true" />
     </div>
   );
 }

@@ -30,6 +30,7 @@ export interface LeadershipCardData {
   tag: string;
   href: string;
   image?: string; // Optional real image path
+  imagePosition?: string; // Custom object-position (e.g. 'center top')
   PlaceholderComponent: React.ComponentType<{ className?: string }>;
 }
 
@@ -44,6 +45,7 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     tag: 'FOUNDING CHAPTER',
     href: '/tenure-2025',
     image: '/images/events/learn_it_tour_image12.jpeg',
+    imagePosition: 'center 20%',
     PlaceholderComponent: Tenure2025Placeholder,
   },
   {
@@ -67,6 +69,7 @@ const LEADERSHIP_CARDS: LeadershipCardData[] = [
     tag: 'CHAPTER MENTOR',
     href: '/faculty-mentors#coordinator',
     image: '/images/team/2026frt_Ahmer-Usmani.jpg',
+    imagePosition: 'center top',
     PlaceholderComponent: TeacherCoordinatorPlaceholder,
   },
   {
@@ -215,6 +218,7 @@ export function TeamChapter() {
                         src={card.image}
                         alt={card.title}
                         className="team-card__image"
+                        style={card.imagePosition ? { objectPosition: card.imagePosition } : undefined}
                         loading="lazy"
                         decoding="async"
                       />

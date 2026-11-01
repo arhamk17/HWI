@@ -73,7 +73,7 @@
 /* Individual Team Card - Image-First Hierarchy */
 .team-card {
   position: absolute;
-  width: min(85vw, 640px);
+  width: min(85vw, 560px);
   height: 100%;
   max-height: 540px;
   border-radius: var(--radius-lg);
@@ -107,12 +107,12 @@
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 45px rgba(239, 68, 68, 0.25);
 }
 
-/* Image Hero Section of Card (occupies top 56%) */
+/* Image Hero Section of Card (occupies top 60%) */
 .team-card__image-wrap {
   position: relative;
   width: 100%;
-  height: 56%;
-  min-height: 220px;
+  height: 60%;
+  min-height: 240px;
   overflow: hidden;
   background-color: #0B090E;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -122,7 +122,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   display: block;
 }
 
@@ -131,9 +131,9 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(11, 9, 14, 0.35) 0%,
-    rgba(11, 9, 14, 0.1) 40%,
-    rgba(14, 12, 18, 0.95) 100%
+    rgba(11, 9, 14, 0.2) 0%,
+    rgba(11, 9, 14, 0.0) 45%,
+    rgba(14, 12, 18, 0.85) 100%
   );
   pointer-events: none;
   z-index: 2;
@@ -284,13 +284,13 @@
   }
   
   .team-card {
-    width: 90vw;
+    width: min(92vw, 440px);
     max-height: 500px;
   }
 
   .team-card__image-wrap {
-    height: 50%;
-    min-height: 180px;
+    height: 58%;
+    min-height: 220px;
   }
 
   .team-showcase__track-wrap {
