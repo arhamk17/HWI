@@ -4,7 +4,7 @@ export interface WhatWeDoDeliverable {
 }
 
 export interface WhatWeDoCategory {
-  id: 'hackathons' | 'workshops' | 'community' | 'industry' | 'research';
+  id: 'hackathons' | 'workshops' | 'community' | 'industry';
   number: string;
   title: string;
   tagline: string;
@@ -69,20 +69,6 @@ export const WHAT_WE_DO_CATEGORIES: WhatWeDoCategory[] = [
       { tag: 'INFRASTRUCTURE CREDITS', detail: 'Access to enterprise cloud computing, GPUs, and developer tooling.' },
       { tag: 'VENTURE MENTORS', detail: 'Advising promising student hackathon prototypes toward seed stage.' },
       { tag: 'KEYNOTE ROUNDS', detail: 'Unfiltered technical talks from CTOs and engineering directors.' },
-    ],
-  },
-  {
-    id: 'research',
-    number: '05',
-    title: 'RESEARCH',
-    tagline: 'Experimental Tech & Technical Publications',
-    description: 'Investigating emerging paradigms at the intersection of AI agents, cryptography, decentralized storage, and compiler toolchains.',
-    particleMode: 'orbital',
-    deliverables: [
-      { tag: 'WHITE PAPERS', detail: 'Publishing student-authored architectural benchmarks and technical reviews.' },
-      { tag: 'EXPERIMENTAL LABS', detail: 'Incubating proof-of-concepts using zero-knowledge proofs and edge AI.' },
-      { tag: 'SECURITY AUDITING', detail: 'Rigorous fuzz testing and formal verification of campus tools.' },
-      { tag: 'OPEN SPECIFICATIONS', detail: 'Contributing RFCs and tooling to established open-source projects.' },
     ],
   },
 ];
