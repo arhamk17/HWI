@@ -33,15 +33,6 @@ export function AboutIntroVideo() {
   const timelineRef = useRef<HTMLDivElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const theaterHlsRef = useRef<Hls | null>(null);
-  const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const triggerControlsTimer = useCallback(() => {
-    setShowControls(true);
-    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
-    controlsTimeoutRef.current = setTimeout(() => {
-      setShowControls(false);
-    }, 3500);
-  }, []);
 
   const [mounted, setMounted] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -208,8 +199,6 @@ export function AboutIntroVideo() {
       if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
         if (!videoEl.src || !videoEl.src.includes(INTRO_VIDEO.hlsSrc)) {
           videoEl.src = INTRO_VIDEO.hlsSrc;
-          // Crucial for iOS Safari AVPlayer initialization
-          videoEl.load();
         }
         return null;
       }
@@ -284,9 +273,6 @@ export function AboutIntroVideo() {
   // Clean up HLS instances on unmount
   useEffect(() => {
     return () => {
-      if (controlsTimeoutRef.current) {
-        clearTimeout(controlsTimeoutRef.current);
-      }
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -329,18 +315,6 @@ export function AboutIntroVideo() {
       }
     },
     [isMuted, initHlsPlayer]
-  );
-
-  const handleStageClick = useCallback(
-    (e: React.MouseEvent) => {
-      // On mobile touch screens or when playing: if controls are not showing, show them first
-      if (isPlaying && !showControls) {
-        triggerControlsTimer();
-        return;
-      }
-      togglePlay(e);
-    },
-    [isPlaying, showControls, triggerControlsTimer, togglePlay]
   );
 
   // Toggle Mute
@@ -527,7 +501,7 @@ export function AboutIntroVideo() {
             className={`about-video-stage ${isRevealed ? 'is-revealed' : ''} ${
               isPlaying ? 'is-playing' : ''
             } ${showControls ? 'controls-visible' : ''}`}
-            onClick={handleStageClick}
+            onClick={() => togglePlay()}
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => setShowControls(false)}
             role="region"

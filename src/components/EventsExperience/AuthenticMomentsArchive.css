@@ -19,13 +19,11 @@
    100vh Sticky Viewport Stage with 3D Perspective
    ------------------------------------------------------------------------- */
 .authentic-moments-stage {
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
   overflow: hidden;
   background-color: #000000;
   perspective: 1200px;

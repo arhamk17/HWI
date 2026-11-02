@@ -278,21 +278,10 @@ export function AboutScrollMorphHero() {
       }
     };
 
-    let prevW = window.innerWidth;
-    let prevH = window.innerHeight;
-
     const handleResize = () => {
-      const newW = window.innerWidth;
-      const newH = window.innerHeight;
-      if (newW === prevW && Math.abs(newH - prevH) < 140) {
-        handleScroll();
-        return;
-      }
-      prevW = newW;
-      prevH = newH;
       setDimensions({
-        width: newW,
-        height: newH,
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
       handleScroll();
     };

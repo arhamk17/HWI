@@ -88,12 +88,6 @@
   .join-form {
     grid-template-columns: 1fr;
   }
-
-  .join-form input,
-  .join-form select,
-  .join-form textarea {
-    font-size: 16px; /* Prevents iOS Safari input focus auto-zoom */
-  }
   
   .join-form-wrapper {
     padding: var(--space-24);

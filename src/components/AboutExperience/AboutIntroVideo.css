@@ -152,7 +152,6 @@
   border-radius: 999px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   margin-bottom: 8px;
 }
 
@@ -244,7 +243,7 @@
     inset 0 0 16px rgba(0, 0, 0, 0.6);
 }
 
-/* Video element - clean native rendering for maximum quality */
+/* Video element with hardware-accelerated bilinear smoothing & anti-aliasing */
 .about-video-element {
   position: absolute;
   inset: 0;
@@ -252,11 +251,14 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  will-change: transform;
+  filter: contrast(1.05) brightness(1.02) saturate(1.06);
 }
 
 /* Dedicated High-Res Poster Thumbnail Overlay */
@@ -481,7 +483,6 @@
   border-radius: 999px;
   border: 1px solid rgba(239, 68, 68, 0.28);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ==========================================================================
@@ -521,17 +522,6 @@
   cursor: pointer;
   overflow: visible;
   transition: height 0.2s ease;
-  touch-action: none;
-}
-
-/* Expanded touch hit area for mobile fingertips */
-.about-video-timeline::before {
-  content: '';
-  position: absolute;
-  top: -12px;
-  bottom: -12px;
-  left: 0;
-  right: 0;
 }
 
 .about-video-timeline:hover {
@@ -683,7 +673,6 @@
   padding: 10px 22px;
   border-radius: 999px;
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   z-index: 5;
   pointer-events: none;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(239, 68, 68, 0.3);
@@ -827,7 +816,6 @@
   border-radius: 999px;
   background: rgba(18, 16, 24, 0.9);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(239, 68, 68, 0.6);
   color: #FFFFFF;
   font-family: var(--font-jetbrains-mono), monospace;
@@ -873,7 +861,10 @@
   object-fit: contain !important;
   background: #000000 !important;
   display: block !important;
-  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  transform: translateZ(0);
+  filter: contrast(1.05) brightness(1.02) saturate(1.06);
 }
 
 /* ==========================================================================

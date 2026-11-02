@@ -75,37 +75,18 @@ export function AboutCubeGrid() {
       mouse.active = false;
     };
 
-    const handlePointerUp = () => {
-      mouse.active = false;
-    };
-
     const handleScroll = () => {
       targetScrollY = window.scrollY || window.pageYOffset || 0;
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerleave', handlePointerLeave, { passive: true });
-    window.addEventListener('pointerup', handlePointerUp, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    let prevW = window.innerWidth;
-    let prevH = window.innerHeight;
-
     const handleResize = () => {
-      const newW = window.innerWidth;
-      const newH = window.innerHeight;
-
-      // Filter mobile toolbar collapse/expand resize events
-      if (newW === prevW && Math.abs(newH - prevH) < 140 && width > 0) {
-        return;
-      }
-      prevW = newW;
-      prevH = newH;
-
-      // Cap DPR to 1.0 on mobile to conserve GPU fill rate
-      const isMobile = window.innerWidth < 768;
-      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.25);
+      // Cap DPR to 1.25 for crisp lines while reducing GPU fill rate by 60%+
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       width = window.innerWidth;
       height = window.innerHeight;
 
@@ -335,7 +316,6 @@ export function AboutCubeGrid() {
       if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerleave', handlePointerLeave);
-      window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
       mediaQuery.removeEventListener('change', handleMotionChange);

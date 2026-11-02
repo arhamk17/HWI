@@ -19,7 +19,6 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
   /* Deep cinematic charcoal vignette keeping the background video atmospheric while giving typography 100% legibility */
   background: radial-gradient(
     circle at center,
@@ -221,7 +220,7 @@
 /* Minimalist technical progress tracker at bottom */
 .intro__tracker {
   position: fixed;
-  bottom: max(40px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   width: 140px;
