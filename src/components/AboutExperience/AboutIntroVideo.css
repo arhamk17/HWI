@@ -244,7 +244,7 @@
     inset 0 0 16px rgba(0, 0, 0, 0.6);
 }
 
-/* Video element with hardware-accelerated bilinear smoothing & anti-aliasing */
+/* Video element - clean native rendering for maximum quality */
 .about-video-element {
   position: absolute;
   inset: 0;
@@ -252,14 +252,11 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
+  image-rendering: auto;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform;
-  filter: contrast(1.05) brightness(1.02) saturate(1.06);
 }
 
 /* Dedicated High-Res Poster Thumbnail Overlay */
@@ -876,10 +873,7 @@
   object-fit: contain !important;
   background: #000000 !important;
   display: block !important;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: high-quality;
-  transform: translateZ(0);
-  filter: contrast(1.05) brightness(1.02) saturate(1.06);
+  image-rendering: auto;
 }
 
 /* ==========================================================================

@@ -1,5 +1,5 @@
 /* ========================================================
-   HWI TENURE 2025–26 EXPERIENCE - MINIMALIST STYLING
+   HWI TENURE 2025–26 EXPERIENCE - ELEGANT STYLING
    Photo-First · Cybernetic HUD · Obsidian Aesthetic
    ======================================================== */
 
@@ -10,7 +10,7 @@
   background-color: var(--surface-primary, #070709);
   color: var(--text-primary, #FFFFFF);
   overflow-x: hidden;
-  padding-bottom: clamp(48px, 8vh, 80px);
+  padding-bottom: clamp(64px, 10vh, 100px);
 }
 
 /* Ambient Radial Glows */
@@ -21,7 +21,7 @@
   transform: translateX(-50%);
   width: 900px;
   height: 500px;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, rgba(127, 29, 29, 0.04) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.14) 0%, rgba(127, 29, 29, 0.04) 50%, transparent 75%);
   filter: blur(100px);
   pointer-events: none;
   z-index: 1;
@@ -33,7 +33,7 @@
   right: 5%;
   width: 600px;
   height: 400px;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
   filter: blur(100px);
   pointer-events: none;
   z-index: 1;
@@ -44,7 +44,7 @@
   position: relative;
   z-index: 5;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(16px, 4vw, 40px);
   box-sizing: border-box;
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: clamp(20px, 3vh, 32px);
+  margin-bottom: clamp(28px, 4vh, 40px);
 }
 
 .tenure-back-btn {
@@ -93,41 +93,465 @@
   font-weight: 600;
 }
 
-/* Minimal Hero Section */
-.tenure-hero--minimal {
-  padding-bottom: clamp(16px, 2vh, 24px);
-  margin-bottom: clamp(24px, 3.5vh, 36px);
+/* ========================================================
+   HERO SECTION
+   ======================================================== */
+.tenure-hero {
   text-align: center;
+  max-width: 860px;
+  margin: 0 auto clamp(48px, 7vh, 72px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tenure-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent, #EF4444);
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.12);
 }
 
 .tenure-hero__title {
   font-family: var(--font-display, var(--font-geist-sans)), sans-serif;
-  font-size: clamp(32px, 5.5vw, 56px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-size: clamp(34px, 5.5vw, 62px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   color: #FFFFFF;
-  margin: 0;
+  margin: 0 0 18px 0;
   text-transform: uppercase;
 }
 
 .tenure-hero__title span {
-  background: linear-gradient(135deg, #EF4444 0%, #F87171 60%, #FFFFFF 100%);
+  background: linear-gradient(135deg, #EF4444 0%, #F87171 50%, #FFFFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.tenure-hero__desc {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.65;
+  color: var(--text-secondary, #94A3B8);
+  max-width: 720px;
+  margin: 0 0 32px 0;
+}
+
+/* Stats Row */
+.tenure-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tenure-stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(18, 16, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+}
+
+.tenure-stat-num {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--accent, #EF4444);
+}
+
+.tenure-stat-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--text-tertiary, #64748B);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ========================================================
+   SECTION HEADERS
+   ======================================================== */
+.tenure-section {
+  margin-bottom: clamp(56px, 8vh, 84px);
+}
+
+.tenure-section__title-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-left: 3px solid var(--accent, #EF4444);
+  padding-left: clamp(14px, 2vw, 20px);
+  margin-bottom: clamp(28px, 4vh, 36px);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tenure-section__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tenure-section__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--accent, #EF4444);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tenure-section__eyebrow .inline-icon {
+  color: var(--accent, #EF4444);
+}
+
+.tenure-section__heading {
+  font-family: var(--font-satoshi), sans-serif;
+  font-weight: 900;
+  font-size: clamp(22px, 3.2vw, 32px);
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.tenure-section__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--text-tertiary, #64748B);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ========================================================
+   EXECUTIVE COUNCIL GRID (PRESIDENT & VICE PRESIDENT)
+   Prominent, large, elegant cards (2 columns)
+   ======================================================== */
+.tenure-exec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: clamp(28px, 3.5vw, 44px);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ========================================================
+   DEPARTMENT HEADS GRID
+   Refined, elegant portrait cards (never too small)
+   ======================================================== */
+.tenure-heads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: clamp(22px, 2.8vw, 32px);
+}
+
+/* ========================================================
+   LEADERSHIP CARD (SHARED ELEGANT CARD ARCHITECTURE)
+   ======================================================== */
+.tenure-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(155deg, rgba(20, 17, 26, 0.95) 0%, rgba(12, 10, 16, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), 0 0 25px rgba(239, 68, 68, 0.05);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+.tenure-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(239, 68, 68, 0.22);
+}
+
+/* Executive Card modifier */
+.tenure-card--executive {
+  border-color: rgba(239, 68, 68, 0.25);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.75), 0 0 35px rgba(239, 68, 68, 0.1);
+}
+
+.tenure-card--executive:hover {
+  border-color: rgba(239, 68, 68, 0.75);
+  box-shadow: 0 32px 85px rgba(0, 0, 0, 0.9), 0 0 50px rgba(239, 68, 68, 0.3);
+}
+
+/* Photo Wrapper - Clean 4:5 Aspect Ratio (Never tiny) */
+.tenure-card__photo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #0B090F;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tenure-card--executive .tenure-card__photo-wrap {
+  min-height: 360px;
+}
+
+.tenure-card--head .tenure-card__photo-wrap {
+  min-height: 300px;
+}
+
+.tenure-card__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tenure-card:hover .tenure-card__photo {
+  transform: scale(1.04);
+}
+
+/* Subtle Gradient at base of photo for smooth transition */
+.tenure-card__photo-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 55%,
+    rgba(12, 10, 16, 0.8) 95%,
+    rgba(12, 10, 16, 1) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Corner Cybernetic Brackets on photo */
+.tenure-card__bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 3;
+  transition: transform 0.3s ease;
+}
+
+.tenure-card__bracket--tl {
+  top: 10px;
+  left: 10px;
+  border-top: 1.5px solid var(--accent, #EF4444);
+  border-left: 1.5px solid var(--accent, #EF4444);
+}
+
+.tenure-card__bracket--tr {
+  top: 10px;
+  right: 10px;
+  border-top: 1.5px solid var(--accent, #EF4444);
+  border-right: 1.5px solid var(--accent, #EF4444);
+}
+
+.tenure-card__bracket--bl {
+  bottom: 10px;
+  left: 10px;
+  border-bottom: 1.5px solid var(--accent, #EF4444);
+  border-left: 1.5px solid var(--accent, #EF4444);
+}
+
+.tenure-card__bracket--br {
+  bottom: 10px;
+  right: 10px;
+  border-bottom: 1.5px solid var(--accent, #EF4444);
+  border-right: 1.5px solid var(--accent, #EF4444);
+}
+
+.tenure-card:hover .tenure-card__bracket--tl { transform: translate(-2px, -2px); }
+.tenure-card:hover .tenure-card__bracket--tr { transform: translate(2px, -2px); }
+.tenure-card:hover .tenure-card__bracket--bl { transform: translate(-2px, 2px); }
+.tenure-card:hover .tenure-card__bracket--br { transform: translate(2px, 2px); }
+
+/* Badge Tag on top right */
+.tenure-card__badge-tag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(15, 12, 19, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #FFFFFF;
+  z-index: 3;
+}
+
+.tenure-card__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #EF4444);
+  box-shadow: 0 0 8px var(--accent, #EF4444);
+}
+
+/* Placeholder Container */
+.tenure-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tenure-card__placeholder-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.tenure-card:hover .tenure-card__placeholder-svg {
+  transform: scale(1.03);
+}
+
+/* Card Content Details Section */
+.tenure-card__content {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(18px, 2.2vh, 24px) clamp(18px, 2.5vw, 26px);
+  gap: 12px;
+  flex: 1;
+}
+
+.tenure-card__text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tenure-card__department {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.tenure-card__name {
+  font-family: var(--font-display, var(--font-satoshi)), sans-serif;
+  font-weight: 900;
+  font-size: clamp(21px, 2.4vw, 26px);
+  color: #FFFFFF;
+  letter-spacing: -0.025em;
+  margin: 0;
+  line-height: 1.15;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.tenure-card--executive .tenure-card__name {
+  font-size: clamp(25px, 2.9vw, 32px);
+  letter-spacing: -0.03em;
+}
+
+.tenure-card:hover .tenure-card__name {
+  color: #FFFFFF;
+  text-shadow: 0 0 24px rgba(239, 68, 68, 0.4);
+}
+
+.tenure-card__role {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent, #EF4444);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.tenure-card--executive .tenure-card__role {
+  font-size: 13.5px;
+  color: #F87171;
+}
+
+.tenure-card__bio {
+  font-family: var(--font-general-sans), sans-serif;
+  font-size: 13px;
+  color: var(--text-tertiary, #94A3B8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Footer row */
+.tenure-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tenure-card__term {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--text-tertiary, #64748B);
+  letter-spacing: 0.14em;
+}
+
+.tenure-card__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent, #EF4444);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 999px);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  transition: all 0.2s ease;
+}
+
+.tenure-card__social-link:hover {
+  background: var(--accent, #EF4444);
+  color: #FFFFFF;
+  border-color: var(--accent, #EF4444);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
 }
 
 /* ========================================================
    THE MAIN SHOWCASE: BIG TEAM PHOTO FRAME
    ======================================================== */
-.tenure-showcase-section--minimal {
-  margin-bottom: clamp(40px, 6vh, 60px);
-}
-
 .tenure-photo-frame-wrap {
   background: rgba(14, 12, 18, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(239, 68, 68, 0.08);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -227,7 +651,7 @@
   transform: translateY(0);
 }
 
-/* Minimal Caption Bar Below Image - Strictly Just "HWI TENURE 2025–26" */
+/* Caption Bar Below Image */
 .tenure-minimal-caption-bar {
   display: flex;
   align-items: center;
@@ -254,7 +678,7 @@
 
 .tenure-minimal-title {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: clamp(15px, 2vw, 19px);
+  font-size: clamp(13px, 1.8vw, 17px);
   font-weight: 700;
   letter-spacing: 0.14em;
   color: #FFFFFF;
@@ -265,8 +689,11 @@
 /* Bottom CTA */
 .tenure-bottom-action {
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding-top: 10px;
+  gap: 16px;
+  padding-top: 20px;
+  flex-wrap: wrap;
 }
 
 /* ========================================================
@@ -359,7 +786,7 @@
 
 .tenure-lightbox-title {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: #FFFFFF;
@@ -376,4 +803,18 @@
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.4);
   color: #FCA5A5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tenure-exec-grid {
+    grid-template-columns: 1fr;
+  }
+  .tenure-heads-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+  .tenure-section__title-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

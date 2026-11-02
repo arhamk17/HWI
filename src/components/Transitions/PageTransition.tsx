@@ -44,6 +44,8 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
       return { title: 'TEAMS // CHAPTER ROSTER', sector: '04' };
     } else if (href.startsWith('/join')) {
       return { title: 'JOIN // PASS PROTOCOL', sector: '05' };
+    } else if (href.startsWith('/tenure')) {
+      return { title: 'TENURE 2025–26 // ARCHIVE', sector: '04.B' };
     }
     const clean = href.replace(/^\//, '').split('/')[0].toUpperCase();
     return { title: clean, sector: '00' };

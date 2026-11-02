@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import anime from 'animejs';
-import { ArrowRight, ArrowLeft, ArrowUpRight, LayoutGrid, Layers, Users, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ArrowUpRight, LayoutGrid, Layers, Users, Sparkles, ArrowDown } from 'lucide-react';
+import Link from 'next/link';
 import { DEPARTMENTS, DepartmentMember } from '@/data/teamDepartments';
 import { getLeadershipPalette } from '@/components/TeamsSection/TeamsSection';
 import { CinematicTitle } from '@/components/ui/CinematicTitle';
@@ -255,6 +256,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
 
     if (isLastDept) {
       setAllDone(true);
+      setTheme('dark');
       onCompleteAll?.(true);
       return;
     }
@@ -658,16 +660,15 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
   // ─── Phase: ALL DEPARTMENTS COMPLETED ─────────────────────────
   if (allDone) {
     return (
-      <div className="team-cinematic team-cinematic--final" data-theme={theme} ref={rootRef}>
-        <Particles theme={theme} />
+      <div className="team-cinematic team-cinematic--final" data-theme="dark" ref={rootRef}>
+        <Particles theme="dark" />
         <div className="team-cinematic__final-roster">
-          <span className="team-cinematic__eyebrow">COMPLETE 2026–27 DIRECTORY</span>
+          <span className="team-cinematic__eyebrow">CHAPTER ROSTER // 2026–27 COMPLETE</span>
           <h2 className="team-cinematic__final-title">
-            THAT&apos;S THE<br />TEAM.
+            THAT&apos;S THE<br />CORE TEAM.
           </h2>
           <p className="team-cinematic__final-desc">
-            Every leader, head, and executive member across all 9 departments — the community powering
-            HackWithIndia BVUDET-NM.
+            You have explored all 9 operational departments powering HackWithIndia BVUDET-NM for the 2026–27 tenure.
           </p>
 
           <div className="final-depts-summary">
@@ -703,7 +704,68 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
             ))}
           </div>
 
-          <div className="team-cinematic__final-actions">
+          {/* Interactive Tenure 2025–26 Archive Choice Card */}
+          <div className="tenure-prompt-card">
+            <span className="tenure-prompt-corner tenure-prompt-corner--tl" />
+            <span className="tenure-prompt-corner tenure-prompt-corner--tr" />
+            <span className="tenure-prompt-corner tenure-prompt-corner--bl" />
+            <span className="tenure-prompt-corner tenure-prompt-corner--br" />
+
+            <div className="tenure-prompt-card__badge">
+              <Sparkles size={13} />
+              <span>CHAPTER ARCHIVES</span>
+            </div>
+
+            <h3 className="tenure-prompt-card__question">
+              WOULD YOU LIKE TO VIEW THE TENURE 2025–26 TEAM?
+            </h3>
+
+            <p className="tenure-prompt-card__subtext">
+              Discover the founding chapter council and inaugural department heads who pioneered HackWithIndia at BVUDET-NM.
+            </p>
+
+            <div className="tenure-prompt-card__actions">
+              <Link
+                href="/tenure-2025"
+                className="tenure-prompt-btn tenure-prompt-btn--yes"
+                data-cursor="link"
+                data-cursor-label="EXPLORE"
+              >
+                <span>YES // VIEW TENURE 2025–26</span>
+                <ArrowRight size={15} />
+              </Link>
+
+              <button
+                type="button"
+                className="tenure-prompt-btn tenure-prompt-btn--no"
+                onClick={() => {
+                  const footerEl = document.getElementById('footer');
+                  if (footerEl) {
+                    footerEl.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.scrollBy({ top: 400, behavior: 'smooth' });
+                  }
+                }}
+                data-cursor="link"
+                data-cursor-label="SCROLL"
+                aria-label="No, continue to registration"
+              >
+                <span>NO // CONTINUE TO REGISTRATION</span>
+                <ArrowDown size={15} />
+              </button>
+            </div>
+          </div>
+
+          <div className="team-cinematic__final-bottom-cues">
+            <div className="team-cinematic__scroll-indicator">
+              <div className="team-cinematic__scroll-mouse">
+                <span className="team-cinematic__scroll-dot" />
+              </div>
+              <span className="team-cinematic__scroll-text">
+                SCROLL FURTHER TO CONTINUE TO REGISTRATION
+              </span>
+            </div>
+
             <button
               className="team-cinematic__btn-editorial"
               onClick={() => {
@@ -716,8 +778,8 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
               }}
               aria-label="Start over from first department"
             >
-              <ArrowLeft size={16} />
-              <span>REPLAY SHOWCASE</span>
+              <ArrowLeft size={14} />
+              <span>REPLAY 2026–27 SHOWCASE</span>
             </button>
           </div>
         </div>
