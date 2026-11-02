@@ -36,7 +36,12 @@ function detectQuality(): keyof typeof QUALITY_CONFIG {
   if (typeof window === 'undefined') return 'medium';
   const w = window.innerWidth;
   const cores = typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || 4 : 4;
-  if (w < 768 || cores < 4 || /Mobi|Android/i.test(navigator.userAgent)) return 'low';
+  const isMobile =
+    w < 768 ||
+    cores < 4 ||
+    /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
+  if (isMobile) return 'low';
   if (w >= 1440 && cores >= 8) return 'high';
   return 'medium';
 }
@@ -79,7 +84,22 @@ export function GlobalBackground() {
     ctx.scale(dpr, dpr);
 
     let resizeTimer: ReturnType<typeof setTimeout>;
+    let prevWidth = window.innerWidth;
+    let prevHeight = window.innerHeight;
+
     const onResize = () => {
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+
+      // Filter out mobile address bar show/hide scroll events
+      if (newWidth === prevWidth && Math.abs(newHeight - prevHeight) < 140) {
+        recalcSectionOffsets();
+        return;
+      }
+
+      prevWidth = newWidth;
+      prevHeight = newHeight;
+
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         width = window.innerWidth;
@@ -186,7 +206,7 @@ export function GlobalBackground() {
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Proximity mouse tracking (Feature 12)
+    // Proximity mouse & touch tracking (Feature 12)
     let mouseX = -9999;
     let mouseY = -9999;
     const onMouseMove = (e: MouseEvent) => {
@@ -197,8 +217,20 @@ export function GlobalBackground() {
       mouseX = -9999;
       mouseY = -9999;
     };
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
+    };
+    const onTouchEnd = () => {
+      mouseX = -9999;
+      mouseY = -9999;
+    };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
 
     // Dynamic environment subscription (Feature 3)
     let currentEnvMode = 'normal';
@@ -1042,6 +1074,8 @@ export function GlobalBackground() {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearTimeout(resizeTimer);
       if (rafId) cancelAnimationFrame(rafId);
@@ -1050,6 +1084,14 @@ export function GlobalBackground() {
       unsubscribeEasterEgg();
       unsubscribeEvents();
     };
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.setAttribute('playsinline', 'true');
+      videoRef.current.setAttribute('webkit-playsinline', 'true');
+      videoRef.current.setAttribute('x5-playsinline', 'true');
+    }
   }, []);
 
   return (
@@ -1063,9 +1105,10 @@ export function GlobalBackground() {
           ref={videoRef}
           src="/videos/sukuna-hero.mp4"
           muted
+          autoPlay
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           className="gbg__video"
         />
         <div className="gbg__video-overlay" />

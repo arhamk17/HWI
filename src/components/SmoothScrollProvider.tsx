@@ -21,6 +21,27 @@ function LenisDispatcher() {
   useLenis((lenis) => {
     scrollBus.notify(lenis.scroll, lenis.progress, lenis.velocity);
   });
+
+  // Native scroll sync fallback for mobile touch devices (Android Chrome & iOS Safari)
+  useEffect(() => {
+    let ticking = false;
+    const handleNativeScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY || window.pageYOffset || 0;
+          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          const progress = Math.min(1, Math.max(0, y / maxScroll));
+          scrollBus.notify(y, progress, 0);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleNativeScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleNativeScroll);
+  }, []);
+
   return null;
 }
 
@@ -53,7 +74,8 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         lerp: reducedMotion ? 1 : 0.075,
         smoothWheel: !reducedMotion,
         wheelMultiplier: 0.9,
-        touchMultiplier: 1.5,
+        touchMultiplier: 1.0,
+        syncTouch: false,
       }}
     >
       <LenisDispatcher />

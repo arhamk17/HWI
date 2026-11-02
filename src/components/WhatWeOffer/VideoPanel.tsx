@@ -67,6 +67,9 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
 
       vid.muted = true;
       vid.playsInline = true;
+      vid.setAttribute('playsinline', 'true');
+      vid.setAttribute('webkit-playsinline', 'true');
+      vid.setAttribute('x5-playsinline', 'true');
 
       const syncPlayback = () => {
         if (isNearViewportRef.current && document.visibilityState === 'visible') {
@@ -163,7 +166,7 @@ export const VideoPanel = forwardRef<HTMLVideoElement, VideoPanelProps>(
               muted
               autoPlay={false}
               loop={loop}
-              preload="none"
+              preload="metadata"
               className="video-panel__video"
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleLoadedMetadata}

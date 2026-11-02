@@ -152,6 +152,7 @@
   border-radius: 999px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   margin-bottom: 8px;
 }
 
@@ -483,6 +484,7 @@
   border-radius: 999px;
   border: 1px solid rgba(239, 68, 68, 0.28);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* ==========================================================================
@@ -522,6 +524,17 @@
   cursor: pointer;
   overflow: visible;
   transition: height 0.2s ease;
+  touch-action: none;
+}
+
+/* Expanded touch hit area for mobile fingertips */
+.about-video-timeline::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: 0;
+  right: 0;
 }
 
 .about-video-timeline:hover {
@@ -673,6 +686,7 @@
   padding: 10px 22px;
   border-radius: 999px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 5;
   pointer-events: none;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(239, 68, 68, 0.3);
@@ -816,6 +830,7 @@
   border-radius: 999px;
   background: rgba(18, 16, 24, 0.9);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(239, 68, 68, 0.6);
   color: #FFFFFF;
   font-family: var(--font-jetbrains-mono), monospace;

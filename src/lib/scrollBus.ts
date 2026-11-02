@@ -20,6 +20,13 @@ class ScrollBus {
   }
 
   public notify(scrollY: number, progress: number, velocity: number) {
+    if (
+      Math.abs(this.scrollY - scrollY) < 0.25 &&
+      Math.abs(this.progress - progress) < 0.0005 &&
+      Math.abs(this.velocity - velocity) < 0.05
+    ) {
+      return;
+    }
     this.scrollY = scrollY;
     this.progress = progress;
     this.velocity = velocity;
