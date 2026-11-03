@@ -373,11 +373,7 @@
 }
 
 .about-scroll-morph__back-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #EF4444;
-  box-shadow: 0 0 8px #EF4444;
+  display: none !important;
 }
 
 .about-scroll-morph__back-category {

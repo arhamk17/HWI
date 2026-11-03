@@ -652,11 +652,7 @@
 }
 
 .about-video-quality-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 6px #22c55e;
+  display: none !important;
 }
 
 /* Buffering Stream Indicator */
@@ -800,11 +796,7 @@
 }
 
 .about-theater-live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #EF4444;
-  box-shadow: 0 0 10px #EF4444;
+  display: none !important;
 }
 
 .about-theater-exit-btn {

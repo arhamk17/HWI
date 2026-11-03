@@ -633,7 +633,6 @@ export function AboutIntroVideo() {
 
                 <div className="about-video-controls-right">
                   <span className="about-video-quality-tag" title="Adaptive HLS Stream Rendition">
-                    <span className="about-video-quality-dot" />
                     {qualityLabel}
                   </span>
 
@@ -667,7 +666,6 @@ export function AboutIntroVideo() {
           {/* Top Bar with Live Indicator and Exit Fullscreen Button */}
           <div className="about-theater-top-bar">
             <div className="about-theater-title-badge">
-              <span className="about-theater-live-dot" />
               <span>HWI CINEMATIC BROADCAST • FULL SCREEN</span>
             </div>
 

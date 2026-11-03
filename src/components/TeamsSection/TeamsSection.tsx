@@ -214,7 +214,7 @@ export function TeamsSection({ onOpenCinematic }: TeamsSectionProps) {
       <div className="container teams-view__container">
         <header className="teams-hero">
           <div className="teams-hero__badge-row">
-            <KokonutBadge variant="accent" dot>
+            <KokonutBadge variant="accent">
               HWI // BVUDET-NM CHAPTER
             </KokonutBadge>
             <span className="teams-hero__tenure">TENURE 2026–27</span>

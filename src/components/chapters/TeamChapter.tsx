@@ -221,7 +221,7 @@ export function TeamChapter() {
                     {/* Number and Badge Header Overlay */}
                     <div className="team-card__badges-overlay">
                       <span className="team-card__number">{card.number}</span>
-                      <KokonutBadge variant="accent" dot>
+                      <KokonutBadge variant="accent">
                         {card.badge}
                       </KokonutBadge>
                     </div>

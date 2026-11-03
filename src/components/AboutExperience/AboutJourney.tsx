@@ -159,7 +159,6 @@ export function AboutJourney() {
                     {milestone.shortTitle}
                   </span>
                   <span className="about-journey__item-metric">
-                    {isSelected && <span className="about-journey__dot" />}
                     {milestone.participants}
                   </span>
                 </div>

@@ -29,8 +29,6 @@ const PARAGRAPH_2_WORDS = [
 export function AboutIdentity() {
   const sectionRef = useRef<HTMLElement>(null);
   const revealWrapperRef = useRef<HTMLDivElement>(null);
-  const railFillRef = useRef<HTMLDivElement>(null);
-  const railPipRef = useRef<HTMLDivElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -93,16 +91,7 @@ export function AboutIdentity() {
         p = Math.max(0, Math.min(1, scrolled / scrollRunway));
       }
 
-      // 1. Vertical Progress Indicator Rail (Direct GPU-composited scaleY)
-      if (railFillRef.current) {
-        railFillRef.current.style.transform = `scaleY(${p.toFixed(3)})`;
-      }
-      if (railPipRef.current) {
-        railPipRef.current.style.top = `${(p * 100).toFixed(1)}%`;
-        railPipRef.current.style.opacity = p > 0.02 ? '1' : '0';
-      }
-
-      // 2. Eyebrow illumination
+      // Eyebrow illumination
       if (eyebrowRef.current) {
         const eyeP = Math.min(1, p / 0.08);
         eyebrowRef.current.style.opacity = (0.35 + 0.65 * eyeP).toFixed(2);
@@ -183,9 +172,7 @@ export function AboutIdentity() {
           <div className="about-panel-frame">
             <div className="about-panel-header">
             <div className="about-panel-header__left">
-              <span className="about-panel-indicator" />
               <span className="about-panel-tag">BHARATI VIDYAPEETH UNIVERSITY</span>
-              <span className="about-panel-slash">•</span>
               <span className="about-panel-coord">DEPARTMENT OF ENGINEERING & TECHNOLOGY, NAVI MUMBAI</span>
             </div>
             <div className="about-panel-header__right">
@@ -194,21 +181,13 @@ export function AboutIdentity() {
           </div>
 
           <div className="about-identity__grid">
-            {/* Left Scroll-Driven Reveal Text Block with Subtle Vertical Rail */}
+            {/* Left Scroll-Driven Reveal Text Block */}
             <div className="about-reveal is-revealed" ref={revealWrapperRef}>
               <div className="about-identity__reveal-wrapper">
-                {/* Subtle Vertical Progress Indicator on the Left */}
-                <div className="about-identity__rail" aria-hidden="true">
-                  <div className="about-identity__rail-fill" ref={railFillRef} />
-                  <div className="about-identity__rail-pip" ref={railPipRef} />
-                </div>
-
-                {/* Content Block indented beside the rail */}
+                {/* Content Block */}
                 <div className="about-identity__content">
                   <div className="about-section-eyebrow" ref={eyebrowRef}>
                     <span>01 // GENESIS & MANDATE</span>
-                    <span style={{ opacity: 0.4 }}>•</span>
-                    <span className="about-eyebrow-scroll-hint">SCROLL TO REVEAL</span>
                   </div>
 
                   {/* Main Heading — Line by Line Scroll Reveal */}
@@ -309,7 +288,7 @@ export function AboutIdentity() {
                   </CardItem>
 
                   <CardItem translateZ={24} className="about-identity__hud-bar">
-                    <span>HACKWITHMUMBAI 1.0 • AUDITORIUM</span>
+                    <span>HACKWITHMUMBAI 1.0 AUDITORIUM</span>
                     <span style={{ color: '#EF4444' }}>340+ BUILDERS IN SPRINT</span>
                   </CardItem>
                 </CardBody>

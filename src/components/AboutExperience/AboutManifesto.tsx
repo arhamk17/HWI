@@ -187,7 +187,6 @@ function StackedPrincipleCard({
         </div>
 
         <div className="about-manifesto__focus-note">
-          <span className="about-manifesto__focus-dot" style={{ backgroundColor: item.color }} />
           <span>{item.focus}</span>
         </div>
       </div>

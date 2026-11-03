@@ -54,6 +54,7 @@ export function AboutHero() {
   const firstLineChars = Math.min(visibleHeadlineChars, HEADLINE_LINE_ONE.length);
   const secondLineChars = Math.max(0, visibleHeadlineChars - HEADLINE_LINE_ONE.length);
   const isTypingFirstLine = visibleHeadlineChars <= HEADLINE_LINE_ONE.length;
+  const isStillTyping = visibleHeadlineChars < HEADLINE_LENGTH;
 
   return (
     <section className="about-hero" id="opening">
@@ -67,12 +68,12 @@ export function AboutHero() {
           >
             <span className="about-hero__kinetic-line about-hero__kinetic-line--active">
               <span aria-hidden="true">{HEADLINE_LINE_ONE.slice(0, firstLineChars)}</span>
-              {isTypingFirstLine && <span className="about-hero__typewriter-cursor" aria-hidden="true">|</span>}
+              {isStillTyping && isTypingFirstLine && <span className="about-hero__typewriter-cursor" aria-hidden="true">|</span>}
             </span>
             <br />
             <span className={`about-hero__kinetic-line about-hero__headline-accent ${secondLineChars > 0 ? 'about-hero__kinetic-line--active' : ''}`}>
               <span aria-hidden="true">{HEADLINE_LINE_TWO.slice(0, secondLineChars)}</span>
-              {!isTypingFirstLine && <span className="about-hero__typewriter-cursor" aria-hidden="true">|</span>}
+              {isStillTyping && !isTypingFirstLine && <span className="about-hero__typewriter-cursor" aria-hidden="true">|</span>}
             </span>
           </h1>
         </div>
@@ -113,7 +114,6 @@ export function AboutHero() {
             aria-label="Scroll to explore our story"
             style={{ background: 'none', border: 'none', padding: 0 }}
           >
-            <div className="about-hero__laser-line" />
             <span style={{ color: '#00F0FF' }}>SCROLL TO EXPLORE</span>
             <span>OUR STORY</span>
           </button>

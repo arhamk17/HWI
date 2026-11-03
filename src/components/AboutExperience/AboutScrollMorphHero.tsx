@@ -588,7 +588,6 @@ export function AboutScrollMorphHero() {
                     <div className="about-scroll-morph__card-back">
                       <div>
                         <div className="about-scroll-morph__back-header">
-                          <span className="about-scroll-morph__back-dot" />
                           <span className="about-scroll-morph__back-category">{card.category}</span>
                         </div>
                         <h4 className="about-scroll-morph__back-title">{card.title}</h4>
