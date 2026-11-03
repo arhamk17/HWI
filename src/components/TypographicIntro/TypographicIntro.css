@@ -302,6 +302,72 @@
   }
 }
 
+/* Interactive Unlock Prompt for browsers with strict unmuted autoplay restriction */
+.intro__gesture-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 50;
+  padding: 16px 32px;
+  border-radius: 999px;
+  background: rgba(14, 12, 18, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.25), inset 0 0 16px rgba(239, 68, 68, 0.1);
+  backdrop-filter: blur(12px);
+  animation: promptPulse 2s infinite ease-in-out;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.intro__gesture-prompt:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+  border-color: #EF4444;
+  box-shadow: 0 0 36px rgba(239, 68, 68, 0.4);
+}
+
+.intro__gesture-icon {
+  color: #EF4444;
+}
+
+.intro__gesture-text {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+}
+
+.intro__gesture-sub {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #EF4444;
+  text-transform: uppercase;
+}
+
+@keyframes promptPulse {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 38px rgba(239, 68, 68, 0.45);
+  }
+}
+
+.is-waiting-gesture {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Accessible reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .intro__slide {
