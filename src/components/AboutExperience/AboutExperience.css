@@ -446,7 +446,6 @@
   .about-identity-section {
     height: auto;
     min-height: 100vh;
-    min-height: 100dvh;
     padding: clamp(60px, 10vh, 120px) 0;
   }
   .about-identity-sticky {
@@ -1263,26 +1262,24 @@
     gap: 28px;
     padding: 12px 0 24px;
     perspective: none;
-    max-width: 100%;
   }
 
   .about-manifesto__card {
     min-height: auto;
     padding: 24px 20px;
-    max-width: 100%;
   }
 
   .about-manifesto__card--0,
   .about-manifesto__card--1,
   .about-manifesto__card--2,
   .about-manifesto__card--3 {
-    transform: skewY(-2deg) translate3d(0, 0, 0);
+    transform: -skew-y(3deg) translate3d(0, 0, 0);
   }
 
   .about-manifesto__card:hover,
   .about-manifesto__card:focus-visible,
   .about-manifesto__card.is-active {
-    transform: skewY(-1deg) translateY(-8px) scale(1.01);
+    transform: -skew-y(1.5deg) translateY(-12px) scale(1.02);
   }
 
   .about-journey__item {

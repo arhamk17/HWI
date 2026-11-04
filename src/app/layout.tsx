@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import { Outfit, Inter, JetBrains_Mono, Playfair_Display, Syne } from 'next/font/google';
 import { GlobalBackground } from '@/components/GlobalBackground/GlobalBackground';
 import { Navigation } from '@/components/Navigation/Navigation';
@@ -9,14 +9,6 @@ import { EasterEgg } from '@/components/EasterEgg/EasterEgg';
 import { PageTransitionProvider } from '@/components/Transitions/PageTransition';
 import { BackgroundSoundtrack } from '@/components/Soundtrack/BackgroundSoundtrack';
 import './globals.css';
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  viewportFit: 'cover',
-  themeColor: '#000000',
-};
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -59,11 +51,6 @@ export const metadata: Metadata = {
     icon: '/hwi-bvudet-logo.png',
     shortcut: '/hwi-bvudet-logo.png',
     apple: '/hwi-bvudet-logo.png',
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'black-translucent',
-    title: 'HackWithIndia BVUDET-NM',
   },
 };
 

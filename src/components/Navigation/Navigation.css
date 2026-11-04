@@ -309,10 +309,8 @@
 .nav-overlay {
   position: fixed;
   inset: 0;
-  width: 100%;
-  max-width: 100%;
+  width: 100vw;
   height: 100vh;
-  height: 100dvh;
   background-color: rgba(7, 7, 10, 0.97);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
@@ -321,8 +319,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: max(24px, env(safe-area-inset-top));
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
   transform: translateY(-100%);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
@@ -335,8 +331,8 @@
 
 .nav-overlay__close {
   position: absolute;
-  top: max(20px, env(safe-area-inset-top));
-  right: max(20px, env(safe-area-inset-right));
+  top: 24px;
+  right: 24px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
@@ -453,7 +449,7 @@
 
 @media (max-width: 768px) {
   .navbar {
-    top: max(14px, env(safe-area-inset-top));
+    top: 14px;
   }
 
   .navbar__pill-track {
@@ -473,7 +469,7 @@
 
 @media (max-width: 480px) {
   .navbar {
-    top: max(10px, env(safe-area-inset-top));
+    top: 10px;
   }
 
   .navbar__container {

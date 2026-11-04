@@ -78,29 +78,12 @@ export function GlobalBackground() {
     canvas.style.height = height + 'px';
     ctx.scale(dpr, dpr);
 
-    if (videoRef.current) {
-      videoRef.current.playsInline = true;
-      videoRef.current.setAttribute('playsinline', 'true');
-      videoRef.current.setAttribute('webkit-playsinline', 'true');
-      videoRef.current.setAttribute('x5-playsinline', 'true');
-    }
-
-    let lastWidth = window.innerWidth;
-    let lastHeight = window.innerHeight;
     let resizeTimer: ReturnType<typeof setTimeout>;
     const onResize = () => {
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-      // Filter mobile browser address bar collapse/expand
-      if (Math.abs(newHeight - lastHeight) < 140 && newWidth === lastWidth) {
-        return;
-      }
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        lastWidth = window.innerWidth;
-        lastHeight = window.innerHeight;
-        width = lastWidth;
-        height = lastHeight;
+        width = window.innerWidth;
+        height = window.innerHeight;
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
         canvas.style.width = width + 'px';

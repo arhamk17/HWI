@@ -19,7 +19,6 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
   /* Deep cinematic charcoal vignette keeping the background video atmospheric while giving typography 100% legibility */
   background: radial-gradient(
     circle at center,

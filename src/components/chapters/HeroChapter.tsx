@@ -104,6 +104,7 @@ export function HeroChapter() {
       className="chapter"
       id="hero"
       style={{
+        minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',

@@ -278,21 +278,10 @@ export function AboutScrollMorphHero() {
       }
     };
 
-    let lastWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-    let lastHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-
     const handleResize = () => {
-      const newWidth = window.innerWidth;
-      const newHeight = window.innerHeight;
-      // Filter mobile browser address bar collapse/expand
-      if (Math.abs(newHeight - lastHeight) < 140 && newWidth === lastWidth) {
-        return;
-      }
-      lastWidth = newWidth;
-      lastHeight = newHeight;
       setDimensions({
-        width: newWidth,
-        height: newHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
       handleScroll();
     };
