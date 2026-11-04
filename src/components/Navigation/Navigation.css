@@ -311,6 +311,9 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: rgba(7, 7, 10, 0.97);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);

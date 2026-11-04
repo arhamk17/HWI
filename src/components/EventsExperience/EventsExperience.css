@@ -2361,3 +2361,37 @@
     font-size: 0.74rem;
   }
 }
+
+/* Mobile 480px Events Additions */
+@media (max-width: 480px) {
+  .chronicles-hero-section {
+    padding-top: clamp(80px, 10vh, 105px);
+    padding-bottom: 24px;
+  }
+  .chronicles-hero__title {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+  }
+  .chronicles-hero__desc {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .chronicles-hero__meta {
+    padding-top: 14px;
+    gap: 14px;
+  }
+  .hero-stats-row {
+    gap: 10px 14px;
+  }
+  .hwi-gallery-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+  .hwi-palette-row {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+}

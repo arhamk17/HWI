@@ -100,3 +100,26 @@
     gap: 8px;
   }
 }
+
+/* Mobile 480px Footer Additions */
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--space-48) 0 var(--space-24);
+  }
+  .footer__top {
+    gap: var(--space-32);
+  }
+  .footer__social {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .footer__divider {
+    margin: var(--space-32) 0 var(--space-20);
+  }
+}

@@ -711,3 +711,38 @@
     font-size: 0.52rem;
   }
 }
+
+/* Mobile 480px AuthenticMoments Additions */
+@media (max-width: 768px) {
+  .moments-top-controls {
+    top: 14px;
+    left: 14px;
+    gap: 6px;
+  }
+  .moments-control-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .moments-bottom-nav {
+    bottom: 14px;
+    padding: 6px 14px;
+  }
+  .moments-hero-title {
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+  }
+  .moments-hero-subtitle {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .moments-top-controls {
+    top: 10px;
+    left: 10px;
+  }
+  .moments-modal-container {
+    width: 95vw;
+    padding: 12px;
+    border-radius: 12px;
+  }
+}

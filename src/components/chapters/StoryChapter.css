@@ -314,3 +314,53 @@
     padding-right: 20px;
   }
 }
+
+/* Mobile 480px Story Additions */
+@media (max-width: 480px) {
+  .story-chapter__title {
+    font-size: clamp(1.3rem, 4.8vw, 1.9rem);
+    line-height: 1.22;
+  }
+  .story-chapter__narrative-global {
+    top: clamp(60px, 8vh, 80px);
+    gap: 14px;
+    left: 14px;
+    right: 14px;
+  }
+  .story-chapter__body-wrap {
+    padding-left: 12px;
+  }
+  .story-chapter__body-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .story-chapter__stats-row {
+    gap: 12px;
+    justify-content: space-between;
+  }
+  .story-chapter__stat-item {
+    flex: 1 1 80px;
+  }
+  .story-chapter__stat-num {
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
+  }
+  .story-chapter__stat-label {
+    font-size: 0.65rem;
+  }
+  .story-chapter__hwi-title {
+    font-size: clamp(1.45rem, 5.8vw, 2.2rem);
+  }
+  .story-chapter__hwi-desc {
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+}
+
+@media (max-width: 360px) {
+  .story-chapter__title {
+    font-size: clamp(1.15rem, 4.6vw, 1.5rem);
+  }
+  .story-chapter__stats-row {
+    gap: 8px;
+  }
+}

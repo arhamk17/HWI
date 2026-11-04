@@ -2418,3 +2418,38 @@
   text-transform: uppercase;
   color: #94A3B8;
 }
+
+/* Mobile 480px TeamCinematic Additions */
+@media (max-width: 480px) {
+  .dept-header {
+    padding-bottom: 8px;
+  }
+  .dept-header__title {
+    font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+  }
+  .tenure-prompt-card {
+    padding: 24px 16px;
+    margin: 18px auto 14px;
+  }
+  .tenure-prompt-card__question {
+    font-size: clamp(18px, 4.8vw, 22px);
+  }
+  .tenure-prompt-card__subtext {
+    font-size: 12.5px;
+  }
+  .tenure-prompt-card__actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tenure-prompt-btn--yes,
+  .tenure-prompt-btn--no {
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 20px;
+    font-size: 11px;
+    justify-content: center;
+  }
+  .team-cinematic__scroll-indicator {
+    padding: 6px 14px;
+  }
+}

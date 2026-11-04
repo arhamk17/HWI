@@ -260,3 +260,67 @@
     position: static;
   }
 }
+
+/* Mobile 480px WhatWeDo Additions */
+@media (max-width: 768px) {
+  .wwd {
+    padding: calc(var(--space-section) * 0.75) 0;
+  }
+  .wwd__header {
+    margin-bottom: var(--space-32);
+  }
+  .wwd__nav-item {
+    padding: 14px 18px;
+  }
+  .wwd__title {
+    font-size: clamp(1.1rem, 3.8vw, 1.35rem);
+  }
+  .wwd__detail-panel {
+    padding: 24px 20px;
+  }
+  .wwd__detail-title {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .wwd__nav-item {
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+  .wwd__nav-left {
+    gap: 10px;
+  }
+  .wwd__number {
+    font-size: 12px;
+  }
+  .wwd__title {
+    font-size: 1rem;
+  }
+  .wwd__detail-panel {
+    padding: 18px 14px;
+    border-radius: 12px;
+  }
+  .wwd__detail-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.8rem);
+    margin-bottom: 12px;
+  }
+  .wwd__detail-desc {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .wwd__deliverables-header {
+    font-size: 10px;
+    margin-bottom: 12px;
+  }
+  .wwd__deliverable-item {
+    padding: 10px 12px;
+  }
+  .wwd__deliverable-tag {
+    font-size: 11px;
+  }
+  .wwd__deliverable-detail {
+    font-size: 12px;
+  }
+}

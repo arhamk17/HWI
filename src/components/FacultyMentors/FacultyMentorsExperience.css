@@ -9,7 +9,8 @@
   min-height: 100vh;
   background-color: var(--surface-primary, #070709);
   color: var(--text-primary, #FFFFFF);
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
   padding-bottom: var(--space-96, 96px);
 }
 
@@ -437,5 +438,55 @@
   .fm-cta-banner {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* Mobile 480px Faculty Mentors Additions */
+@media (max-width: 480px) {
+  .fm-nav-bar {
+    padding-top: 76px;
+    margin-bottom: var(--space-24, 24px);
+  }
+  .fm-hero {
+    padding-bottom: var(--space-32, 32px);
+    margin-bottom: var(--space-32, 32px);
+  }
+  .fm-hero__title {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+  .fm-stats-bar {
+    gap: 10px;
+  }
+  .fm-stat-card {
+    flex: 1 1 120px;
+    padding: 10px 14px;
+  }
+  .fm-stat-num {
+    font-size: 20px;
+  }
+  .fm-tabs-bar {
+    gap: 8px;
+    margin-bottom: var(--space-32, 32px);
+  }
+  .fm-tab {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+  .fm-cta-banner {
+    padding: 24px 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-ambient-glow {
+    width: 100vw;
+    max-width: 100%;
+    left: 0;
+    transform: none;
+  }
+  .fm-ambient-glow-secondary {
+    width: 100vw;
+    max-width: 100%;
+    right: 0;
   }
 }

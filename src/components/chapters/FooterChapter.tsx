@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import '@/components/Footer/Footer.css';
 import { ScrollFurtherTrigger } from '@/components/ScrollFurther/ScrollFurtherTrigger';
 
 export function FooterChapter() {
@@ -15,8 +16,8 @@ export function FooterChapter() {
       padding: 'var(--space-64) 0 0',
     }}>
       <div className="container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-48)' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div className="footer__top">
+          <div className="footer__brand">
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-12)', marginBottom: 'var(--space-8)' }}>
               <img
                 src="/hwi-bvudet-logo.png"
@@ -31,7 +32,7 @@ export function FooterChapter() {
             <p className="type-body-small text-tertiary" style={{ marginTop: 'var(--space-8)' }}>A chapter of HackWithIndia</p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 'var(--space-24)' }}>
+          <div className="footer__links">
             <div style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
               <a
                 href="https://www.instagram.com/hwi.bvudet_nm?exln=MTk5NDVrMDJtZ2d2Nw=="

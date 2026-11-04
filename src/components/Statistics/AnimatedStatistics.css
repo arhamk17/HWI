@@ -160,7 +160,7 @@
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-20);
+    gap: 20px;
   }
 }
 
@@ -171,7 +171,7 @@
   }
 
   .stat-card {
-    padding: var(--space-20);
+    padding: 20px;
     transform: none !important;
   }
 }
@@ -183,5 +183,30 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* Mobile 480px Statistics Additions */
+@media (max-width: 480px) {
+  .impact-header {
+    margin-bottom: var(--space-32);
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .stat-card {
+    padding: 16px 18px;
+    border-radius: 12px;
+  }
+  .stat-card__number {
+    font-size: clamp(2.2rem, 7vw, 2.8rem);
+  }
+  .stat-card__label {
+    font-size: 1rem;
+  }
+  .stat-card__desc {
+    font-size: 12px;
+    padding-top: 8px;
   }
 }

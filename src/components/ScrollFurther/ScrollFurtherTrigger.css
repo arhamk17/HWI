@@ -365,3 +365,29 @@
   }
 }
 
+
+/* Mobile 480px ScrollFurther Additions */
+@media (max-width: 480px) {
+  .scroll-further-portal {
+    padding: 24px 16px;
+    margin-top: 32px;
+  }
+  .scroll-further-heading {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+  .scroll-further-desc {
+    font-size: 0.82rem;
+  }
+  .scroll-further-dial {
+    width: 52px;
+    height: 52px;
+  }
+  .scroll-center-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .gesture-instruction-text {
+    font-size: 0.62rem;
+  }
+}

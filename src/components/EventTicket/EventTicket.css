@@ -139,7 +139,7 @@
 /* Upcoming Events Grid */
 .upcoming-events-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 24px;
 }
 
@@ -1261,8 +1261,15 @@
 /* ─── Responsive Styles ─────────────────────────────────────────────────── */
 @media (max-width: 960px) {
   .ticket-split-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 40px;
+    max-width: 100%;
+  }
+
+  .ticket-split-grid > * {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .ticket-preview-pane {
@@ -1400,5 +1407,95 @@
 
   .r-barcode {
     fill: #000000 !important;
+  }
+}
+
+/* Mobile 480px Ticket Additions */
+@media (max-width: 480px) {
+  .hwi-ticket-hero {
+    padding: 100px 0 36px;
+  }
+  .ticket-hero-title {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+  }
+  .upcoming-events-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .thermal-ticket {
+    padding: 20px 14px;
+    max-width: 100%;
+  }
+  .thermal-ticket-container {
+    max-width: 100%;
+  }
+  .ticket-form-card {
+    padding: 18px 14px;
+  }
+  .ticket-output-controls {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stage {
+    width: 100%;
+    max-width: 100%;
+  }
+  .printer-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .printer-pick button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  .printer-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .ticket-form-card {
+    padding: 16px 10px;
+  }
+  .printer-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .printer-pick {
+    width: 100%;
+    display: flex;
+  }
+  .printer-pick button {
+    flex: 1;
+    text-align: center;
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+  .printer-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hwi-personalize-section {
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+  .stage {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+  .receipt-hang {
+    margin: -9px 6px 0 !important;
+  }
+  .receipt {
+    padding: 20px 12px 28px !important;
   }
 }

@@ -123,6 +123,8 @@ export function HeroChapter() {
           style={{
             marginBottom: 'var(--space-24)',
             textShadow: '0 4px 24px rgba(0, 0, 0, 0.85), 0 2px 8px rgba(0, 0, 0, 0.7)',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
           }}
           data-cursor="text"
         >
@@ -182,7 +184,7 @@ export function HeroChapter() {
           className="type-eyebrow text-accent"
           style={{
             marginBottom: 'var(--space-24)',
-            letterSpacing: '0.3em',
+            letterSpacing: 'clamp(0.12em, 1.5vw, 0.3em)',
             opacity: 0,
             textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
           }}

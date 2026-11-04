@@ -303,3 +303,74 @@
     gap: 8px;
   }
 }
+
+/* Mobile 480px TeamChapter Additions */
+@media (max-width: 768px) {
+  .team-showcase__track-wrap {
+    height: 62vh;
+    min-height: 380px;
+    max-height: 520px;
+  }
+  .team-card {
+    width: min(92vw, 420px);
+    max-height: 480px;
+  }
+  .team-card__image-wrap {
+    height: 52%;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-showcase__sticky {
+    padding: 16px 0;
+  }
+  .team-showcase__track-wrap {
+    min-height: 340px;
+  }
+  .team-card {
+    width: min(94vw, 380px);
+    max-height: 460px;
+  }
+  .team-card__image-wrap {
+    height: 50%;
+    min-height: 160px;
+  }
+  .team-card__content {
+    padding: 14px 16px;
+  }
+  .team-card__title {
+    font-size: clamp(1.2rem, 4.8vw, 1.6rem);
+  }
+  .team-card__year {
+    font-size: clamp(1.05rem, 3.8vw, 1.3rem);
+  }
+  .team-card__desc {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+  .team-card__number {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+  }
+  .team-showcase__indicator-dot {
+    width: 22px;
+  }
+  .team-showcase__indicator-dot--active {
+    width: 36px;
+  }
+}
+
+@media (max-width: 360px) {
+  .team-card {
+    width: calc(100vw - 20px);
+    max-height: 440px;
+  }
+  .team-card__image-wrap {
+    height: 48%;
+    min-height: 140px;
+  }
+  .team-card__content {
+    padding: 10px 12px;
+  }
+}
