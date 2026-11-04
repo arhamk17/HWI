@@ -31,7 +31,7 @@ export function FooterChapter() {
             <p className="type-body-small text-tertiary" style={{ marginTop: 'var(--space-8)' }}>A chapter of HackWithIndia</p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 'var(--space-24)' }}>
+          <div className="footer__right-col">
             <div style={{ display: 'flex', gap: 'var(--space-24)', flexWrap: 'wrap' }}>
               <a
                 href="https://www.instagram.com/hwi.bvudet_nm?exln=MTk5NDVrMDJtZ2d2Nw=="

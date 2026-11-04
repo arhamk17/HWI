@@ -21,6 +21,19 @@ function LenisDispatcher() {
   useLenis((lenis) => {
     scrollBus.notify(lenis.scroll, lenis.progress, lenis.velocity);
   });
+
+  useEffect(() => {
+    const handleNativeScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? scrollY / docHeight : 0;
+      scrollBus.notify(scrollY, progress, 0);
+    };
+
+    window.addEventListener('scroll', handleNativeScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleNativeScroll);
+  }, []);
+
   return null;
 }
 
@@ -53,7 +66,8 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         lerp: reducedMotion ? 1 : 0.075,
         smoothWheel: !reducedMotion,
         wheelMultiplier: 0.9,
-        touchMultiplier: 1.5,
+        touchMultiplier: 1.0,
+        syncTouch: false,
       }}
     >
       <LenisDispatcher />

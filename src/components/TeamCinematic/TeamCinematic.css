@@ -88,6 +88,7 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  gap: 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -99,8 +100,10 @@
 
 .dept-header__left {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .dept-header__eyebrow {
@@ -136,6 +139,7 @@
 }
 
 .dept-header__counter {
+  flex: 0 0 auto;
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: clamp(13px, 1.2vw, 16px);
   letter-spacing: 0.15em;
@@ -1168,6 +1172,7 @@
   .team-cinematic {
     height: auto;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-y: auto;
     padding: calc(64px + 16px) 16px 20px;
   }
@@ -1261,6 +1266,7 @@
   }
 
   .dept-header__switcher {
+    flex: 0 1 auto;
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
@@ -1536,9 +1542,11 @@
 /* ── Top Header Department Switcher ── */
 .dept-header__switcher {
   display: flex;
+  flex: 0 1 550px;
   align-items: center;
   gap: 6px;
   max-width: 550px;
+  min-width: 0;
   overflow-x: auto;
   padding: 4px 6px;
   background: rgba(255, 255, 255, 0.03);
@@ -1558,6 +1566,7 @@
   background: transparent;
   border: none;
   border-radius: var(--radius-pill);
+  flex: 0 0 auto;
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 11px;
   color: var(--tc-text-sec);

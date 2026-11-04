@@ -303,3 +303,28 @@
     gap: 8px;
   }
 }
+
+@media (max-width: 480px) {
+  .team-showcase__sticky {
+    padding: 14px 0;
+  }
+
+  .team-card {
+    width: 92vw;
+    max-height: 460px;
+  }
+
+  .team-card__image-wrap {
+    height: 52%;
+    min-height: 180px;
+  }
+
+  .team-card__content {
+    padding: 12px 16px;
+  }
+
+  .team-card__desc {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}
