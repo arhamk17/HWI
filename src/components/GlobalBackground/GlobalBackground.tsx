@@ -26,8 +26,8 @@ import './GlobalBackground.css';
 // =============================================
 const QUALITY_CONFIG = {
   high: { particleCount: 2000, glow: true },
-  medium: { particleCount: 1300, glow: false },
-  low: { particleCount: 700, glow: false },
+  medium: { particleCount: 1400, glow: false },
+  low: { particleCount: 1200, glow: false },
 };
 
 const TARGET_FRAME_INTERVAL = 1000 / 30;
@@ -70,7 +70,8 @@ export function GlobalBackground() {
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, quality === 'low' ? 1 : 1.5);
+    const isMobile = width < 768 || /Mobi|Android/i.test(navigator.userAgent);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
@@ -82,20 +83,25 @@ export function GlobalBackground() {
     const onResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        width = window.innerWidth;
-        height = window.innerHeight;
+        const newW = window.innerWidth;
+        const newH = window.innerHeight;
+        // Ignore minor mobile address bar height fluctuations (< 120px) to prevent canvas wipe & jitter
+        if (Math.abs(newW - width) < 4 && Math.abs(newH - height) < 120) {
+          height = newH;
+          return;
+        }
+        width = newW;
+        height = newH;
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
         ctx.scale(dpr, dpr);
         recalcSectionOffsets();
-        if (targetsReady) {
-          populateHWIState(soa);
-          populateWhiteSectionState(soa, width, height);
-          populateBonsaiTreeState(soa, width, height);
-          populateTeamState(soa, width, height);
-        }
+        populateHWIState(soa);
+        populateWhiteSectionState(soa, width, height);
+        populateBonsaiTreeState(soa, width, height);
+        populateTeamState(soa, width, height);
       }, 150);
     };
     window.addEventListener('resize', onResize);
@@ -107,21 +113,12 @@ export function GlobalBackground() {
     const soa: ParticleSOA = createParticleSOA(N);
     initInitialStates(soa, width, height);
 
-    // Progressive target state generation deferred to idle time
-    let targetsReady = false;
-    const initDeferredTargets = () => {
-      populateHWIState(soa);
-      populateWhiteSectionState(soa, width, height);
-      populateBonsaiTreeState(soa, width, height);
-      populateTeamState(soa, width, height);
-      targetsReady = true;
-    };
-
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(initDeferredTargets);
-    } else {
-      setTimeout(initDeferredTargets, 60);
-    }
+    // Instant synchronous target state initialization: guarantees all target states are ready on frame 1
+    populateHWIState(soa);
+    populateWhiteSectionState(soa, width, height);
+    populateBonsaiTreeState(soa, width, height);
+    populateTeamState(soa, width, height);
+    const targetsReady = true;
 
     // ========================================================
     // 2. CACHED SECTION OFFSETS (Eliminates layout thrashing)
@@ -199,6 +196,26 @@ export function GlobalBackground() {
     };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     document.addEventListener('mouseleave', onMouseLeave);
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
+    };
+    const onTouchEnd = () => {
+      mouseX = -9999;
+      mouseY = -9999;
+    };
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchstart', onTouchMove, { passive: true });
+
+    let currentWindowScrollY = 0;
+    const onWindowScroll = () => {
+      currentWindowScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    };
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
 
     // Dynamic environment subscription (Feature 3)
     let currentEnvMode = 'normal';
@@ -300,7 +317,7 @@ export function GlobalBackground() {
       time += elapsed / 1000;
 
       const currentPath = pathnameRef.current;
-      const targetScrollY = scrollBus.scrollY || window.scrollY || 0;
+      const targetScrollY = Math.max(scrollBus.scrollY || 0, window.scrollY || 0, currentWindowScrollY);
       smoothScrollY += (targetScrollY - smoothScrollY) * (1 - Math.pow(0.9, elapsed / (1000 / 60)));
       const scrollY = smoothScrollY;
       const vh = height;
@@ -404,13 +421,14 @@ export function GlobalBackground() {
         }
 
         // Section Scoping for Particle Alpha:
-        // Disable distracting particles in Hero section to preserve clean video background & typography
+        // Ambient dust in hero, smoothly transitioning into the 3D celestial globe
         if (scrollY < aboutTop * 0.85) {
-          // Hero section: completely remove floating particles
-          sectionParticleAlpha = 0.0;
+          // Hero section: elegant ambient cosmic dust (visible on mobile and desktop)
+          const heroIntro = Math.min(1.0, scrollY / Math.max(1, vh * 0.4));
+          sectionParticleAlpha = isMobile ? 0.65 : 0.45 + heroIntro * 0.2;
         } else if (scrollY < aboutTop) {
-          // Approaching About section: smoothly introduce the 3D celestial globe
-          sectionParticleAlpha = Math.min(1.0, (scrollY - aboutTop * 0.85) / (aboutTop * 0.15));
+          // Approaching About section: smoothly transition to full globe prominence
+          sectionParticleAlpha = Math.min(1.0, 0.65 + ((scrollY - aboutTop * 0.85) / Math.max(1, aboutTop * 0.15)) * 0.35);
         } else {
           // Full particle presence across all other sections
           sectionParticleAlpha = 1.0;
@@ -546,7 +564,7 @@ export function GlobalBackground() {
       globeStore.targetRotY += rotSpeed;
       globeStore.stepInertia();
 
-      const sphereRadius = Math.min(width, height) * 0.28;
+      const sphereRadius = Math.min(width, height) * (width < 768 ? 0.36 : 0.28);
       const rotY = globeStore.rotY * rotDamp;
       const rotX = globeStore.rotX * rotDamp;
       const cosY = Math.cos(rotY);
@@ -567,15 +585,16 @@ export function GlobalBackground() {
       const hwiHalfH = svgH * 0.5;
 
       // Bonsai Tree parameters (Black section)
-      // Sits slightly right of center to frame foreground content perfectly
-      const treeCX = centerX + Math.min(width, height) * 0.14;
-      const treeCY = centerY + 15;
-      const treeSway = prefersReducedMotion ? 0 : Math.sin(time * 0.95) * 2.8;
+      // On mobile screens (< 768px), center the tree so it frames centered mobile content cleanly without clipping off the right edge
+      const isMobileScreen = width < 768;
+      const treeCX = isMobileScreen ? centerX : centerX + Math.min(width, height) * 0.14;
+      const treeCY = centerY + (isMobileScreen ? 5 : 15);
+      const treeSway = prefersReducedMotion ? 0 : Math.sin(time * 0.95) * (isMobileScreen ? 1.5 : 2.8);
       const treeScale = 1.0 + Math.sin(time * 0.45) * 0.015;
 
       for (let i = 0; i < N; i++) {
         let x = 0, y = 0, opacity = 0;
-        let size = soa.size[i];
+        let size = isMobileScreen ? Math.max(2.0, soa.size[i]) : soa.size[i];
         let cr = 239, cg = 68, cb = 68;
 
         const drift = Math.sin(time * soa.driftSpeed[i] + soa.driftPhase[i]) * 8;
@@ -932,7 +951,12 @@ export function GlobalBackground() {
       // 2–4 natural red leaves detach from canopy, gently sway and fall
       // ------------------------------------------------------
       if (sceneProgress >= 2.5 && sceneProgress <= 3.5) {
-        const normScale = Math.max(520, Math.min(height * 0.62, 720)) / 360;
+        const isMobileScreen = width < 768;
+        const maxTreeSpan = isMobileScreen ? width * 0.82 : 720;
+        const treeHeightTarget = isMobileScreen
+          ? Math.min(height * 0.48, maxTreeSpan * 1.15)
+          : Math.max(520, Math.min(height * 0.62, 720));
+        const normScale = treeHeightTarget / 360;
 
         let activeCount = 0;
         for (let l = 0; l < MAX_LEAVES; l++) {
@@ -1042,6 +1066,10 @@ export function GlobalBackground() {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchstart', onTouchMove);
+      window.removeEventListener('scroll', onWindowScroll);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearTimeout(resizeTimer);
       if (rafId) cancelAnimationFrame(rafId);

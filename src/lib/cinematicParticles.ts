@@ -89,19 +89,20 @@ export function initInitialStates(soa: ParticleSOA, width: number, height: numbe
   const centerX = width / 2;
   const centerY = height / 2;
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  const isMobile = width < 768;
 
   for (let i = 0; i < N; i++) {
     soa.stagger[i] = Math.random() * 0.5;
     soa.driftSpeed[i] = 0.4 + Math.random() * 0.8;
     soa.driftPhase[i] = Math.random() * Math.PI * 2;
-    soa.size[i] = 1.8 + Math.random() * 2.2;
+    soa.size[i] = (isMobile ? 2.0 : 1.8) + Math.random() * 2.2;
     soa.isRect[i] = Math.random() > 0.6 ? 1 : 0;
 
     // State 0: Ambient Cosmic Dust (Hero)
     const aTheta = Math.random() * Math.PI * 2;
-    const aDist = (0.2 + 0.8 * Math.sqrt(Math.random())) * Math.max(width, height) * 0.45;
+    const aDist = (0.15 + 0.85 * Math.sqrt(Math.random())) * Math.max(width, height) * (isMobile ? 0.65 : 0.45);
     soa.s0x[i] = centerX + Math.cos(aTheta) * aDist;
-    soa.s0y[i] = centerY + Math.sin(aTheta) * aDist * 0.6;
+    soa.s0y[i] = centerY + Math.sin(aTheta) * aDist * (isMobile ? 0.95 : 0.6);
     soa.s0z[i] = (Math.random() - 0.5) * 200;
 
     // State 1: Fibonacci Celestial Sphere (About / Story)
@@ -505,8 +506,13 @@ export function populateWhiteSectionState(soa: ParticleSOA, width: number, heigh
 // ==========================================================================
 export function populateBonsaiTreeState(soa: ParticleSOA, width: number, height: number) {
   const N = soa.count;
-  // Make the tree substantial: 60% of viewport height (minimum 520px, max 720px)
-  const treeHeightTarget = Math.max(520, Math.min(height * 0.62, 720));
+  // Make the tree substantial and responsive:
+  // On mobile screens (< 768px), scale relative to screen width so it fits within screen margins
+  const isMobile = width < 768;
+  const maxTreeSpan = isMobile ? width * 0.82 : 720;
+  const treeHeightTarget = isMobile
+    ? Math.min(height * 0.48, maxTreeSpan * 1.15)
+    : Math.max(520, Math.min(height * 0.62, 720));
   const normScale = treeHeightTarget / 360; // unit multiplier
 
   const rootCount = Math.floor(N * 0.16);
