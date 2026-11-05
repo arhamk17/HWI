@@ -45,12 +45,37 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: 'HackWithIndia BVUDET-NM Chapter',
+  metadataBase: new URL('https://hwi-murex.vercel.app/'),
+  title: 'HackWithIndia BVUDET-NM Chapter | Student Developer Community',
   description: 'Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.',
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: '/hwi-bvudet-logo.png',
     shortcut: '/hwi-bvudet-logo.png',
     apple: '/hwi-bvudet-logo.png',
+  },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    siteName: 'HackWithIndia BVUDET-NM Chapter',
+    title: 'HackWithIndia BVUDET-NM Chapter | Student Developer Community',
+    description: 'Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'HackWithIndia BVUDET-NM Chapter — Innovate. Create. Elevate.',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HackWithIndia BVUDET-NM Chapter | Student Developer Community',
+    description: 'Innovate. Create. Elevate. The student developer community at Bharati Vidyapeeth, Navi Mumbai.',
+    images: ['/og-image.png'],
   },
 };
 

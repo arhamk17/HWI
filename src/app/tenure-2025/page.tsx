@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Tenure2025Page() {
   return (
-    <main style={{ minHeight: '100vh', position: 'relative', zIndex: 10 }}>
+    <main style={{ minHeight: '100vh', position: 'relative', zIndex: 10, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       <Tenure2025Experience />
       <FooterChapter />
     </main>

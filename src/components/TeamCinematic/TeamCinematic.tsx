@@ -188,7 +188,21 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
   const headIntroCardRef = useRef<HTMLDivElement>(null);
   const activeCardRef = useRef<HTMLDivElement>(null);
   const activeDetailsRef = useRef<HTMLDivElement>(null);
+  const switcherRef = useRef<HTMLElement>(null);
   const timelineRef = useRef<anime.AnimeTimelineInstance | null>(null);
+
+  // Auto-scroll active department switcher tab into view for touch/mobile
+  useEffect(() => {
+    if (!switcherRef.current) return;
+    const activePill = switcherRef.current.querySelector<HTMLElement>('.dept-switcher-pill--active');
+    if (activePill) {
+      activePill.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [deptIndex]);
 
   const dept = DEPARTMENTS[deptIndex];
   const head = dept.members[0];
@@ -805,7 +819,7 @@ export function TeamCinematic({ onCompleteAll }: TeamCinematicProps) {
         </div>
 
         {/* Quick Department Navigation Switcher */}
-        <nav className="dept-header__switcher" aria-label="Department Switcher">
+        <nav className="dept-header__switcher" aria-label="Department Switcher" ref={switcherRef}>
           {DEPARTMENTS.map((d, idx) => (
             <button
               key={d.id}

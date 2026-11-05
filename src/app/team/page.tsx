@@ -8,7 +8,7 @@ export default function TeamPage() {
   const [showFooter, setShowFooter] = useState(false);
 
   return (
-    <main style={{ minHeight: '100vh', position: 'relative', zIndex: 10 }}>
+    <main style={{ minHeight: '100vh', position: 'relative', zIndex: 10, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       <TeamCinematic onCompleteAll={(completed) => setShowFooter(completed)} />
       {showFooter && <FooterChapter />}
     </main>
